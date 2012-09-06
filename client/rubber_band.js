@@ -28,7 +28,7 @@ define(['util'], function (util) {
         needsToBeRemoved = false,
         lineWidth = 1,
         el,
-        onDragEnd2; // configurable handler
+        onDragEnd2; // configurable handler, called at the end of `onDragEnd`
 
     // may be negative
     function width() {
@@ -78,6 +78,7 @@ define(['util'], function (util) {
         if (onDragEnd2 !== undefined) {
             onDragEnd2();
         }
+        pos1 = pos2 = [0, 0]; // reset at the end - may be needed in `onDrag2`
     }
 
     // Assumption: Rubber band canvas is located in the upper left corner.
@@ -128,20 +129,18 @@ define(['util'], function (util) {
 
     // top left corner
     function tlPos() {
-        return Object.freeze([Math.min(pos1[0], pos2[0]),
-                              Math.min(pos1[1], pos2[1])]);
+        return [Math.min(pos1[0], pos2[0]), Math.min(pos1[1], pos2[1])];
     }
 
     // bottom right corner
     function brPos() {
-        return Object.freeze([Math.max(pos1[0], pos2[0]),
-                              Math.max(pos1[1], pos2[1])]);
+        return [Math.max(pos1[0], pos2[0]), Math.max(pos1[1], pos2[1])];
     }
 
     // Currently selected rectangle, defined by the positions of its top left
     // and its bottom right corner.
     function selectedRect() {
-        return Object.freeze([tlPos(), brPos()]);
+        return [tlPos(), brPos()];
     }
 
     function draggedToTheRight() {

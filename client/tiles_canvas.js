@@ -29,10 +29,6 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
         return document.getElementById('tilesCanvas');
     }
 
-    function onRubberBandDragEnd() {
-        // fixme: trigger rotation
-    }
-
     // Converts tile position to screen position.
     function posFromPosT(posT) {
         return posT.map(function (coordT) {
@@ -47,8 +43,8 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
         });
     }
 
-    function areSamePosT(posT1, posT2) {
-        return posT1[0] === posT2[0] && posT1[1] === posT2[1];
+    function areSamePosT(pos1T, pos2T) {
+        return pos1T[0] === pos2T[0] && pos1T[1] === pos2T[1];
     }
 
     function areSameRectT(rectT1, rectT2) {
@@ -56,9 +52,9 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
                 areSamePosT(rectT1[1], rectT2[1]));
     }
 
-    // If the specified position is in spacing between tiles, then the
-    // coordinate in question is shifted so that the "bad coordinates" are in
-    // the middle of the tile to the upper left.
+    // If the specified position is in spacing between tiles, then coordinates
+    // in question are shifted so that they are in the middle of the next tile
+    // to the upper and/or left.
     function decIfInSpacing(pos) {
         return pos.map(function (coord) {
             var modulo = coord % (tileLen + spacing);
@@ -68,7 +64,7 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
         });
     }
 
-    // Like `decIfInSpacing` but shifts to the tile to the lower right.
+    // Like `decIfInSpacing` but shifts to the tile to the lower and/or right.
     function incIfInSpacing(pos) {
         return pos.map(function (coord) {
             var modulo = coord % (tileLen + spacing);
@@ -114,6 +110,13 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
 
     function selectedRectHasChanged() {
         return !areSameRectT(selectedRectT, newSelectedRectT());
+    }
+
+    function onRubberBandDragEnd() {
+        selectedRectT = newSelectedRectT(); // rarely needed, but inexpensive
+
+        boards.selectedBoard.rotate(selectedRectT,
+                                    rubberBand.draggedToTheRight);
     }
 
     function needsToBeRendered(newSideLen) {

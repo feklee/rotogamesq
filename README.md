@@ -8,11 +8,13 @@ Why a new Roto Game? Because: The [original author][2] has moved, and in his
 new home there are squared bathroom tiles.
 
 
-Coding conventions
-==================
+Development
+===========
 
   * Coordinate variable names that end in a `T` are in units of tiles (*tile
     coordinates*).
+    
+  * `Object.freeze` is not used due to Android 2.3's browser not supporting it.
 
 
 Legal

@@ -18,7 +18,7 @@
 
 /*global define */
 
-define(function () {
+define(['board_prototype'], function (boardPrototype) {
     'use strict';
 
     // Returns the specified triple as RGB string.
@@ -99,10 +99,7 @@ define(function () {
 
     // Loads the board, and calls `onLoaded(board)` when done.
     function load(name, onLoaded) {
-        var board = {};
-
-        Object.defineProperty(board, 'endImgUrl',
-                              {value: imgUrl(name, 'end')});
+        var board = Object.create(boardPrototype);
 
         loadTiles(imgUrl(name, 'start'), function (tiles) {
             onStartTilesLoaded(board, tiles, onLoaded);
