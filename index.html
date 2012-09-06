@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+
+<html lang="en">
+  <head>
+    <meta charset=utf-8>
+    <title>ROTOGAMEsq</title>
+    <link href="css/reset.css" rel="stylesheet" type="text/css">
+    <link href="css/index.css" rel="stylesheet" type="text/css">
+    <script src="vendor/prefixfree.min.js"></script>
+    <script data-main="client/game" src="vendor/require.js"></script>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  </head>
+  <body>
+    <div id="interactiveBoard">
+      <canvas id="tilesCanvas"></canvas>
+      <canvas id="rubberBandCanvas"></canvas>
+    </div>
+    <div id="panel">
+      <h1>ROTOGAME<em>sq</em></h1>
+      <p>drag’n’rotate</p>
+      <div id="boardsNavigator">
+        <canvas id="endBoardCanvas" width="50" height="50"></canvas>
+      </div>
+    </div>
+    <div id="loadIndicator">
+      <p>Loading...</p>
+    </div>
+  </body>
+</html>
