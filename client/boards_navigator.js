@@ -39,7 +39,7 @@ define(['boards'], function (boards) {
 
         for (xT = 0; xT < sideLenT; xT += 1) {
             for (yT = 0; yT < sideLenT; yT += 1) {
-                ctx.fillStyle = board.endRows[yT][xT];
+                ctx.fillStyle = board.endTiles[xT][yT];
                 ctx.fillRect(xT * factor, yT * factor, factor, factor);
             }
         }

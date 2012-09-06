@@ -22,37 +22,36 @@ define(function () {
     'use strict';
 
     // Returns the specified triple as RGB string.
-    function rgbFromTriple(triple) {
+    function rgb(imgData, offs) {
         return ('rgb(' +
-                triple[0] + ',' +
-                triple[1] + ',' +
-                triple[2] + ')');
+                imgData[offs] + ',' +
+                imgData[offs + 1] + ',' +
+                imgData[offs + 2] + ')');
     }
 
-    // Reads the color values of the image into rows of hex values. Ignores the
-    // alpha channel.
-    function rowsFromCtx(ctx, width, height) {
-        var rows, cols, xT, yT, triple, offs,
+    // Reads the color values of the image into a two dimensional array of hex
+    // values. Ignores the alpha channel.
+    function tilesFromCtx(ctx, width, height) {
+        var tiles, tilesColumn, xT, yT, triple, offs,
             sideLenT = Math.min(width, height), // forces square dimensions
             imgData = ctx.getImageData(0, 0, sideLenT, sideLenT).data;
 
-        rows = [];
-        for (yT = 0; yT < sideLenT; yT += 1) {
-            cols = [];
-            for (xT = 0; xT < sideLenT; xT += 1) {
+        tiles = [];
+        for (xT = 0; xT < sideLenT; xT += 1) {
+            tilesColumn = [];
+            for (yT = 0; yT < sideLenT; yT += 1) {
                 offs = 4 * (yT * sideLenT + xT);
-                triple = imgData.subarray(offs, offs + 3);
-                cols.push(rgbFromTriple(triple));
+                tilesColumn.push(rgb(imgData, offs));
             }
-            rows.push(cols);
+            tiles.push(tilesColumn);
         }
 
-        return rows;
+        return tiles;
     }
 
-    // Loads rows (composed of squares), describing the layout of a board. The
-    // data is read from the specified graphics file.
-    function loadRows(imgUrl, onRowsLoaded) {
+    // Loads tiles (each identified by a color specifier), describing the
+    // layout of a board. The data is read from the specified graphics file.
+    function loadTiles(imgUrl, onTilesLoaded) {
         var img = new Image();
 
         img.onload = function () {
@@ -61,36 +60,36 @@ define(function () {
             tmpCanvas.width = img.width;
             tmpCanvas.height = img.height;
             ctx.drawImage(img, 0, 0);
-            onRowsLoaded(rowsFromCtx(ctx, img.width, img.height));
+            onTilesLoaded(tilesFromCtx(ctx, img.width, img.height));
         };
         img.src = imgUrl;
     }
 
-    function allRowsAreLoaded(board) {
-        return (board.hasOwnProperty('rows') &&
-                board.hasOwnProperty('endRows'));
+    function allTilesAreLoaded(board) {
+        return (board.hasOwnProperty('tiles') &&
+                board.hasOwnProperty('endTiles'));
     }
 
-    function onAllRowsLoaded(board, onLoaded) {
-        Object.defineProperty(board, 'sideLenT', {value: board.rows.length});
+    function onAllTilesLoaded(board, onLoaded) {
+        Object.defineProperty(board, 'sideLenT', {value: board.tiles.length});
         onLoaded(board);
     }
 
-    // Start rows form the *mutable* start layout of blocks, i.e. the current
+    // Start tiles form the *mutable* start layout of blocks, i.e. the current
     // state of the board.
-    function onStartRowsLoaded(board, rows, onLoaded) {
-        Object.defineProperty(board, 'rows', {value : rows});
-        if (allRowsAreLoaded(board)) {
-            onAllRowsLoaded(board, onLoaded);
+    function onStartTilesLoaded(board, tiles, onLoaded) {
+        Object.defineProperty(board, 'tiles', {value : tiles});
+        if (allTilesAreLoaded(board)) {
+            onAllTilesLoaded(board, onLoaded);
         }
     }
 
-    // Start rows form the *immutable* start layout of blocks, the destination
+    // Start tiles form the *immutable* start layout of blocks, the destination
     // state of the board.
-    function onEndRowsLoaded(board, rows, onLoaded) {
-        Object.defineProperty(board, 'endRows', {value : rows});
-        if (allRowsAreLoaded(board)) {
-            onAllRowsLoaded(board, onLoaded);
+    function onEndTilesLoaded(board, tiles, onLoaded) {
+        Object.defineProperty(board, 'endTiles', {value : tiles});
+        if (allTilesAreLoaded(board)) {
+            onAllTilesLoaded(board, onLoaded);
         }
     }
 
@@ -105,11 +104,11 @@ define(function () {
         Object.defineProperty(board, 'endImgUrl',
                               {value: imgUrl(name, 'end')});
 
-        loadRows(imgUrl(name, 'start'), function (rows) {
-            onStartRowsLoaded(board, rows, onLoaded);
+        loadTiles(imgUrl(name, 'start'), function (tiles) {
+            onStartTilesLoaded(board, tiles, onLoaded);
         });
-        loadRows(imgUrl(name, 'end'), function (rows) {
-            onEndRowsLoaded(board, rows, onLoaded);
+        loadTiles(imgUrl(name, 'end'), function (tiles) {
+            onEndTilesLoaded(board, tiles, onLoaded);
         });
     }
 

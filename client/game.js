@@ -19,13 +19,14 @@
 /*global define */
 
 define([
-    'board_display', 'panel', 'boards', 'load_indicator',
+    'board_display', 'panel', 'boards', 'load_indicator', 'util',
     '../vendor/rAF'
 ], function (
     boardDisplay,
     panel,
     boards,
-    loadIndicator
+    loadIndicator,
+    util
 ) {
     'use strict';
 
@@ -76,15 +77,5 @@ define([
         });
     }
 
-    function onReadyStateChanged() {
-        if (document.readyState === 'complete') {
-            onDocumentIsReady();
-        }
-    }
-
-    if (document.readyState === 'complete') {
-        onDocumentIsReady();
-    } else {
-        document.onreadystatechange = onReadyStateChanged;
-    }
+    util.whenDocumentIsReady(onDocumentIsReady);
 });

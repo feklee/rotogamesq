@@ -23,6 +23,9 @@ define(['boards'], function (boards) {
 
     var sideLen;
 
+    // fixme: posTFromPos, posFromPosT (converts between screen and tile
+    // coordinates)
+
     function el() {
         return document.getElementById('tilesCanvas');
     }
@@ -45,7 +48,7 @@ define(['boards'], function (boards) {
 
         for (xT = 0; xT < sideLenT; xT += 1) {
             for (yT = 0; yT < sideLenT; yT += 1) {
-                ctx.fillStyle = board.rows[yT][xT];
+                ctx.fillStyle = board.tiles[xT][yT];
                 ctx.fillRect(xT * (tileLen + spacing) + spacing,
                              yT * (tileLen + spacing) + spacing,
                              tileLen, tileLen);
