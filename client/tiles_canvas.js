@@ -74,6 +74,15 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
         });
     }
 
+    // Returns posT, if necessary truncates so that it fits into the board.
+    function posTInBounds(posT) {
+        var board = boards.selectedBoard;
+
+        return posT.map(function (coordT) {
+            return Math.min(Math.max(coordT, 0), board.sideLenT);
+        });
+    }
+
     // Returns selected rectangle, as an array:
     //
     // * 0: position (tile coordinates) of top left selected tile
@@ -86,8 +95,8 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
         var rect = rubberBand.selectedRect,
             tlPos = incIfInSpacing(rect[0]),
             brPos = decIfInSpacing(rect[1]),
-            tlPosT = posTFromPos(tlPos).map(Math.floor),
-            brPosT = posTFromPos(brPos).map(Math.floor);
+            tlPosT = posTInBounds(posTFromPos(tlPos).map(Math.floor)),
+            brPosT = posTInBounds(posTFromPos(brPos).map(Math.floor));
 
         return [tlPosT, brPosT];
     }
@@ -136,13 +145,15 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
         var pos, posT, xT, yT,
             ctx = e.getContext('2d'),
             sideLenT = boards.selectedBoard.sideLenT,
-            tiles = boards.selectedBoard.tiles;
+            tiles = boards.selectedBoard.tiles,
+            showSelection = rubberBand.isBeingDragged;
 
         for (xT = 0; xT < sideLenT; xT += 1) {
             for (yT = 0; yT < sideLenT; yT += 1) {
                 ctx.fillStyle = tiles[xT][yT];
                 posT = [xT, yT];
-                ctx.globalAlpha = tileIsSelected(posT) ? 0.5 : 1;
+                ctx.globalAlpha = (showSelection && tileIsSelected(posT) ?
+                                   0.5 : 1);
                 pos = posFromPosT(posT);
                 ctx.fillRect(pos[0], pos[1], tileLen, tileLen);
             }

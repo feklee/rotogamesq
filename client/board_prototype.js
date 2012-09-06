@@ -28,31 +28,48 @@ define(function () {
         return (pos2T[0] - pos1T[0]) === (pos2T[1] - pos1T[1]);
     }
 
-    // rotates by 90° in the specified direction
-    function rotateBy90(tiles, rectT, cw) {
-        console.log('fixme: rotation by 90°');
+    function selectedTiles(tiles, x1T, y1T, x2T, y2T) {
+        var sTiles, sTilesColumn, xT, yT;
+
+        sTiles = [];
+        for (xT = x1T; xT <= x2T; xT += 1) {
+            sTilesColumn = [];
+            for (yT = y1T; yT <= y2T; yT += 1) {
+                sTilesColumn.push(tiles[xT][yT]);
+            }
+            sTiles.push(sTilesColumn);
+        }
+
+        return sTiles;
     }
 
-    // rotates by 180°
-    function rotateBy180(tiles, rectT) {
-        var xT, yT, tmpTiles, tmpTilesColumn,
+    function rotate2(tiles, rectT, rotator) {
+        var xT, yT,
             x1T = rectT[0][0], y1T = rectT[0][1],
-            x2T = rectT[1][0], y2T = rectT[1][1];
-
-        tmpTiles = [];
-        for (xT = x2T; xT >= x1T; xT -= 1) {
-            tmpTilesColumn = [];
-            for (yT = y2T; yT >= y1T; yT -= 1) {
-                tmpTilesColumn.push(tiles[xT][yT]);
-            }
-            tmpTiles.push(tmpTilesColumn);
-        }
+            x2T = rectT[1][0], y2T = rectT[1][1],
+            widthT = x2T - x1T,
+            heightT = y2T - y1T,
+            sTiles = selectedTiles(tiles, x1T, y1T, x2T, y2T);
 
         for (xT = x1T; xT <= x2T; xT += 1) {
             for (yT = y1T; yT <= y2T; yT += 1) {
-                tiles[xT][yT] = tmpTiles[xT - x1T][yT - y1T];
+                tiles[xT][yT] = rotator(sTiles,
+                                        xT - x1T, yT - y1T,
+                                        widthT, heightT);
             }
         }
+    }
+
+    function rotator90CW(sTiles, xT, yT, widthT, heightT) {
+        return sTiles[yT][widthT - xT];
+    }
+
+    function rotator90CCW(sTiles, xT, yT, widthT, heightT) {
+        return sTiles[heightT - yT][xT];
+    }
+
+    function rotator180(sTiles, xT, yT, widthT, heightT) {
+        return sTiles[widthT - xT][heightT - yT];
     }
 
     // Rotates the tiles in the specified rectangle in the specified direction:
@@ -62,9 +79,13 @@ define(function () {
     // that order.
     function rotate(tiles, rectT, cw) {
         if (isSquare(rectT)) {
-            rotateBy90(tiles, rectT, cw);
+            if (cw) {
+                rotate2(tiles, rectT, rotator90CW);
+            } else {
+                rotate2(tiles, rectT, rotator90CCW);
+            }
         } else {
-            rotateBy180(tiles, rectT);
+            rotate2(tiles, rectT, rotator180);
         }
     }
 

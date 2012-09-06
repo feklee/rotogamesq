@@ -170,6 +170,7 @@ define(['util'], function (util) {
 
     return Object.defineProperties({}, {
         'render': {value: render},
+        'isBeingDragged': {get: function () { return isBeingDragged; }},
         'selectedRect': {get: selectedRect },
         'draggedToTheRight': {get: draggedToTheRight },
         'onDragEnd': {set: function (x) { onDragEnd2 = x; }}
