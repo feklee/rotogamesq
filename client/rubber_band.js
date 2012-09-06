@@ -1,4 +1,4 @@
-// Shows the tiles in the interactive board.
+// Rubber band that the user may drag to select tiles.
 
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
@@ -18,13 +18,16 @@
 
 /*global define */
 
-define(['boards'], function (boards) {
+define(function () {
     'use strict';
 
-    var sideLen;
+    var sideLen, corner1 = [0, 0], corner2 = [0, 0];
 
     function el() {
-        return document.getElementById('tilesCanvas');
+        return document.getElementById('rubberBandCanvas');
+    }
+
+    function renderRubberBand(e) {
     }
 
     function updateDimensions(e, newSideLen) {
@@ -36,35 +39,29 @@ define(['boards'], function (boards) {
         return sideLen !== newSideLen;
     }
 
-    function renderBoard(e) {
-        var xT, yT, ctx = e.getContext('2d'),
-            board = boards.selectedBoard,
-            sideLenT = board.sideLenT,
-            spacing = 0.1 * sideLen / sideLenT,
-            tileLen = (sideLen - spacing * (sideLenT + 1)) / sideLenT;
-
-        for (xT = 0; xT < sideLenT; xT += 1) {
-            for (yT = 0; yT < sideLenT; yT += 1) {
-                ctx.fillStyle = board.rows[yT][xT];
-                ctx.fillRect(xT * (tileLen + spacing) + spacing,
-                             yT * (tileLen + spacing) + spacing,
-                             tileLen, tileLen);
-            }
-        }
+    function onMouseDown() {
+        ;
     }
 
-    function render(newSideLen) { // fixme: add border, totalSideLen
+    function registerMouseEvents(e) {
+        e.onmousedown = onMouseDown;
+    }
+
+    function render(newSideLen) {
         var e;
 
         if (needsToBeRendered(newSideLen)) {
             e = el();
 
+            registerMouseEvents(e);
             updateDimensions(e, newSideLen);
-            renderBoard(e);
+            renderRubberBand(e);
         }
     }
 
     return Object.defineProperties({}, {
-        'render': {value: render}
+        'render': {value: render},
+        'corner1': {get: function () { return corner1; }},
+        'corner2': {get: function () { return corner2; }}
     });
 });

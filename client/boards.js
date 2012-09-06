@@ -21,11 +21,7 @@
 define(['board_loader'], function (boardLoader) {
     'use strict';
 
-    var exports, selectedBoard;
-
-    function getSelectedBoard() {
-        return selectedBoard;
-    }
+    var selectedBoard;
 
     function load(onLoaded) {
         boardLoader.load('smiley', function (board) {
@@ -34,13 +30,8 @@ define(['board_loader'], function (boardLoader) {
         });
     }
 
-    exports = {
-        load: load
-    };
-
-    Object.defineProperty(exports, 'selectedBoard', {
-        get: getSelectedBoard
+    return Object.defineProperties({}, {
+        'load': {value: load},
+        'selectedBoard': {get: function () { return selectedBoard; }}
     });
-
-    return exports;
 });

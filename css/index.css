@@ -15,11 +15,11 @@ h1 em {
     font-weight: normal;
 }
 
-#panel, #interactiveBoard, #loadIndicator, #tilesCanvas, #rubberBandCanvas {
+#panel, #boardDisplay, #loadIndicator, #tilesCanvas, #rubberBandCanvas {
     position: absolute;
 }
 
-#panel, #interactiveBoard {
+#panel, #boardDisplay {
     display: none;
 }
 

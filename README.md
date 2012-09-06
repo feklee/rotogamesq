@@ -11,8 +11,8 @@ new home there are squared bathroom tiles.
 Coding conventions
 ==================
 
-  * Coordinates that end in a `T` are in units of tiles. They are called *tile
-    coordinates*.
+  * Coordinate variable names that end in a `T` are in units of tiles (*tile
+    coordinates*).
 
 
 Legal

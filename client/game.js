@@ -19,10 +19,10 @@
 /*global define */
 
 define([
-    'interactive_board', 'panel', 'boards', 'load_indicator',
+    'board_display', 'panel', 'boards', 'load_indicator',
     '../vendor/rAF'
 ], function (
-    interactiveBoard,
+    boardDisplay,
     panel,
     boards,
     loadIndicator
@@ -51,7 +51,7 @@ define([
 
     function render() {
         loadIndicator.render(width);
-        interactiveBoard.render(height);
+        boardDisplay.render(height);
         panel.render(width - height, height);
     }
 
@@ -71,7 +71,7 @@ define([
         startAnimation();
         boards.load(function () {
             panel.show();
-            interactiveBoard.show();
+            boardDisplay.show();
             loadIndicator.hide();
         });
     }

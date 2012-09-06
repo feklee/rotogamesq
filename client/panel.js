@@ -41,7 +41,7 @@ define(['boards', 'boards_navigator'], function (boards, boardsNavigator) {
         height = newHeight;
     }
 
-    function needsToBeRerendered(newWidth, newHeight) {
+    function needsToBeRendered(newWidth, newHeight) {
         return (width !== newWidth || height !== newHeight ||
                 selectedBoard !== boards.selectedBoard);
     }
@@ -49,7 +49,7 @@ define(['boards', 'boards_navigator'], function (boards, boardsNavigator) {
     function render(newWidth, newHeight) {
         var e;
 
-        if (isVisible && needsToBeRerendered(newWidth, newHeight)) {
+        if (isVisible && needsToBeRendered(newWidth, newHeight)) {
             e = el();
 
             updateDimensions(e, newWidth, newHeight);
@@ -64,8 +64,8 @@ define(['boards', 'boards_navigator'], function (boards, boardsNavigator) {
         isVisible = true;
     }
 
-    return {
-        render: render,
-        show: show
-    };
+    return Object.defineProperties({}, {
+        'render': {value: render},
+        'show': {value: show}
+    });
 });

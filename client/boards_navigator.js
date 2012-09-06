@@ -58,7 +58,7 @@ define(['boards'], function (boards) {
         renderBoard(canvas, boards.selectedBoard);
     }
 
-    return {
-        render: render
-    };
+    return Object.defineProperties({}, {
+        'render': {value: render}
+    });
 });

@@ -18,13 +18,13 @@
 
 /*global define */
 
-define(['tiles_canvas'], function (tilesCanvas) {
+define(['tiles_canvas', 'rubber_band'], function (tilesCanvas, rubberBand) {
     'use strict';
 
     var isVisible = false, sideLen;
 
     function el() {
-        return document.getElementById('interactiveBoard');
+        return document.getElementById('boardDisplay');
     }
 
     function updateDimensions(newSideLen) {
@@ -42,6 +42,7 @@ define(['tiles_canvas'], function (tilesCanvas) {
         if (isVisible) {
             updateDimensions(newSideLen);
             tilesCanvas.render(newSideLen);
+            rubberBand.render(newSideLen);
         }
     }
 
@@ -50,8 +51,8 @@ define(['tiles_canvas'], function (tilesCanvas) {
         isVisible = true;
     }
 
-    return {
-        render: render,
-        show: show
-    };
+    return Object.defineProperties({}, {
+        'render': {value: render},
+        'show': {value: show}
+    });
 });

@@ -113,7 +113,7 @@ define(function () {
         });
     }
 
-    return {
-        load: load
-    };
+    return Object.defineProperties({}, {
+        'load': {value: load}
+    });
 });

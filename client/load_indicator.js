@@ -42,8 +42,8 @@ define(function () {
         el().style.display = 'none';
     }
 
-    return {
-        render: render,
-        hide: hide
-    };
+    return Object.defineProperties({}, {
+        'render': {value: render},
+        'hide': {value: hide}
+    });
 });
