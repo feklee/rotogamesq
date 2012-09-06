@@ -68,14 +68,12 @@ define([
         window.requestAnimationFrame(animationStep);
     }
 
-    function onDocumentIsReady() {
+    util.whenDocumentIsReady(function () {
         startAnimation();
         boards.load(function () {
             panel.show();
             boardDisplay.show();
             loadIndicator.hide();
         });
-    }
-
-    util.whenDocumentIsReady(onDocumentIsReady);
+    });
 });

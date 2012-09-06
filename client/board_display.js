@@ -38,7 +38,7 @@ define(['tiles_canvas', 'rubber_band'], function (tilesCanvas, rubberBand) {
         }
     }
 
-    function render(newSideLen) { // fixme: add border
+    function render(newSideLen) {
         if (isVisible) {
             updateDimensions(newSideLen);
             tilesCanvas.render(newSideLen);

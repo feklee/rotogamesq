@@ -22,21 +22,22 @@ define(['util'], function (util) {
     'use strict';
 
     var sideLen, // side length of canvas
-        corner1 = [0, 0],
-        corner2 = [0, 0],
+        pos1 = [0, 0], // 1st corner of rectangle
+        pos2 = [0, 0], // 2nd corner of rectangle
         isBeingDragged = false,
         needsToBeRemoved = false,
         lineWidth = 1,
-        el;
+        el,
+        onDragEnd2; // configurable handler
 
     // may be negative
     function width() {
-        return corner2[0] - corner1[0];
+        return pos2[0] - pos1[0];
     }
 
     // may be negative
     function height() {
-        return corner2[1] - corner1[1];
+        return pos2[1] - pos1[1];
     }
 
     function renderRubberBand() {
@@ -46,7 +47,7 @@ define(['util'], function (util) {
             ctx.strokeStyle = '#fff';
             ctx.lineWidth = lineWidth;
             ctx.lineJoin = 'round';
-            ctx.strokeRect(corner1[0], corner1[1], width(), height());
+            ctx.strokeRect(pos1[0], pos1[1], width(), height());
         } else {
             needsToBeRemoved = false;
         }
@@ -63,17 +64,20 @@ define(['util'], function (util) {
     }
 
     function onDragStart(pos) {
-        corner2 = corner1 = pos;
+        pos2 = pos1 = pos;
         isBeingDragged = true;
     }
 
     function onDrag(pos) {
-        corner2 = pos;
+        pos2 = pos;
     }
 
     function onDragEnd() {
         isBeingDragged = false;
         needsToBeRemoved = true;
+        if (onDragEnd2 !== undefined) {
+            onDragEnd2();
+        }
     }
 
     // Assumption: Rubber band canvas is located in the upper left corner.
@@ -122,6 +126,28 @@ define(['util'], function (util) {
         }
     }
 
+    // top left corner
+    function tlPos() {
+        return Object.freeze([Math.min(pos1[0], pos2[0]),
+                              Math.min(pos1[1], pos2[1])]);
+    }
+
+    // bottom right corner
+    function brPos() {
+        return Object.freeze([Math.max(pos1[0], pos2[0]),
+                              Math.max(pos1[1], pos2[1])]);
+    }
+
+    // Currently selected rectangle, defined by the positions of its top left
+    // and its bottom right corner.
+    function selectedRect() {
+        return Object.freeze([tlPos(), brPos()]);
+    }
+
+    function draggedToTheRight() {
+        return pos2[0] > pos1[0];
+    }
+
     function render(newSideLen) {
         if (needsToBeRendered(newSideLen) && el !== undefined) {
             updateDimensions(newSideLen);
@@ -129,7 +155,7 @@ define(['util'], function (util) {
         }
     }
 
-    function onDocumentIsReady() {
+    util.whenDocumentIsReady(function () {
         el = document.getElementById('rubberBandCanvas');
 
         el.addEventListener('mousedown', onMouseDown);
@@ -141,13 +167,12 @@ define(['util'], function (util) {
         window.addEventListener('touchmove', onTouchMove);
         window.addEventListener('mouseup', onMouseUp);
         window.addEventListener('touchend', onTouchEnd);
-    }
-
-    util.whenDocumentIsReady(onDocumentIsReady);
+    });
 
     return Object.defineProperties({}, {
         'render': {value: render},
-        'corner1': {get: function () { return Object.freeze(corner1); }},
-        'corner2': {get: function () { return Object.freeze(corner2); }}
+        'selectedRect': {get: selectedRect },
+        'draggedToTheRight': {get: draggedToTheRight },
+        'onDragEnd': {set: function (x) { onDragEnd2 = x; }}
     });
 });
