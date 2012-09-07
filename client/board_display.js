@@ -38,21 +38,18 @@ define(['tiles_canvas', 'rubber_band'], function (tilesCanvas, rubberBand) {
         }
     }
 
-    function render(newSideLen) {
-        if (isVisible) {
-            updateDimensions(newSideLen);
-            tilesCanvas.render(newSideLen);
-            rubberBand.render(newSideLen);
-        }
-    }
-
-    function show() {
-        el().style.display = 'block';
-        isVisible = true;
-    }
-
     return Object.defineProperties({}, {
-        'render': {value: render},
-        'show': {value: show}
+        animationStep: {value: function (newSideLen) {
+            if (isVisible) {
+                updateDimensions(newSideLen);
+                tilesCanvas.animationStep(newSideLen);
+                rubberBand.animationStep(newSideLen);
+            }
+        }},
+
+        show: {value: function () {
+            el().style.display = 'block';
+            isVisible = true;
+        }}
     });
 });

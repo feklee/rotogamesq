@@ -56,17 +56,17 @@ define(['boards'], function (boards) {
     }
 
     function render(newWidth) {
-        var canvas;
+        var canvas = document.getElementById('endBoardCanvas');
 
-        if (needsToBeRendered(newWidth)) {
-            canvas = document.getElementById('endBoardCanvas');
-
-            updateDimensions(canvas, newWidth);
-            renderBoard(canvas, boards.selectedBoard);
-        }
+        updateDimensions(canvas, newWidth);
+        renderBoard(canvas, boards.selectedBoard);
     }
 
     return Object.defineProperties({}, {
-        'render': {value: render}
+        animationStep: {value: function (newWidth) {
+            if (needsToBeRendered(newWidth)) {
+                render(newWidth);
+            }
+        }}
     });
 });

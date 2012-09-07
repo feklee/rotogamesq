@@ -52,29 +52,28 @@ define([
     }
 
     function render(newWidth, newHeight) {
-        var e;
+        var e = el();
 
-        if (isVisible) {
-            if (needsToBeRendered(newWidth, newHeight)) {
-                e = el();
+        updateDimensions(e, newWidth, newHeight);
 
-                updateDimensions(e, newWidth, newHeight);
-
-                selectedBoard = boards.selectedBoard;
-            }
-
-            boardsNavigator.render(newWidth);
-            rotationsNavigator.render();
-        }
-    }
-
-    function show() {
-        el().style.display = 'block';
-        isVisible = true;
+        selectedBoard = boards.selectedBoard;
     }
 
     return Object.defineProperties({}, {
-        'render': {value: render},
-        'show': {value: show}
+        animationStep: {value: function (newWidth, newHeight) {
+            if (isVisible) {
+                if (needsToBeRendered(newWidth, newHeight)) {
+                    render(newWidth, newHeight);
+                }
+
+                boardsNavigator.animationStep(newWidth);
+                rotationsNavigator.animationStep();
+            }
+        }},
+
+        show: {value: function () {
+            el().style.display = 'block';
+            isVisible = true;
+        }}
     });
 });

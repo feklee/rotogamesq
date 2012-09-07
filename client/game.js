@@ -50,16 +50,12 @@ define([
         document.body.style.height = height + 'px';
     }
 
-    function render() {
-        loadIndicator.render(width);
-        boardDisplay.render(height);
-        panel.render(width - height, height);
-    }
-
     function animationStep() {
         updateDimensions();
 
-        render();
+        loadIndicator.animationStep(width);
+        boardDisplay.animationStep(height);
+        panel.animationStep(width - height, height);
 
         window.requestAnimationFrame(animationStep);
     }

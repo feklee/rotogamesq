@@ -68,14 +68,12 @@ define(['boards', 'util'], function (boards, util) {
     }
 
     function render() {
-        if (needsToBeRendered()) {
-            selectedBoard = boards.selectedBoard;
-            nRotations = selectedBoard.nRotations;
+        selectedBoard = boards.selectedBoard;
+        nRotations = selectedBoard.nRotations;
 
-            document.getElementById('nRotations').textContent = nRotations;
-            renderUndoButton();
-            renderRedoButton();
-        }
+        document.getElementById('nRotations').textContent = nRotations;
+        renderUndoButton();
+        renderRedoButton();
     }
 
     util.whenDocumentIsReady(function () {
@@ -84,6 +82,10 @@ define(['boards', 'util'], function (boards, util) {
     });
 
     return Object.defineProperties({}, {
-        'render': {value: render}
+        animationStep: {value: function () {
+            if (needsToBeRendered()) {
+                render();
+            }
+        }}
     });
 });

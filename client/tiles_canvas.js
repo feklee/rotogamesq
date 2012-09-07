@@ -1,4 +1,3 @@
-
 // Shows the tiles in the interactive board.
 
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
@@ -19,10 +18,13 @@
 
 /*global define */
 
-define(['boards', 'rubber_band'], function (boards, rubberBand) {
+define([
+    'boards', 'rubber_band', 'rect_t_factory'
+], function (boards, rubberBand, rectTFactory) {
     'use strict';
 
     var sideLen, tileLen, spacing,
+        tiles,
         selectedRectT; // selected rectangle in tile coordinates
 
     function el() {
@@ -41,23 +43,6 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
         return pos.map(function (coord) {
             return (coord - spacing) / (tileLen + spacing);
         });
-    }
-
-    function rectWidthT(rectT) {
-        return rectT[1][0] - rectT[0][0];
-    }
-
-    function rectHeightT(rectT) {
-        return rectT[1][1] - rectT[0][1];
-    }
-
-    function areSamePosT(pos1T, pos2T) {
-        return pos1T[0] === pos2T[0] && pos1T[1] === pos2T[1];
-    }
-
-    function areSameRectT(rectT1, rectT2) {
-        return (areSamePosT(rectT1[0], rectT2[0]) &&
-                areSamePosT(rectT1[1], rectT2[1]));
     }
 
     // If the specified position is in spacing between tiles, then coordinates
@@ -106,7 +91,7 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
             tlPosT = posTInBounds(posTFromPos(tlPos).map(Math.floor)),
             brPosT = posTInBounds(posTFromPos(brPos).map(Math.floor));
 
-        return [tlPosT, brPosT];
+        return rectTFactory.create(tlPosT, brPosT);
     }
 
     function updateDimensions(e, newSideLen) {
@@ -126,24 +111,32 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
     }
 
     function selectedRectHasChanged() {
-        return !areSameRectT(selectedRectT, newSelectedRectT());
+        return !selectedRectT.isEqualTo(newSelectedRectT());
+    }
+
+    function tilesHaveChanged() {
+        return (tiles === undefined ||
+                !boards.selectedBoard.tiles.isEqualTo(tiles));
     }
 
     function rotationMakesSense(selectedRectT) {
-        return rectWidthT(selectedRectT) > 0 && rectHeightT(selectedRectT) > 0;
+        return selectedRectT.widthT > 0 || selectedRectT.heightT > 0;
     }
 
     function onRubberBandDragEnd() {
         selectedRectT = newSelectedRectT(); // rarely needed, but inexpensive
 
-        if (rotationMakesSense(selectedRectT)) {
+        if (rotationMakesSense(selectedRectT) &&
+                !boards.selectedBoard.isFinished) {
             boards.selectedBoard.rotate({rectT: selectedRectT,
                                          cw: rubberBand.draggedToTheRight});
         }
     }
 
     function needsToBeRendered(newSideLen) {
-        return sideLen !== newSideLen || selectedRectHasChanged();
+        return (sideLen !== newSideLen ||
+                selectedRectHasChanged() ||
+                tilesHaveChanged());
     }
 
     function tileIsSelected(posT) {
@@ -153,41 +146,51 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
                 posT[1] <= selectedRectT[1][1]);
     }
 
-    // fixme: make use of draggedToTheRight
+    function alpha(posT) {
+        var showSelection = rubberBand.isBeingDragged,
+            isFinished = boards.selectedBoard.isFinished;
+
+        return ((showSelection && tileIsSelected(posT)) || isFinished ?
+                0.5 : 1);
+    }
 
     function renderBoard(e) {
         var pos, posT, xT, yT,
             ctx = e.getContext('2d'),
-            sideLenT = boards.selectedBoard.sideLenT,
-            tiles = boards.selectedBoard.tiles,
-            showSelection = rubberBand.isBeingDragged;
+            sideLenT = boards.selectedBoard.sideLenT;
 
         for (xT = 0; xT < sideLenT; xT += 1) {
             for (yT = 0; yT < sideLenT; yT += 1) {
                 ctx.fillStyle = tiles[xT][yT];
                 posT = [xT, yT];
-                ctx.globalAlpha = (showSelection && tileIsSelected(posT) ?
-                                   0.5 : 1);
+                ctx.globalAlpha = alpha(posT);
                 pos = posFromPosT(posT);
                 ctx.fillRect(pos[0], pos[1], tileLen, tileLen);
             }
         }
     }
 
-    function render(newSideLen) { // fixme: add border, totalSideLen
-        var e;
-
-        if (needsToBeRendered(newSideLen)) {
-            e = el();
-
-            updateDimensions(e, newSideLen);
-            renderBoard(e);
+    function updateTiles() {
+        if (tilesHaveChanged()) {
+            tiles = boards.selectedBoard.tiles.copy();
         }
+    }
+
+    function render(newSideLen) { // fixme: add border, totalSideLen
+        var e = el();
+
+        updateTiles();
+        updateDimensions(e, newSideLen);
+        renderBoard(e);
     }
 
     rubberBand.onDragEnd = onRubberBandDragEnd;
 
     return Object.defineProperties({}, {
-        'render': {value: render}
+        animationStep: {value: function (newSideLen) {
+            if (needsToBeRendered(newSideLen)) {
+                render(newSideLen);
+            }
+        }}
     });
 });

@@ -18,13 +18,14 @@
 
 /*global define */
 
-define(['util'], function (util) {
+define(['util', 'boards'], function (util, boards) {
     'use strict';
 
     var sideLen, // side length of canvas
         pos1 = [0, 0], // 1st corner of rectangle
         pos2 = [0, 0], // 2nd corner of rectangle
         isBeingDragged = false,
+        isVisible = false,
         needsToBeRemoved = false,
         lineWidth = 1,
         el,
@@ -59,8 +60,13 @@ define(['util'], function (util) {
         lineWidth = 0.005 * sideLen;
     }
 
+    function newIsVisible() {
+        return !boards.selectedBoard.isFinished;
+    }
+
     function needsToBeRendered(newSideLen) {
-        return sideLen !== newSideLen || isBeingDragged || needsToBeRemoved;
+        return (sideLen !== newSideLen || isBeingDragged || needsToBeRemoved ||
+                isVisible !== newIsVisible());
     }
 
     function onDragStart(pos) {
@@ -137,21 +143,21 @@ define(['util'], function (util) {
         return [Math.max(pos1[0], pos2[0]), Math.max(pos1[1], pos2[1])];
     }
 
-    // Currently selected rectangle, defined by the positions of its top left
-    // and its bottom right corner.
-    function selectedRect() {
-        return [tlPos(), brPos()];
-    }
+    function updateVisibility() {
+        var style = el.style;
 
-    function draggedToTheRight() {
-        return pos2[0] > pos1[0];
+        isVisible = newIsVisible();
+        if (isVisible) {
+            style.display = 'block';
+        } else {
+            style.display = 'none';
+        }
     }
 
     function render(newSideLen) {
-        if (needsToBeRendered(newSideLen) && el !== undefined) {
-            updateDimensions(newSideLen);
-            renderRubberBand();
-        }
+        updateVisibility();
+        updateDimensions(newSideLen);
+        renderRubberBand();
     }
 
     util.whenDocumentIsReady(function () {
@@ -170,10 +176,28 @@ define(['util'], function (util) {
     });
 
     return Object.defineProperties({}, {
-        'render': {value: render},
-        'isBeingDragged': {get: function () { return isBeingDragged; }},
-        'selectedRect': {get: selectedRect },
-        'draggedToTheRight': {get: draggedToTheRight },
-        'onDragEnd': {set: function (x) { onDragEnd2 = x; }}
+        animationStep: {value: function (newSideLen) {
+            if (needsToBeRendered(newSideLen) && el !== undefined) {
+                render(newSideLen);
+            }
+        }},
+
+        isBeingDragged: {get: function () {
+            return isBeingDragged;
+        }},
+
+        // Currently selected rectangle, defined by the positions of its top
+        // left and its bottom right corner.
+        selectedRect: {get: function () {
+            return [tlPos(), brPos()];
+        }},
+
+        draggedToTheRight: {get: function () {
+            return pos2[0] > pos1[0];
+        }},
+
+        onDragEnd: {set: function (x) {
+            onDragEnd2 = x;
+        }}
     });
 });

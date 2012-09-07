@@ -18,13 +18,13 @@
 
 /*global define */
 
-define(['board_loader'], function (boardLoader) {
+define(['board_factory'], function (boardFactory) {
     'use strict';
 
     var selectedBoard;
 
     function load(onLoaded) {
-        boardLoader.load('smiley', function (board) {
+        boardFactory.load('smiley', function (board) {
             selectedBoard = board; // there's only one board at the moment
             onLoaded();
         });

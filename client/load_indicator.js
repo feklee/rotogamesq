@@ -27,23 +27,20 @@ define(function () {
         return document.getElementById('loadIndicator');
     }
 
-    function render(newWidth) {
-        var style;
-
-        if (isVisible) {
-            style = el().style;
-            style.fontSize = Math.ceil(newWidth / 20) + 'px';
-            style.top = style.left = Math.round(0.01 * newWidth);
-        }
-    }
-
-    function hide() {
-        isVisible = false;
-        el().style.display = 'none';
-    }
-
     return Object.defineProperties({}, {
-        'render': {value: render},
-        'hide': {value: hide}
+        'animationStep': {value: function (newWidth) {
+            var style;
+
+            if (isVisible) {
+                style = el().style;
+                style.fontSize = Math.ceil(newWidth / 20) + 'px';
+                style.top = style.left = Math.round(0.01 * newWidth);
+            }
+        }},
+
+        'hide': {value: function () {
+            isVisible = false;
+            el().style.display = 'none';
+        }}
     });
 });
