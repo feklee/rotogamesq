@@ -43,6 +43,14 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
         });
     }
 
+    function rectWidthT(rectT) {
+        return rectT[1][0] - rectT[0][0];
+    }
+
+    function rectHeightT(rectT) {
+        return rectT[1][1] - rectT[0][1];
+    }
+
     function areSamePosT(pos1T, pos2T) {
         return pos1T[0] === pos2T[0] && pos1T[1] === pos2T[1];
     }
@@ -79,7 +87,7 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
         var board = boards.selectedBoard;
 
         return posT.map(function (coordT) {
-            return Math.min(Math.max(coordT, 0), board.sideLenT);
+            return Math.min(Math.max(coordT, 0), board.sideLenT - 1);
         });
     }
 
@@ -121,11 +129,17 @@ define(['boards', 'rubber_band'], function (boards, rubberBand) {
         return !areSameRectT(selectedRectT, newSelectedRectT());
     }
 
+    function rotationMakesSense(selectedRectT) {
+        return rectWidthT(selectedRectT) > 0 && rectHeightT(selectedRectT) > 0;
+    }
+
     function onRubberBandDragEnd() {
         selectedRectT = newSelectedRectT(); // rarely needed, but inexpensive
 
-        boards.selectedBoard.rotate(selectedRectT,
-                                    rubberBand.draggedToTheRight);
+        if (rotationMakesSense(selectedRectT)) {
+            boards.selectedBoard.rotate({rectT: selectedRectT,
+                                         cw: rubberBand.draggedToTheRight});
+        }
     }
 
     function needsToBeRendered(newSideLen) {

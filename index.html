@@ -19,7 +19,11 @@
     </div>
     <div id="panel">
       <h1>ROTOGAME<em>sq</em></h1>
-      <p>drag’n’rotate</p>
+      <p id="stepsNavigator">
+        <span class="undo button disabled">↶</span>
+        <span id="nRotations">0</span>
+        <span class="redo button disabled">↷</span>
+      </p>
       <div id="boardsNavigator">
         <canvas id="endBoardCanvas" width="50" height="50"></canvas>
       </div>

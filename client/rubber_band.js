@@ -166,6 +166,7 @@ define(['util'], function (util) {
         window.addEventListener('touchmove', onTouchMove);
         window.addEventListener('mouseup', onMouseUp);
         window.addEventListener('touchend', onTouchEnd);
+        window.addEventListener('touchcancel', onTouchEnd);
     });
 
     return Object.defineProperties({}, {

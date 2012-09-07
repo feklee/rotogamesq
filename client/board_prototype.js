@@ -43,7 +43,19 @@ define(function () {
         return sTiles;
     }
 
-    function rotate2(tiles, rectT, rotator) {
+    function rotator90CW(sTiles, xT, yT, widthT, heightT) {
+        return sTiles[yT][widthT - xT];
+    }
+
+    function rotator90CCW(sTiles, xT, yT, widthT, heightT) {
+        return sTiles[heightT - yT][xT];
+    }
+
+    function rotator180(sTiles, xT, yT, widthT, heightT) {
+        return sTiles[widthT - xT][heightT - yT];
+    }
+
+    function rotateWithRotator(tiles, rectT, rotator) {
         var xT, yT,
             x1T = rectT[0][0], y1T = rectT[0][1],
             x2T = rectT[1][0], y2T = rectT[1][1],
@@ -60,38 +72,43 @@ define(function () {
         }
     }
 
-    function rotator90CW(sTiles, xT, yT, widthT, heightT) {
-        return sTiles[yT][widthT - xT];
-    }
-
-    function rotator90CCW(sTiles, xT, yT, widthT, heightT) {
-        return sTiles[heightT - yT][xT];
-    }
-
-    function rotator180(sTiles, xT, yT, widthT, heightT) {
-        return sTiles[widthT - xT][heightT - yT];
-    }
-
     // Rotates the tiles in the specified rectangle in the specified direction:
     // clockwise if `cw` is true
     //
     // The rectangle is defined by its top left and its bottom right corner, in
     // that order.
-    function rotate(tiles, rectT, cw) {
+    function rotate(tiles, rotation) {
+        var rectT = rotation.rectT, cw = rotation.cw;
+
         if (isSquare(rectT)) {
             if (cw) {
-                rotate2(tiles, rectT, rotator90CW);
+                rotateWithRotator(tiles, rectT, rotator90CW);
             } else {
-                rotate2(tiles, rectT, rotator90CCW);
+                rotateWithRotator(tiles, rectT, rotator90CCW);
             }
         } else {
-            rotate2(tiles, rectT, rotator180);
+            rotateWithRotator(tiles, rectT, rotator180);
         }
+    }
+
+    function inverseRotation(rotation) {
+        return {
+            rectT: rotation.rectT,
+            cw: !rotation.cw
+        };
+    }
+
+    // Applies the inverse of the specified rotation.
+    function rotateInverse(tiles, rotation) {
+        rotate(tiles, inverseRotation(rotation));
     }
 
     return Object.defineProperties({}, {
         rotate: {
-            value: function (rectT, cw) { rotate(this.tiles, rectT, cw); }
+            value: function (rotation) { rotate(this.tiles, rotation); }
+        },
+        rotateInverse: {
+            value: function (rotation) { rotateInverse(this.tiles, rotation); }
         }
     });
 });

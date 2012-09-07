@@ -18,10 +18,13 @@
 
 /*global define */
 
-define(['boards', 'boards_navigator'], function (boards, boardsNavigator) {
+define([
+    'boards', 'boards_navigator', 'rotations_navigator'
+], function (boards, boardsNavigator, rotationsNavigator) {
     'use strict';
 
-    var width, height, selectedBoard, isVisible = false;
+    var width, height, selectedBoard,
+        isVisible = false;
 
     function el() {
         return document.getElementById('panel');
@@ -42,20 +45,26 @@ define(['boards', 'boards_navigator'], function (boards, boardsNavigator) {
     }
 
     function needsToBeRendered(newWidth, newHeight) {
+        var newSelectedBoard = boards.selectedBoard;
+
         return (width !== newWidth || height !== newHeight ||
-                selectedBoard !== boards.selectedBoard);
+                selectedBoard !== newSelectedBoard);
     }
 
     function render(newWidth, newHeight) {
         var e;
 
-        if (isVisible && needsToBeRendered(newWidth, newHeight)) {
-            e = el();
+        if (isVisible) {
+            if (needsToBeRendered(newWidth, newHeight)) {
+                e = el();
 
-            updateDimensions(e, newWidth, newHeight);
+                updateDimensions(e, newWidth, newHeight);
+
+                selectedBoard = boards.selectedBoard;
+            }
+
             boardsNavigator.render(newWidth);
-
-            selectedBoard = boards.selectedBoard;
+            rotationsNavigator.render();
         }
     }
 

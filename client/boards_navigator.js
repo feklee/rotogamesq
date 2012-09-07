@@ -51,11 +51,19 @@ define(['boards'], function (boards) {
         canvas.width = canvas.height = Math.round(width / 5);
     }
 
-    function render(newWidth) {
-        var canvas = document.getElementById('endBoardCanvas');
+    function needsToBeRendered(newWidth) {
+        return width !== newWidth;
+    }
 
-        updateDimensions(canvas, newWidth);
-        renderBoard(canvas, boards.selectedBoard);
+    function render(newWidth) {
+        var canvas;
+
+        if (needsToBeRendered(newWidth)) {
+            canvas = document.getElementById('endBoardCanvas');
+
+            updateDimensions(canvas, newWidth);
+            renderBoard(canvas, boards.selectedBoard);
+        }
     }
 
     return Object.defineProperties({}, {

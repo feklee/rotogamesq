@@ -99,7 +99,34 @@ define(['board_prototype'], function (boardPrototype) {
 
     // Loads the board, and calls `onLoaded(board)` when done.
     function load(name, onLoaded) {
-        var board = Object.create(boardPrototype);
+        var board = Object.create(boardPrototype),
+            rotations = [], // for undo, for counting, ...
+            futureRotations = []; // for redo
+
+        Object.defineProperties(board, {
+            rotate: {value: function (rotation) {
+                rotations.push(rotation);
+                futureRotations = []; // resets redo history
+                boardPrototype.rotate.call(this, rotation);
+            }},
+            nRotations: {get: function () { return rotations.length; }},
+            undoIsPossible: {get: function () {
+                return rotations.length > 0;
+            }},
+            undo: {value: function () {
+                var rotation = rotations.pop();
+                futureRotations.push(rotation);
+                boardPrototype.rotateInverse.call(this, rotation);
+            }},
+            redoIsPossible: {get: function () {
+                return futureRotations.length > 0;
+            }},
+            redo: {value: function () {
+                var rotation = futureRotations.pop();
+                rotations.push(rotation);
+                boardPrototype.rotate.call(this, rotation);
+            }}
+        });
 
         loadTiles(imgUrl(name, 'start'), function (tiles) {
             onStartTilesLoaded(board, tiles, onLoaded);
