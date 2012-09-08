@@ -75,7 +75,7 @@ define(function () {
             var el = document.createElement('div'),
                 wrapperEl = createWrapperEl(el);
 
-            return Object.create({}, {
+            return Object.create(null, {
                 el: {get: function () {
                     return wrapperEl;
                 }},

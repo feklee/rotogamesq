@@ -19,3 +19,29 @@
 /*global define */
 
 // fixme: create arrow, if rotation is non-null
+
+define(function () {
+    'use strict';
+
+    return Object.create(null, {
+        create: {value: function (posP, sideLenP, color, highlighted) {
+            var el, s, c;
+
+            el = document.createElement('div');
+            s = el.style;
+            s.position = 'absolute';
+            s.left = posP[0] + '%';
+            s.top = posP[1] + '%';
+            s.width = s.height = sideLenP + '%';
+            s.background = color;
+
+            c = 'tile';
+            if (highlighted) {
+                c += ' highlighted';
+            }
+            el.className = c;
+
+            return el;
+        }}
+    });
+});

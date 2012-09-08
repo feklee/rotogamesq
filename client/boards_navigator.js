@@ -36,7 +36,6 @@ define([
 
     boardThumb = boardThumbFactory.create();
     boardThumb.el.style.width = '20%';
-    boardThumb.el.style.height = '20%';
 
     util.whenDocumentIsReady(function () {
         document.getElementById('boardsNavigator').appendChild(boardThumb.el);

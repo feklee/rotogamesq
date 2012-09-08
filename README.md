@@ -8,8 +8,8 @@ Why a new Roto Game? Because: The [original author][2] has moved, and in his
 new home there are squared bathroom tiles.
 
 
-Development
-===========
+Development notes
+=================
 
   * Variable postfixes of coordinates and dimensions denote units:
   
@@ -20,6 +20,12 @@ Development
       - *no postfix:* pixels
 
   * `Object.freeze` is not used due to Android 2.3's browser not supporting it.
+  
+  * Tiles are rendered to `canvas`. This may look cumbersome: Can't tiles be
+    rendered simply as `div` tags? They can. However, in major browser `div`
+    tags cannot be positioned with sub pixel accuracy (as of September 2012).
+    In these browsers, positions are rounded to pixels and the result is uneven
+    spacing, e.g.: one spacing 2px, another one 3px
 
 
 Legal

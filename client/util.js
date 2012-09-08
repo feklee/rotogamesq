@@ -21,7 +21,7 @@
 define(function () {
     'use strict';
 
-    return Object.create({}, {
+    return Object.create(null, {
         whenDocumentIsReady: {value: function (onDocumentIsReady) {
             if (document.readyState === 'complete') {
                 onDocumentIsReady();
@@ -34,8 +34,7 @@ define(function () {
             }
         }},
 
-        // fixme: perhaps remove this
-        clear: {value: function (el) {
+        clearContainer: {value: function (el) {
             while (el.firstChild) {
                 el.removeChild(el.firstChild);
             }

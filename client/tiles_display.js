@@ -19,11 +19,13 @@
 /*global define */
 
 define([
-    'boards', 'rubber_band_canvas', 'rot_anim_canvas', 'rect_t_factory'
-], function (boards, rubberBandCanvas, rotAnimCanvas, rectTFactory) {
+    'boards', 'tile_element_factory', 'rubber_band_canvas', 'rot_anim_canvas',
+    'rect_t_factory', 'util'
+], function (boards, tileElementFactory, rubberBandCanvas, rotAnimCanvas,
+             rectTFactory, util) {
     'use strict';
 
-    var sideLen, tileLen, spacing, tiles,
+    var sideLen, tileSideLenP, spacingP, tiles,
         selectedRectT; // selected rectangle in coordinates of tiles
 
     function el() {
@@ -31,16 +33,18 @@ define([
     }
 
     // Converts tile position to screen position.
-    function posFromPosT(posT) {
+    function posPFromPosT(posT) {
         return posT.map(function (coordT) {
-            return coordT * (tileLen + spacing) + spacing;
+            return coordT * (tileSideLenP + spacingP) + spacingP;
         });
     }
 
-    // inverse of `posFromPosT`, with `Math.floor` applied to each element
+    // inverse of `posPFromPosT`, with `Math.floor` applied to each element
+
+    // fixme: use: FromPosP
     function posTFromPos(pos) {
         return pos.map(function (coord) {
-            return (coord - spacing) / (tileLen + spacing);
+            return (coord - spacingP) / (tileSideLenP + spacingP);
         });
     }
 
@@ -49,9 +53,9 @@ define([
     // to the upper and/or left.
     function decIfInSpacing(pos) {
         return pos.map(function (coord) {
-            var modulo = coord % (tileLen + spacing);
-            return ((coord > 0 && modulo < spacing) ?
-                    (coord - modulo - tileLen / 2) :
+            var modulo = coord % (tileSideLenP + spacingP);
+            return ((coord > 0 && modulo < spacingP) ?
+                    (coord - modulo - tileSideLenP / 2) :
                     coord);
         });
     }
@@ -59,9 +63,9 @@ define([
     // Like `decIfInSpacing` but shifts to the tile to the lower and/or right.
     function incIfInSpacing(pos) {
         return pos.map(function (coord) {
-            var modulo = coord % (tileLen + spacing);
-            return ((coord > 0 && modulo < spacing) ?
-                    (coord - modulo + spacing + tileLen / 2) :
+            var modulo = coord % (tileSideLenP + spacingP);
+            return ((coord > 0 && modulo < spacingP) ?
+                    (coord - modulo + spacingP + tileSideLenP / 2) :
                     coord);
         });
     }
@@ -94,16 +98,15 @@ define([
     }
 
     function updateDimensions(e, newSideLen) {
-        var sideLenT;
+        var sideLenT, s = e.style;
 
         // Dimensions of canvas:
-        e.width = sideLen = newSideLen;
-        e.height = newSideLen;
+        s.height = s.width = sideLen = newSideLen;
 
         // Dimensions of tiles (depends on dimensions of canvas):
         sideLenT = boards.selectedBoard.sideLenT;
-        spacing = 0.1 * sideLen / sideLenT;
-        tileLen = (sideLen - spacing * (sideLenT + 1)) / sideLenT;
+        spacingP = 5 / sideLenT;
+        tileSideLenP = (100 - spacingP * (sideLenT + 1)) / sideLenT;
 
         // Dimensions of selection (depends on dimensions of tiles):
         selectedRectT = newSelectedRectT();
@@ -154,17 +157,19 @@ define([
     }
 
     function renderBoard(e) {
-        var pos, posT, xT, yT,
-            ctx = e.getContext('2d'),
-            sideLenT = boards.selectedBoard.sideLenT;
+        var xT, yT, posT, sideLenT = boards.selectedBoard.sideLenT;
+
+        util.clearContainer(e);
 
         for (xT = 0; xT < sideLenT; xT += 1) {
             for (yT = 0; yT < sideLenT; yT += 1) {
-                ctx.fillStyle = tiles[xT][yT];
                 posT = [xT, yT];
-                ctx.globalAlpha = alpha(posT);
-                pos = posFromPosT(posT);
-                ctx.fillRect(pos[0], pos[1], tileLen, tileLen);
+                e.appendChild(tileElementFactory.create(
+                    posPFromPosT(posT),
+                    tileSideLenP,
+                    tiles[xT][yT],
+                    rubberBandCanvas.isBeingDragged && tileIsSelected(posT)
+                ));
             }
         }
     }
@@ -199,6 +204,7 @@ define([
         animationStep: {value: function (newSideLen) {
             if (needsToBeRendered(newSideLen)) {
                 render(newSideLen);
+                // fixme: don't render if only sideLen changed
             }
         }}
     });
