@@ -19,8 +19,8 @@
 /*global define */
 
 define([
-    'tiles_display', 'rubber_band_canvas', 'rot_anim_canvas'
-], function (tilesDisplay, rubberBandCanvas, rotAnimCanvas) {
+    'tiles_canvas', 'rubber_band_canvas', 'rot_anim_canvas'
+], function (tilesCanvas, rubberBandCanvas, rotAnimCanvas) {
     'use strict';
 
     var isVisible = false, sideLen;
@@ -44,7 +44,7 @@ define([
         animationStep: {value: function (newSideLen) {
             if (isVisible) {
                 updateDimensions(newSideLen);
-                tilesDisplay.animationStep(newSideLen);
+                tilesCanvas.animationStep(newSideLen);
                 rubberBandCanvas.animationStep(newSideLen);
                 rotAnimCanvas.animationStep(newSideLen);
             }

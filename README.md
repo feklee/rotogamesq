@@ -26,6 +26,9 @@ Development notes
     tags cannot be positioned with sub pixel accuracy (as of September 2012).
     In these browsers, positions are rounded to pixels and the result is uneven
     spacing, e.g.: one spacing 2px, another one 3px
+    
+    For similar reasons (possible subpixel positioning issues), the rotation is
+    *not* done using CSS3 transformations.
 
 
 Legal

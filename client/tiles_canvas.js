@@ -19,13 +19,13 @@
 /*global define */
 
 define([
-    'boards', 'tile_element_factory', 'rubber_band_canvas', 'rot_anim_canvas',
+    'boards', 'rubber_band_canvas', 'rot_anim_canvas',
     'rect_t_factory', 'util'
-], function (boards, tileElementFactory, rubberBandCanvas, rotAnimCanvas,
+], function (boards, rubberBandCanvas, rotAnimCanvas,
              rectTFactory, util) {
     'use strict';
 
-    var sideLen, tileSideLenP, spacingP, tiles,
+    var sideLen, tileSideLen, spacing, tiles,
         selectedRectT; // selected rectangle in coordinates of tiles
 
     function el() {
@@ -33,18 +33,16 @@ define([
     }
 
     // Converts tile position to screen position.
-    function posPFromPosT(posT) {
+    function posFromPosT(posT) {
         return posT.map(function (coordT) {
-            return coordT * (tileSideLenP + spacingP) + spacingP;
+            return coordT * (tileSideLen + spacing) + spacing;
         });
     }
 
-    // inverse of `posPFromPosT`, with `Math.floor` applied to each element
-
-    // fixme: use: FromPosP
+    // inverse of `posFromPosT`, with `Math.floor` applied to each element
     function posTFromPos(pos) {
         return pos.map(function (coord) {
-            return (coord - spacingP) / (tileSideLenP + spacingP);
+            return (coord - spacing) / (tileSideLen + spacing);
         });
     }
 
@@ -53,9 +51,9 @@ define([
     // to the upper and/or left.
     function decIfInSpacing(pos) {
         return pos.map(function (coord) {
-            var modulo = coord % (tileSideLenP + spacingP);
-            return ((coord > 0 && modulo < spacingP) ?
-                    (coord - modulo - tileSideLenP / 2) :
+            var modulo = coord % (tileSideLen + spacing);
+            return ((coord > 0 && modulo < spacing) ?
+                    (coord - modulo - tileSideLen / 2) :
                     coord);
         });
     }
@@ -63,9 +61,9 @@ define([
     // Like `decIfInSpacing` but shifts to the tile to the lower and/or right.
     function incIfInSpacing(pos) {
         return pos.map(function (coord) {
-            var modulo = coord % (tileSideLenP + spacingP);
-            return ((coord > 0 && modulo < spacingP) ?
-                    (coord - modulo + spacingP + tileSideLenP / 2) :
+            var modulo = coord % (tileSideLen + spacing);
+            return ((coord > 0 && modulo < spacing) ?
+                    (coord - modulo + spacing + tileSideLen / 2) :
                     coord);
         });
     }
@@ -101,12 +99,12 @@ define([
         var sideLenT, s = e.style;
 
         // Dimensions of canvas:
-        s.height = s.width = sideLen = newSideLen;
+        e.height = e.width = sideLen = newSideLen;
 
         // Dimensions of tiles (depends on dimensions of canvas):
         sideLenT = boards.selectedBoard.sideLenT;
-        spacingP = 5 / sideLenT;
-        tileSideLenP = (100 - spacingP * (sideLenT + 1)) / sideLenT;
+        spacing = 0.1 * sideLen / sideLenT;
+        tileSideLen = (sideLen - spacing * (sideLenT + 1)) / sideLenT;
 
         // Dimensions of selection (depends on dimensions of tiles):
         selectedRectT = newSelectedRectT();
@@ -150,26 +148,24 @@ define([
                 posT[1] <= selectedRectT[1][1]);
     }
 
-    function alpha(posT) {
-        var showSelection = rubberBandCanvas.isBeingDragged;
+    function renderTile(ctx, posT, isHighlighted) {
+        var pos = posFromPosT(posT),
+            color = tiles[posT[0]][posT[1]],
+            showSelection = rubberBandCanvas.isBeingDragged;
 
-        return (showSelection && tileIsSelected(posT)) ? 0.5 : 1;
+        ctx.globalAlpha = (showSelection && tileIsSelected(posT)) ? 0.5 : 1;
+        ctx.strokeStyle = '#fff';
+        ctx.fillStyle = color;
+        ctx.fillRect(pos[0], pos[1], tileSideLen, tileSideLen);
     }
 
     function renderBoard(e) {
-        var xT, yT, posT, sideLenT = boards.selectedBoard.sideLenT;
-
-        util.clearContainer(e);
+        var xT, yT, sideLenT = boards.selectedBoard.sideLenT,
+            ctx = e.getContext('2d');
 
         for (xT = 0; xT < sideLenT; xT += 1) {
             for (yT = 0; yT < sideLenT; yT += 1) {
-                posT = [xT, yT];
-                e.appendChild(tileElementFactory.create(
-                    posPFromPosT(posT),
-                    tileSideLenP,
-                    tiles[xT][yT],
-                    rubberBandCanvas.isBeingDragged && tileIsSelected(posT)
-                ));
+                renderTile(ctx, [xT, yT]);
             }
         }
     }
@@ -204,7 +200,6 @@ define([
         animationStep: {value: function (newSideLen) {
             if (needsToBeRendered(newSideLen)) {
                 render(newSideLen);
-                // fixme: don't render if only sideLen changed
             }
         }}
     });

@@ -26,7 +26,7 @@ h1 em {
 }
 
 #panel, #boardDisplay, #loadIndicator,
-#tilesDisplay, #rotAnimCanvas, #rubberBandCanvas {
+#tilesCanvas, #rotAnimCanvas, #rubberBandCanvas {
     position: absolute;
 }
 
@@ -61,18 +61,6 @@ h1 em {
 #stepsNavigator .button.disabled {
     color: #777;
     cursor: default;
-}
-
-#tilesDisplay {
-    width: 100%;
-    height: 100%;
-}
-
-#tilesDisplay .tile {
-    -moz-border-radius: 10%;
-    -webkit-border-radius: 10%;
-    border-radius: 10%;
-    -khtml-border-radius: 10%;
 }
 
 /* fixme: remove crap */
