@@ -22,65 +22,71 @@
 define(function () {
     'use strict';
 
-    // Renders the board using `div` tags for tiles.
+    function posFromPosT(posT, sideLen, sideLenT) {
+        return posT.map(function (coordT) {
+            return coordT * sideLen / sideLenT;
+        });
+    }
+
+    function renderTile(ctx, board, posT, sideLen) {
+        var sideLenT = board.sideLenT,
+            tiles = board.endTiles,
+            pos = posFromPosT(posT, sideLen, sideLenT),
+            color = tiles[posT[0]][posT[1]],
+            tileSideLen = sideLen / sideLenT + 1; // +1 to avoid ugly spacing
+
+        ctx.fillStyle = color;
+        ctx.fillRect(pos[0], pos[1], tileSideLen, tileSideLen);
+    }
+
+    // Renders the board to canvas.
     //
     // Why not simply display the board image in an `<img>` tag, and scale
     // that? Rationale: As of Chrome 21.0, when scaling an image in an `<img>`
     // tag, then it is smoothed/blurred, and there is no way to turn off that
     // behavior. In particular, there is no equivalent to Firefox 14.0's
     // `-moz-crisp-edges`.
-    function render(el, board) {
-        var xT, yT, s, tileEl,
+    function render(el, board, sideLen) {
+        var xT, yT,
             sideLenT = board.sideLenT,
-            tileSideLenP = (100 / sideLenT);
+            ctx = el.getContext('2d');
+
+        el.width = el.height = sideLen; // also clears canvas
 
         for (xT = 0; xT < sideLenT; xT += 1) {
             for (yT = 0; yT < sideLenT; yT += 1) {
-                tileEl = document.createElement('div');
-                s = tileEl.style;
-                s.position = 'absolute';
-                s.left = (100 * xT / sideLenT) + '%';
-                s.top = (100 * yT / sideLenT) + '%';
-                s.width = s.height = tileSideLenP + '%';
-                s['background-color'] = board.endTiles[xT][yT];
-                el.appendChild(tileEl);
+                renderTile(ctx, board, [xT, yT], sideLen);
             }
         }
     }
 
-    // Ensures squared aspect ratio. See also:
-    //
-    // <url:http://stackoverflow.com/questions/12121090/responsively-change-div
-    // -size-keeping-aspect-ratio>
-    function createWrapperEl(el) {
-        var wrapperEl = document.createElement('div'),
-            dummyEl = document.createElement('div');
-
-        wrapperEl.style.display = 'inline-block';
-        wrapperEl.style.position = 'relative';
-
-        dummyEl.style['padding-top'] = '100%';
-
-        el.style.position = 'absolute';
-        el.style.top = el.style.right = el.style.bottom = el.style.left = 0;
-
-        wrapperEl.appendChild(dummyEl);
-        wrapperEl.appendChild(el);
-
-        return wrapperEl;
-    }
-
     return Object.defineProperties({}, {
-        create: {value: function () {
-            var el = document.createElement('div'),
-                wrapperEl = createWrapperEl(el);
+        create: {value: function (board) {
+            var el = document.createElement('canvas'),
+                renderRequested = true,
+                sideLen = 0;
 
             return Object.create(null, {
                 el: {get: function () {
-                    return wrapperEl;
+                    return el;
                 }},
-                render: {value: function (board) {
-                    render(el, board);
+                sideLen: {set: function (x) {
+                    if (x !== sideLen) {
+                        sideLen = x;
+                        renderRequested = true;
+                    }
+                }},
+                board: {set: function (x) {
+                    if (x !== board) {
+                        board = x;
+                        renderRequested = true;
+                    }
+                }},
+                animationStep: {value: function () {
+                    if (renderRequested) {
+                        render(el, board, sideLen);
+                        renderRequested = false;
+                    }
                 }}
             });
         }}

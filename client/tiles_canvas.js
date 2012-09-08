@@ -154,7 +154,6 @@ define([
             showSelection = rubberBandCanvas.isBeingDragged;
 
         ctx.globalAlpha = (showSelection && tileIsSelected(posT)) ? 0.5 : 1;
-        ctx.strokeStyle = '#fff';
         ctx.fillStyle = color;
         ctx.fillRect(pos[0], pos[1], tileSideLen, tileSideLen);
     }

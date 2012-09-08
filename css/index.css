@@ -28,6 +28,8 @@ h1 em {
 #panel, #boardDisplay, #loadIndicator,
 #tilesCanvas, #rotAnimCanvas, #rubberBandCanvas {
     position: absolute;
+    top: 0;
+    left: 0;
 }
 
 #panel, #boardDisplay {

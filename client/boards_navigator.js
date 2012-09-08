@@ -23,29 +23,19 @@ define([
 ], function (boards, util, boardThumbFactory) {
     'use strict';
 
-    var selectedBoard, boardThumb;
-
-    function render() {
-        selectedBoard = boards.selectedBoard;
-        boardThumb.render(selectedBoard);
-    }
-
-    function needsToBeRendered() {
-        return selectedBoard !== boards.selectedBoard;
-    }
-
-    boardThumb = boardThumbFactory.create();
-    boardThumb.el.style.width = '20%';
+    var selectedBoardThumb = boardThumbFactory.create(boards.selectedBoard);
 
     util.whenDocumentIsReady(function () {
-        document.getElementById('boardsNavigator').appendChild(boardThumb.el);
+        document.getElementById('boardsNavigator').appendChild(
+            selectedBoardThumb.el
+        );
     });
 
     return Object.defineProperties({}, {
-        animationStep: {value: function () {
-            if (needsToBeRendered()) {
-                render();
-            }
+        animationStep: {value: function (newWidth) {
+            selectedBoardThumb.board = boards.selectedBoard;
+            selectedBoardThumb.sideLen = newWidth / 5;
+            selectedBoardThumb.animationStep();
         }}
     });
 });

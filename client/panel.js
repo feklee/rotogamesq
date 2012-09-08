@@ -66,7 +66,7 @@ define([
                     render(newWidth, newHeight);
                 }
 
-                boardsNavigator.animationStep();
+                boardsNavigator.animationStep(newWidth);
                 rotationsNavigator.animationStep();
             }
         }},
