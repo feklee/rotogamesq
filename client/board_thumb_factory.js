@@ -60,10 +60,10 @@ define(function () {
         }
     }
 
-    return Object.defineProperties({}, {
+    return Object.create(null, {
         create: {value: function (board) {
             var el = document.createElement('canvas'),
-                renderRequested = true,
+                needsToBeRendered = true,
                 sideLen = 0;
 
             return Object.create(null, {
@@ -73,19 +73,19 @@ define(function () {
                 sideLen: {set: function (x) {
                     if (x !== sideLen) {
                         sideLen = x;
-                        renderRequested = true;
+                        needsToBeRendered = true;
                     }
                 }},
                 board: {set: function (x) {
                     if (x !== board) {
                         board = x;
-                        renderRequested = true;
+                        needsToBeRendered = true;
                     }
                 }},
                 animationStep: {value: function () {
-                    if (renderRequested) {
+                    if (needsToBeRendered) {
                         render(el, board, sideLen);
-                        renderRequested = false;
+                        needsToBeRendered = false;
                     }
                 }}
             });

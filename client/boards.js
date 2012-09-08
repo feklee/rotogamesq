@@ -30,7 +30,7 @@ define(['board_factory'], function (boardFactory) {
         });
     }
 
-    return Object.defineProperties({}, {
+    return Object.create(null, {
         'load': {value: load},
         'selectedBoard': {get: function () { return selectedBoard; }}
     });

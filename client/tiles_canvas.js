@@ -19,104 +19,25 @@
 /*global define */
 
 define([
-    'boards', 'rubber_band_canvas', 'rot_anim_canvas',
-    'rect_t_factory', 'util'
-], function (boards, rubberBandCanvas, rotAnimCanvas,
-             rectTFactory, util) {
+    'boards', 'rubber_band_canvas', 'rot_anim_canvas', 'display_c_sys'
+], function (boards, rubberBandCanvas, rotAnimCanvas, displayCSys) {
     'use strict';
 
-    var sideLen, tileSideLen, spacing, tiles,
+    var sideLen, tiles, board,
+        needsToBeRendered = true,
         selectedRectT; // selected rectangle in coordinates of tiles
 
-    function el() {
-        return document.getElementById('tilesDisplay');
-    }
-
-    // Converts tile position to screen position.
-    function posFromPosT(posT) {
-        return posT.map(function (coordT) {
-            return coordT * (tileSideLen + spacing) + spacing;
-        });
-    }
-
-    // inverse of `posFromPosT`, with `Math.floor` applied to each element
-    function posTFromPos(pos) {
-        return pos.map(function (coord) {
-            return (coord - spacing) / (tileSideLen + spacing);
-        });
-    }
-
-    // If the specified position is in spacing between tiles, then coordinates
-    // in question are shifted so that they are in the middle of the next tile
-    // to the upper and/or left.
-    function decIfInSpacing(pos) {
-        return pos.map(function (coord) {
-            var modulo = coord % (tileSideLen + spacing);
-            return ((coord > 0 && modulo < spacing) ?
-                    (coord - modulo - tileSideLen / 2) :
-                    coord);
-        });
-    }
-
-    // Like `decIfInSpacing` but shifts to the tile to the lower and/or right.
-    function incIfInSpacing(pos) {
-        return pos.map(function (coord) {
-            var modulo = coord % (tileSideLen + spacing);
-            return ((coord > 0 && modulo < spacing) ?
-                    (coord - modulo + spacing + tileSideLen / 2) :
-                    coord);
-        });
-    }
-
-    // Returns posT, if necessary truncates so that it fits into the board.
-    function posTInBounds(posT) {
-        var board = boards.selectedBoard;
-
-        return posT.map(function (coordT) {
-            return Math.min(Math.max(coordT, 0), board.sideLenT - 1);
-        });
-    }
-
-    // Returns selected rectangle, as an array:
-    //
-    // * 0: position (tile coordinates) of top left selected tile
-    //
-    // * 1: position bottom right selected tile
-    //
-    // A tile is selected, if it is inside or if it is touched by the rubber
-    // band. Spacing is *not* part of tiles!
-    function newSelectedRectT() {
-        var rect = rubberBandCanvas.selectedRect,
-            tlPos = incIfInSpacing(rect[0]),
-            brPos = decIfInSpacing(rect[1]),
-            tlPosT = posTInBounds(posTFromPos(tlPos).map(Math.floor)),
-            brPosT = posTInBounds(posTFromPos(brPos).map(Math.floor));
-
-        return rectTFactory.create(tlPosT, brPosT);
-    }
-
-    function updateDimensions(e, newSideLen) {
-        var sideLenT, s = e.style;
-
-        // Dimensions of canvas:
-        e.height = e.width = sideLen = newSideLen;
-
-        // Dimensions of tiles (depends on dimensions of canvas):
-        sideLenT = boards.selectedBoard.sideLenT;
-        spacing = 0.1 * sideLen / sideLenT;
-        tileSideLen = (sideLen - spacing * (sideLenT + 1)) / sideLenT;
-
-        // Dimensions of selection (depends on dimensions of tiles):
-        selectedRectT = newSelectedRectT();
-    }
-
-    function selectedRectHasChanged() {
-        return !selectedRectT.isEqualTo(newSelectedRectT());
+    function selectedRectTNeedsChange() {
+        return (selectedRectT === undefined ||
+                !selectedRectT.isEqualTo(rubberBandCanvas.selectedRectT));
     }
 
     function tilesHaveChanged() {
-        return (tiles === undefined ||
-                !boards.selectedBoard.tiles.isEqualTo(tiles));
+        return tiles === undefined || !board.tiles.isEqualTo(tiles);
+    }
+
+    function boardNeedsChange() {
+        return board === undefined || board !== boards.selectedBoard;
     }
 
     function rotationMakesSense(selectedRectT) {
@@ -124,7 +45,8 @@ define([
     }
 
     function onRubberBandDragEnd() {
-        selectedRectT = newSelectedRectT(); // rarely needed, but inexpensive
+        selectedRectT = rubberBandCanvas.selectedRectT; // to be on the safe
+                                                        // side
 
         if (rotationMakesSense(selectedRectT) &&
                 !boards.selectedBoard.isFinished) {
@@ -135,12 +57,6 @@ define([
         }
     }
 
-    function needsToBeRendered(newSideLen) {
-        return (sideLen !== newSideLen ||
-                selectedRectHasChanged() ||
-                tilesHaveChanged());
-    }
-
     function tileIsSelected(posT) {
         return (posT[0] >= selectedRectT[0][0] &&
                 posT[0] <= selectedRectT[1][0] &&
@@ -148,19 +64,39 @@ define([
                 posT[1] <= selectedRectT[1][1]);
     }
 
-    function renderTile(ctx, posT, isHighlighted) {
-        var pos = posFromPosT(posT),
+    // Renders tile either to the main canvas, or to the canvas that is rotated
+    // as part of a rotation animation.
+    function renderTile(ctx, posT) {
+        var pos = displayCSys.posFromPosT(posT),
             color = tiles[posT[0]][posT[1]],
-            showSelection = rubberBandCanvas.isBeingDragged;
+            showSelection = rubberBandCanvas.isBeingDragged,
+            tileSideLen = displayCSys.tileSideLen;
 
-        ctx.globalAlpha = (showSelection && tileIsSelected(posT)) ? 0.5 : 1;
+        if (rotAnimCanvas.animInProgress &&
+                rotAnimCanvas.tileIsRotated(posT)) {
+            ctx = rotAnimCanvas.staticCtx;
+        } else {
+            ctx.globalAlpha = showSelection && tileIsSelected(posT) ? 0.5 : 1;
+        }
+
         ctx.fillStyle = color;
         ctx.fillRect(pos[0], pos[1], tileSideLen, tileSideLen);
     }
 
-    function renderBoard(e) {
-        var xT, yT, sideLenT = boards.selectedBoard.sideLenT,
-            ctx = e.getContext('2d');
+    function updateBackgroundColor(el) {
+        el.style['background-color'] = (boards.selectedBoard.isFinished ?
+                                        'white' : 'black');
+    }
+
+    function render() {
+        var xT, yT,
+            sideLenT = board.sideLenT,
+            el = document.getElementById('tilesCanvas'),
+            ctx = el.getContext('2d');
+
+        el.height = el.width = sideLen;
+
+        updateBackgroundColor(el);
 
         for (xT = 0; xT < sideLenT; xT += 1) {
             for (yT = 0; yT < sideLenT; yT += 1) {
@@ -169,36 +105,50 @@ define([
         }
     }
 
-    function updateTiles() {
-        if (tilesHaveChanged()) {
-            tiles = boards.selectedBoard.tiles.copy();
+    function initRotationAnim() {
+        var lastRotation = board.lastRotation;
+        if (lastRotation !== undefined) {
+            rotAnimCanvas.initAnim(lastRotation);
         }
-    }
-
-    function updateBackgroundColor(e) {
-        e.style['background-color'] = (boards.selectedBoard.isFinished ?
-                                       'white' : 'black');
-    }
-
-    function rotAnimShouldBeShown() {
-        // fixme: check if has changed, etc. (perhaps put that in variable)
-    }
-
-    function render(newSideLen) {
-        var e = el();
-
-        updateTiles();
-        updateDimensions(e, newSideLen);
-        updateBackgroundColor(e);
-        renderBoard(e);
     }
 
     rubberBandCanvas.onDragEnd = onRubberBandDragEnd;
 
-    return Object.defineProperties({}, {
-        animationStep: {value: function (newSideLen) {
-            if (needsToBeRendered(newSideLen)) {
-                render(newSideLen);
+    return Object.create(null, {
+        animationStep: {value: function () {
+            var boardHasChanged;
+
+            if (boardNeedsChange()) {
+                needsToBeRendered = true;
+                board = boards.selectedBoard;
+                boardHasChanged = true;
+            } else {
+                boardHasChanged = false;
+            }
+
+            if (tilesHaveChanged()) {
+                needsToBeRendered = true;
+                tiles = board.tiles.copy();
+                if (!boardHasChanged) {
+                    initRotationAnim();
+                } // else: change in tiles not due to rotation
+            }
+
+            if (selectedRectTNeedsChange()) {
+                needsToBeRendered = true;
+                selectedRectT = rubberBandCanvas.selectedRectT;
+            }
+
+            if (needsToBeRendered) {
+                render();
+                needsToBeRendered = false;
+            }
+        }},
+
+        sideLen: {set: function (x) {
+            if (x !== sideLen) {
+                sideLen = x;
+                needsToBeRendered = true;
             }
         }}
     });

@@ -27,7 +27,7 @@ define(function () {
         return document.getElementById('loadIndicator');
     }
 
-    return Object.defineProperties({}, {
+    return Object.create(null, {
         animationStep: {value: function (newWidth) {
             var style;
 

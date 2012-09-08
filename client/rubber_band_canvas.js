@@ -18,17 +18,19 @@
 
 /*global define */
 
-define(['util', 'boards'], function (util, boards) {
+define([
+    'util', 'rect_t_factory', 'boards', 'display_c_sys'
+], function (util, rectTFactory, boards, displayCSys) {
     'use strict';
 
     var sideLen, // side length of canvas
         pos1 = [0, 0], // 1st corner of rectangle
         pos2 = [0, 0], // 2nd corner of rectangle
+        selectedRectT = rectTFactory.create([0, 0], [0, 0]),
         isBeingDragged = false,
         isVisible = false,
-        needsToBeRemoved = false,
+        needsToBeRendered = true,
         lineWidth = 1,
-        el,
         onDragEnd2; // configurable handler, called at the end of `onDragEnd`
 
     // may be negative
@@ -41,50 +43,86 @@ define(['util', 'boards'], function (util, boards) {
         return pos2[1] - pos1[1];
     }
 
-    function renderRubberBand() {
-        var ctx = el.getContext('2d');
-
-        if (!needsToBeRemoved) {
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = lineWidth;
-            ctx.lineJoin = 'round';
-            ctx.strokeRect(pos1[0], pos1[1], width(), height());
-        } else {
-            needsToBeRemoved = false;
-        }
-    }
-
-    // Also clears the canvas.
-    function updateDimensions(newSideLen) {
-        el.height = el.width = sideLen = newSideLen;
-        lineWidth = 0.005 * sideLen;
-    }
-
     function newIsVisible() {
         return !boards.selectedBoard.isFinished;
     }
 
-    function needsToBeRendered(newSideLen) {
-        return (sideLen !== newSideLen || isBeingDragged || needsToBeRemoved ||
-                isVisible !== newIsVisible());
+    function updateVisibility() {
+        var el = document.getElementById('rubberBandCanvas');
+
+        isVisible = newIsVisible();
+        el.style.display = isVisible ? 'block' : 'none';
+    }
+
+    function visibilityNeedsChange() {
+        return isVisible !== newIsVisible();
+    }
+
+    function render() {
+        var el = document.getElementById('rubberBandCanvas'),
+            ctx = el.getContext('2d');
+
+        el.height = el.width = sideLen; // also clears canvas
+        lineWidth = 0.005 * sideLen;
+
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = lineWidth;
+        ctx.lineJoin = 'round';
+        ctx.strokeRect(pos1[0], pos1[1], width(), height());
+    }
+
+    // top left corner
+    function tlPos() {
+        return [Math.min(pos1[0], pos2[0]), Math.min(pos1[1], pos2[1])];
+    }
+
+    // bottom right corner
+    function brPos() {
+        return [Math.max(pos1[0], pos2[0]), Math.max(pos1[1], pos2[1])];
+    }
+
+    // Updates the selected rectangle, which is represented by an array:
+    //
+    // * 0: position (tile coordinates) of top left selected tile
+    //
+    // * 1: position bottom right selected tile
+    //
+    // A tile is selected, if it is inside or if it is touched by the rubber
+    // band. Spacing is *not* part of tiles!
+    function updateSelectedRectT() {
+        var tlPos2 = displayCSys.incIfInSpacing(tlPos()),
+            brPos2 = displayCSys.decIfInSpacing(brPos()),
+            tlPosT = displayCSys.posTInBounds(
+                displayCSys.posTFromPos(tlPos2).map(Math.floor)
+            ),
+            brPosT = displayCSys.posTInBounds(
+                displayCSys.posTFromPos(brPos2).map(Math.floor)
+            );
+
+        selectedRectT = rectTFactory.create(tlPosT, brPosT);
     }
 
     function onDragStart(pos) {
         pos2 = pos1 = pos;
+        updateSelectedRectT();
         isBeingDragged = true;
+        needsToBeRendered = true;
     }
 
     function onDrag(pos) {
         pos2 = pos;
+        updateSelectedRectT();
+        needsToBeRendered = true;
     }
 
     function onDragEnd() {
         isBeingDragged = false;
-        needsToBeRemoved = true;
         if (onDragEnd2 !== undefined) {
             onDragEnd2();
         }
         pos1 = pos2 = [0, 0]; // reset at the end - may be needed in `onDrag2`
+        updateSelectedRectT();
+        needsToBeRendered = true;
     }
 
     // Assumption: Rubber band canvas is located in the upper left corner.
@@ -133,35 +171,8 @@ define(['util', 'boards'], function (util, boards) {
         }
     }
 
-    // top left corner
-    function tlPos() {
-        return [Math.min(pos1[0], pos2[0]), Math.min(pos1[1], pos2[1])];
-    }
-
-    // bottom right corner
-    function brPos() {
-        return [Math.max(pos1[0], pos2[0]), Math.max(pos1[1], pos2[1])];
-    }
-
-    function updateVisibility() {
-        var style = el.style;
-
-        isVisible = newIsVisible();
-        if (isVisible) {
-            style.display = 'block';
-        } else {
-            style.display = 'none';
-        }
-    }
-
-    function render(newSideLen) {
-        updateVisibility();
-        updateDimensions(newSideLen);
-        renderRubberBand();
-    }
-
     util.whenDocumentIsReady(function () {
-        el = document.getElementById('rubberBandCanvas');
+        var el = document.getElementById('rubberBandCanvas');
 
         el.addEventListener('mousedown', onMouseDown);
         el.addEventListener('touchstart', onTouchStart);
@@ -175,10 +186,16 @@ define(['util', 'boards'], function (util, boards) {
         window.addEventListener('touchcancel', onTouchEnd);
     });
 
-    return Object.defineProperties({}, {
-        animationStep: {value: function (newSideLen) {
-            if (needsToBeRendered(newSideLen) && el !== undefined) {
-                render(newSideLen);
+    return Object.create(null, {
+        animationStep: {value: function () {
+            if (visibilityNeedsChange()) {
+                updateVisibility();
+                needsToBeRendered = true;
+            }
+
+            if (needsToBeRendered) {
+                render();
+                needsToBeRendered = false;
             }
         }},
 
@@ -186,10 +203,15 @@ define(['util', 'boards'], function (util, boards) {
             return isBeingDragged;
         }},
 
-        // Currently selected rectangle, defined by the positions of its top
-        // left and its bottom right corner.
-        selectedRect: {get: function () {
-            return [tlPos(), brPos()];
+        selectedRectT: {get: function () {
+            return selectedRectT;
+        }},
+
+        sideLen: {set: function (x) {
+            if (x !== sideLen) {
+                sideLen = x;
+                needsToBeRendered = true;
+            }
         }},
 
         draggedToTheRight: {get: function () {

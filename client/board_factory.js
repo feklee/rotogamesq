@@ -211,7 +211,7 @@ define(['tiles_factory'], function (tilesFactory) {
         });
     }
 
-    return Object.defineProperties({}, {
+    return Object.create(null, {
         'load': {value: load}
     });
 });

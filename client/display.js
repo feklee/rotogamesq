@@ -19,14 +19,16 @@
 /*global define */
 
 define([
-    'tiles_canvas', 'rubber_band_canvas', 'rot_anim_canvas'
-], function (tilesCanvas, rubberBandCanvas, rotAnimCanvas) {
+    'tiles_canvas', 'rubber_band_canvas', 'rot_anim_canvas', 'display_c_sys',
+    'boards'
+], function (tilesCanvas, rubberBandCanvas, rotAnimCanvas, displayCSys,
+             boards) {
     'use strict';
 
     var isVisible = false, sideLen;
 
     function el() {
-        return document.getElementById('boardDisplay');
+        return document.getElementById('display');
     }
 
     function updateDimensions(newSideLen) {
@@ -40,13 +42,18 @@ define([
         }
     }
 
-    return Object.defineProperties({}, {
+    return Object.create(null, {
         animationStep: {value: function (newSideLen) {
+            displayCSys.board = boards.selectedBoard;
+            displayCSys.sideLen = newSideLen;
+            tilesCanvas.sideLen = newSideLen;
+            rubberBandCanvas.sideLen = newSideLen;
+            rotAnimCanvas.sideLen = newSideLen;
             if (isVisible) {
                 updateDimensions(newSideLen);
-                tilesCanvas.animationStep(newSideLen);
+                tilesCanvas.animationStep();
                 rubberBandCanvas.animationStep(newSideLen);
-                rotAnimCanvas.animationStep(newSideLen);
+                rotAnimCanvas.animationStep();
             }
         }},
 

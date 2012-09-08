@@ -59,7 +59,7 @@ define([
         selectedBoard = boards.selectedBoard;
     }
 
-    return Object.defineProperties({}, {
+    return Object.create(null, {
         animationStep: {value: function (newWidth, newHeight) {
             if (isVisible) {
                 if (needsToBeRendered(newWidth, newHeight)) {

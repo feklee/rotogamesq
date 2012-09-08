@@ -81,7 +81,7 @@ define(['boards', 'util'], function (boards, util) {
         setupButton('redo', onRedoClick);
     });
 
-    return Object.defineProperties({}, {
+    return Object.create(null, {
         animationStep: {value: function () {
             if (needsToBeRendered()) {
                 render();

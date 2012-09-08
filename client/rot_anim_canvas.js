@@ -21,7 +21,21 @@
 define(function () {
     'use strict';
 
+    var sideLen,
+        requestRedraw = true;
+
 //fixme:    var sideLen; // side length of canvas
+
+    function render() {
+        var el = document.getElementById('rotAnimCanvas'),
+            ctx = el.getContext('2d');
+
+        el.width = el.height = sideLen; // also clears canvas
+
+        ctx.save();
+
+        ctx.restore();
+    }
 
 /*fixme:    function mainEl() {
         return document.getElementById('rotationCanvas');
@@ -41,15 +55,21 @@ define(function () {
         updateDimensions(newSideLen);
     }*/
 
-    return Object.defineProperties({}, {
-        animationStep: {value: function (newSideLen) {
+    return Object.create(null, {
+        animationStep: {value: function () {
 /*fixme:            if (needsToBeRendered(newSideLen)) {
                 render(newSideLen);
             }*/
         }},
 
-        canvas: {value: function (tilesData) {
+        sideLen: {set: function (x) {
+            if (x !== sideLen) {
+                sideLen = x;
+                requestRedraw = true;
+            }
         }},
+
+        staticCtx: {value: staticCtx},
 
         animIsRunning: {value: false}, // fixme
 

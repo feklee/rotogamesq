@@ -40,7 +40,7 @@ define(function () {
         }}
     });
 
-    return Object.defineProperties({}, {
+    return Object.create(null, {
         // Creates rectangle from top-left and bottom-right corners.
         create: {value: function (tlPosT, brPosT) {
             var newRectT = Object.create(prototype);

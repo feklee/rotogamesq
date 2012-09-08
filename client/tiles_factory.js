@@ -87,7 +87,7 @@ define(function () {
         }}
     });
 
-    return Object.defineProperties({}, {
+    return Object.create(null, {
         // Loads tiles (each identified by a color specifier), describing the
         // layout of a board. The data is read from the specified graphics
         // file.

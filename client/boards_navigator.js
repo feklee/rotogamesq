@@ -31,7 +31,7 @@ define([
         );
     });
 
-    return Object.defineProperties({}, {
+    return Object.create(null, {
         animationStep: {value: function (newWidth) {
             selectedBoardThumb.board = boards.selectedBoard;
             selectedBoardThumb.sideLen = newWidth / 5;
