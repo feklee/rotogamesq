@@ -11,9 +11,14 @@ new home there are squared bathroom tiles.
 Development
 ===========
 
-  * Coordinate variable names that end in a `T` are in units of tiles (*tile
-    coordinates*).
-    
+  * Variable postfixes of coordinates and dimensions denote units:
+  
+      - `T`: multiples of tiles (*tile coordinates*)
+      
+      - `P`: percentage
+
+      - *no postfix:* pixels
+
   * `Object.freeze` is not used due to Android 2.3's browser not supporting it.
 
 

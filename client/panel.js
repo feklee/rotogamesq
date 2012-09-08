@@ -14,7 +14,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-/*jslint browser: true, devel: true, maxerr: 50, maxlen: 79 */
+/*jslint browser: true, maxerr: 50, maxlen: 79 */
 
 /*global define */
 
@@ -66,7 +66,7 @@ define([
                     render(newWidth, newHeight);
                 }
 
-                boardsNavigator.animationStep(newWidth);
+                boardsNavigator.animationStep();
                 rotationsNavigator.animationStep();
             }
         }},

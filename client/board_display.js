@@ -14,11 +14,13 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-/*jslint browser: true, devel: true, maxerr: 50, maxlen: 79 */
+/*jslint browser: true, maxerr: 50, maxlen: 79 */
 
 /*global define */
 
-define(['tiles_canvas', 'rubber_band'], function (tilesCanvas, rubberBand) {
+define([
+    'tiles_display', 'rubber_band_canvas', 'rot_anim_canvas'
+], function (tilesDisplay, rubberBandCanvas, rotAnimCanvas) {
     'use strict';
 
     var isVisible = false, sideLen;
@@ -42,8 +44,9 @@ define(['tiles_canvas', 'rubber_band'], function (tilesCanvas, rubberBand) {
         animationStep: {value: function (newSideLen) {
             if (isVisible) {
                 updateDimensions(newSideLen);
-                tilesCanvas.animationStep(newSideLen);
-                rubberBand.animationStep(newSideLen);
+                tilesDisplay.animationStep(newSideLen);
+                rubberBandCanvas.animationStep(newSideLen);
+                rotAnimCanvas.animationStep(newSideLen);
             }
         }},
 

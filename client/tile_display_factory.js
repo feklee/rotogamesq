@@ -1,4 +1,4 @@
-// Describes the current state of the boards.
+// Factory for individual tiles that are displayed on screen.
 
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
@@ -14,24 +14,8 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-/*jslint browser: true, maxerr: 50, maxlen: 79 */
+/*jslint browser: true, devel: true, maxerr: 50, maxlen: 79 */
 
 /*global define */
 
-define(['board_factory'], function (boardFactory) {
-    'use strict';
-
-    var selectedBoard;
-
-    function load(onLoaded) {
-        boardFactory.load('smiley', function (board) {
-            selectedBoard = board; // there's only one board at the moment
-            onLoaded();
-        });
-    }
-
-    return Object.defineProperties({}, {
-        'load': {value: load},
-        'selectedBoard': {get: function () { return selectedBoard; }}
-    });
-});
+// fixme: create arrow, if rotation is non-null

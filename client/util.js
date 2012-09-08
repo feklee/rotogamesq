@@ -14,26 +14,31 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-/*jslint browser: true, devel: true, maxerr: 50, maxlen: 79 */
+/*jslint browser: true, maxerr: 50, maxlen: 79 */
 
 /*global define */
 
 define(function () {
     'use strict';
 
-    function whenDocumentIsReady(onDocumentIsReady) {
-        if (document.readyState === 'complete') {
-            onDocumentIsReady();
-        } else {
-            document.addEventListener('readystatechange', function () {
-                if (document.readyState === 'complete') {
-                    onDocumentIsReady();
-                }
-            });
-        }
-    }
+    return Object.create({}, {
+        whenDocumentIsReady: {value: function (onDocumentIsReady) {
+            if (document.readyState === 'complete') {
+                onDocumentIsReady();
+            } else {
+                document.addEventListener('readystatechange', function () {
+                    if (document.readyState === 'complete') {
+                        onDocumentIsReady();
+                    }
+                });
+            }
+        }},
 
-    return Object.defineProperties({}, {
-        whenDocumentIsReady: {value: whenDocumentIsReady}
+        // fixme: perhaps remove this
+        clear: {value: function (el) {
+            while (el.firstChild) {
+                el.removeChild(el.firstChild);
+            }
+        }}
     });
 });

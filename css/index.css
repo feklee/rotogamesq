@@ -25,7 +25,8 @@ h1 em {
     font-weight: normal;
 }
 
-#panel, #boardDisplay, #loadIndicator, #tilesCanvas, #rubberBandCanvas {
+#panel, #boardDisplay, #loadIndicator,
+#tilesDisplay, #rotAnimCanvas, #rubberBandCanvas {
     position: absolute;
 }
 
@@ -60,4 +61,16 @@ h1 em {
 #stepsNavigator .button.disabled {
     color: #777;
     cursor: default;
+}
+
+/* fixme: remove crap */
+#rotAnimCanvas {
+    width: 200px;
+    height: 100px;
+    background-color: red;
+    -webkit-transform: rotate(120deg);
+    -o-transform: rotate(120deg);
+    -moz-transform: rotate(120deg);
+    -ms-transform: rotate(120deg);
+    transform: rotate(120deg);
 }

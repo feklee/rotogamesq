@@ -1,4 +1,4 @@
-// Shows the tiles in the interactive board.
+// Displays the tiles in the interactive board.
 
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
@@ -14,21 +14,20 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-/*jslint browser: true, devel: true, maxerr: 50, maxlen: 79 */
+/*jslint browser: true, maxerr: 50, maxlen: 79 */
 
 /*global define */
 
 define([
-    'boards', 'rubber_band', 'rect_t_factory'
-], function (boards, rubberBand, rectTFactory) {
+    'boards', 'rubber_band_canvas', 'rot_anim_canvas', 'rect_t_factory'
+], function (boards, rubberBandCanvas, rotAnimCanvas, rectTFactory) {
     'use strict';
 
-    var sideLen, tileLen, spacing,
-        tiles,
-        selectedRectT; // selected rectangle in tile coordinates
+    var sideLen, tileLen, spacing, tiles,
+        selectedRectT; // selected rectangle in coordinates of tiles
 
     function el() {
-        return document.getElementById('tilesCanvas');
+        return document.getElementById('tilesDisplay');
     }
 
     // Converts tile position to screen position.
@@ -85,7 +84,7 @@ define([
     // A tile is selected, if it is inside or if it is touched by the rubber
     // band. Spacing is *not* part of tiles!
     function newSelectedRectT() {
-        var rect = rubberBand.selectedRect,
+        var rect = rubberBandCanvas.selectedRect,
             tlPos = incIfInSpacing(rect[0]),
             brPos = decIfInSpacing(rect[1]),
             tlPosT = posTInBounds(posTFromPos(tlPos).map(Math.floor)),
@@ -128,8 +127,10 @@ define([
 
         if (rotationMakesSense(selectedRectT) &&
                 !boards.selectedBoard.isFinished) {
-            boards.selectedBoard.rotate({rectT: selectedRectT,
-                                         cw: rubberBand.draggedToTheRight});
+            boards.selectedBoard.rotate({
+                rectT: selectedRectT,
+                cw: rubberBandCanvas.draggedToTheRight
+            });
         }
     }
 
@@ -147,11 +148,9 @@ define([
     }
 
     function alpha(posT) {
-        var showSelection = rubberBand.isBeingDragged,
-            isFinished = boards.selectedBoard.isFinished;
+        var showSelection = rubberBandCanvas.isBeingDragged;
 
-        return ((showSelection && tileIsSelected(posT)) || isFinished ?
-                0.5 : 1);
+        return (showSelection && tileIsSelected(posT)) ? 0.5 : 1;
     }
 
     function renderBoard(e) {
@@ -176,15 +175,25 @@ define([
         }
     }
 
-    function render(newSideLen) { // fixme: add border, totalSideLen
+    function updateBackgroundColor(e) {
+        e.style['background-color'] = (boards.selectedBoard.isFinished ?
+                                       'white' : 'black');
+    }
+
+    function rotAnimShouldBeShown() {
+        // fixme: check if has changed, etc. (perhaps put that in variable)
+    }
+
+    function render(newSideLen) {
         var e = el();
 
         updateTiles();
         updateDimensions(e, newSideLen);
+        updateBackgroundColor(e);
         renderBoard(e);
     }
 
-    rubberBand.onDragEnd = onRubberBandDragEnd;
+    rubberBandCanvas.onDragEnd = onRubberBandDragEnd;
 
     return Object.defineProperties({}, {
         animationStep: {value: function (newSideLen) {
