@@ -130,6 +130,10 @@ define(['tiles_factory'], function (tilesFactory) {
         rotateTiles(tiles, inverseRotation(rotation));
     }
 
+    function isFinished(tiles, endTiles) {
+        return tiles.colorsAreEqualTo(endTiles);
+    }
+
     prototype = Object.defineProperties({}, {
         rotate: {value: function (internal, rotation) {
             var rectT = rotation.rectT, cw = rotation.cw, tiles = this.tiles;
@@ -137,7 +141,7 @@ define(['tiles_factory'], function (tilesFactory) {
             internal.rotations.push(rotation);
             internal.futureRotations.length = 0; // resets redo history
             rotateTiles(this.tiles, rotation);
-            internal.isFinished = this.tiles.isEqualTo(this.endTiles);
+            internal.isFinished = isFinished(this.tiles, this.endTiles);
             internal.lastRotation = rotation;
         }},
 
@@ -146,7 +150,7 @@ define(['tiles_factory'], function (tilesFactory) {
             if (rotation !== undefined) {
                 internal.futureRotations.push(rotation);
                 rotateTilesInverse(this.tiles, rotation);
-                internal.isFinished = this.tiles.isEqualTo(this.endTiles);
+                internal.isFinished = isFinished(this.tiles, this.endTiles);
                 internal.lastRotation = rotation;
             } // else: no more undo
         }},
@@ -156,7 +160,7 @@ define(['tiles_factory'], function (tilesFactory) {
             if (rotation !== undefined) {
                 internal.rotations.push(rotation);
                 rotateTiles(this.tiles, rotation);
-                internal.isFinished = this.tiles.isEqualTo(this.endTiles);
+                internal.isFinished = isFinished(this.tiles, this.endTiles);
                 internal.lastRotation = rotation;
             } // else: no more redo
         }}

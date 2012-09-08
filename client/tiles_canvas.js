@@ -34,7 +34,7 @@ define([
     }
 
     function tilesNeedChange() {
-        return tiles === undefined || !board.tiles.isEqualTo(tiles);
+        return tiles === undefined || !board.tiles.areEqualTo(tiles);
     }
 
     function animIsRunningNeedsChange() {
@@ -86,7 +86,8 @@ define([
     }
 
     function updateBackgroundColor(el) {
-        el.style['background-color'] = (boards.selectedBoard.isFinished ?
+        el.style['background-color'] = ((boards.selectedBoard.isFinished &&
+                                         !rotAnimCanvas.animIsRunning) ?
                                         'white' : 'black');
     }
 

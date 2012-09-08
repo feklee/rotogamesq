@@ -89,7 +89,7 @@ define(['boards', 'display_c_sys'], function (boards, displayCSys) {
     }
 
     function updateAngle() {
-        var speed = 0.002; // rad / s
+        var speed = 0.004; // rad / s
 
         angle = startAngle + dir * speed * passedTime();
     }

@@ -58,28 +58,46 @@ define(function () {
         return tiles;
     }
 
-    prototype = Object.defineProperties([], {
-        isEqualTo: {value: function (tiles) {
-            var xT, yT, tilesColumn, thisColumn;
+    function areEqual(tiles1, tiles2, isEqual) {
+        var xT, yT, tiles2Column, tiles1Column;
 
-            if (tiles.length !== this.length) {
-                return false;
-            }
+        if (tiles2.widthT !== tiles1.widthT ||
+                tiles2.heightT !== tiles1.heightT) {
+            return false;
+        }
 
-            for (xT = 0; xT < tiles.length; xT += 1) {
-                tilesColumn = tiles[xT];
-                thisColumn = this[xT];
-                if (tilesColumn.length !== thisColumn.length) {
+        for (xT = 0; xT < tiles2.length; xT += 1) {
+            tiles2Column = tiles2[xT];
+            tiles1Column = tiles1[xT];
+            for (yT = 0; yT < tiles2Column.length; yT += 1) {
+                if (!isEqual(tiles2Column[yT], tiles1Column[yT])) {
                     return false;
                 }
-                for (yT = 0; yT < tilesColumn.length; yT += 1) {
-                    if (tilesColumn[yT] !== thisColumn[yT]) {
-                        return false;
-                    }
-                }
             }
+        }
 
-            return true;
+        return true;
+    }
+
+    prototype = Object.defineProperties([], {
+        areEqualTo: {value: function (tiles) {
+            return areEqual(this, tiles, function (tile1, tile2) {
+                return tile1 === tile2;
+            });
+        }},
+
+        colorsAreEqualTo: {value: function (tiles) {
+            return areEqual(this, tiles, function (tile1, tile2) {
+                return tile1.color === tile2.color;
+            });
+        }},
+
+        widthT: {get: function () {
+            return this.length;
+        }},
+
+        heightT: {get: function () {
+            return this.widthT > 0 ? this[0].length : 0;
         }},
 
         // Returns a deep copy of `this`.
