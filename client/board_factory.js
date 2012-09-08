@@ -62,12 +62,6 @@ define(['tiles_factory'], function (tilesFactory) {
         };
     }
 
-    function isSquare(rectT) {
-        var pos1T = rectT[0], pos2T = rectT[1];
-
-        return (pos2T[0] - pos1T[0]) === (pos2T[1] - pos1T[1]);
-    }
-
     function selectedTiles(tiles, x1T, y1T, x2T, y2T) {
         var sTiles, sTilesColumn, xT, yT;
 
@@ -120,7 +114,7 @@ define(['tiles_factory'], function (tilesFactory) {
     function rotateTiles(tiles, rotation) {
         var rectT = rotation.rectT, cw = rotation.cw;
 
-        if (isSquare(rectT)) {
+        if (rectT.isSquare) {
             if (cw) {
                 rotateTilesWithRotator(tiles, rectT, rotator90CW);
             } else {
@@ -137,69 +131,78 @@ define(['tiles_factory'], function (tilesFactory) {
     }
 
     prototype = Object.defineProperties({}, {
-        rotate: {value: function (rotation, rotations, futureRotations) {
+        rotate: {value: function (internal, rotation) {
             var rectT = rotation.rectT, cw = rotation.cw, tiles = this.tiles;
 
-            rotations.push(rotation);
-            futureRotations.length = 0; // resets redo history
+            internal.rotations.push(rotation);
+            internal.futureRotations.length = 0; // resets redo history
             rotateTiles(this.tiles, rotation);
+            internal.isFinished = this.tiles.isEqualTo(this.endTiles);
+            internal.lastRotation = rotation;
         }},
 
-        undo: {value: function (rotations, futureRotations) {
-            var rotation = rotations.pop();
+        undo: {value: function (internal) {
+            var rotation = internal.rotations.pop();
             if (rotation !== undefined) {
-                futureRotations.push(rotation);
+                internal.futureRotations.push(rotation);
                 rotateTilesInverse(this.tiles, rotation);
+                internal.isFinished = this.tiles.isEqualTo(this.endTiles);
+                internal.lastRotation = rotation;
             } // else: no more undo
         }},
 
-        redo: {value: function (rotations, futureRotations) {
-            var rotation = futureRotations.pop();
+        redo: {value: function (internal) {
+            var rotation = internal.futureRotations.pop();
             if (rotation !== undefined) {
-                rotations.push(rotation);
+                internal.rotations.push(rotation);
                 rotateTiles(this.tiles, rotation);
+                internal.isFinished = this.tiles.isEqualTo(this.endTiles);
+                internal.lastRotation = rotation;
             } // else: no more redo
         }}
     });
 
     // Loads the board, and calls `onLoaded(board)` when done.
     function load(name, onLoaded) {
-        var board = Object.create(prototype),
-            rotations = [], // for undo, for counting, ...
-            futureRotations = [], // for redo
-            isFinished = false; // true when game is finished
+        var board,
+            internal = {
+                rotations: [], // for undo, for counting, ...
+                futureRotations: [], // for redo
+                lastRotation: null,
+                isFinished: false // true when game is finished
+            };
 
-        Object.defineProperties(board, {
+        board = Object.create(prototype, {
             rotate: {value: function (rotation) {
-                prototype.rotate.call(this, rotation,
-                                      rotations, futureRotations);
-                isFinished = this.tiles.isEqualTo(this.endTiles);
+                prototype.rotate.call(this, internal, rotation);
             }},
 
             nRotations: {get: function () {
-                return rotations.length;
+                return internal.rotations.length;
             }},
 
             undoIsPossible: {get: function () {
-                return rotations.length > 0;
+                return internal.rotations.length > 0;
             }},
 
             undo: {value: function () {
-                prototype.undo.call(this, rotations, futureRotations);
-                isFinished = this.tiles.isEqualTo(this.endTiles);
+                prototype.undo.call(this, internal);
             }},
 
             redoIsPossible: {get: function () {
-                return futureRotations.length > 0;
+                return internal.futureRotations.length > 0;
             }},
 
             redo: {value: function () {
-                prototype.redo.call(this, rotations, futureRotations);
-                isFinished = this.tiles.isEqualTo(this.endTiles);
+                prototype.redo.call(this, internal);
             }},
 
             isFinished: {get: function () {
-                return isFinished;
+                return internal.isFinished;
+            }},
+
+            lastRotation: {get: function () {
+                return internal.lastRotation;
             }}
         });
 

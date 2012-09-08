@@ -32,7 +32,7 @@ define(function () {
         var sideLenT = board.sideLenT,
             tiles = board.endTiles,
             pos = posFromPosT(posT, sideLen, sideLenT),
-            color = tiles[posT[0]][posT[1]],
+            color = tiles[posT[0]][posT[1]].color,
             tileSideLen = sideLen / sideLenT + 1; // +1 to avoid ugly spacing
 
         ctx.fillStyle = color;

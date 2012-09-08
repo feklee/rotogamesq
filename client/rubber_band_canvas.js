@@ -43,19 +43,19 @@ define([
         return pos2[1] - pos1[1];
     }
 
-    function newIsVisible() {
+    function shouldBeVisible() {
         return !boards.selectedBoard.isFinished;
     }
 
     function updateVisibility() {
         var el = document.getElementById('rubberBandCanvas');
 
-        isVisible = newIsVisible();
+        isVisible = shouldBeVisible();
         el.style.display = isVisible ? 'block' : 'none';
     }
 
     function visibilityNeedsChange() {
-        return isVisible !== newIsVisible();
+        return isVisible !== shouldBeVisible();
     }
 
     function render() {

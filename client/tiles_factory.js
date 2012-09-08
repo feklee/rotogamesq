@@ -33,17 +33,24 @@ define(function () {
 
     // Reads the color values of the image into a two dimensional array of hex
     // values. Ignores the alpha channel.
+    //
+    // Tile colors are stored in objects and not directly as value of a tile.
+    // This makes it possible to differentiate between tiles that have the same
+    // color (when comparing them using e.g. `===`).
     function tilesFromCtx(ctx, width, height) {
         var tiles, tilesColumn, xT, yT, triple, offs,
             sideLenT = Math.min(width, height), // forces square dimensions
-            imgData = ctx.getImageData(0, 0, sideLenT, sideLenT).data;
+            imgData = ctx.getImageData(0, 0, sideLenT, sideLenT).data,
+            tileId = 0;
 
         tiles = Object.create(prototype);
         for (xT = 0; xT < sideLenT; xT += 1) {
             tilesColumn = [];
             for (yT = 0; yT < sideLenT; yT += 1) {
                 offs = 4 * (yT * sideLenT + xT);
-                tilesColumn.push(rgb(imgData, offs));
+                tilesColumn.push({
+                    color: rgb(imgData, offs)
+                });
             }
             tiles.push(tilesColumn);
         }
@@ -76,14 +83,14 @@ define(function () {
         }},
 
         // Returns a deep copy of `this`.
-        copy: {value: function () {
-            var tiles = Object.create(prototype), xT;
+        copy: {value: function (rectT) {
+            var newTiles = Object.create(prototype), xT;
 
             this.forEach(function (thisColumn) {
-                tiles.push(thisColumn.slice());
+                newTiles.push(thisColumn.slice());
             });
 
-            return tiles;
+            return newTiles;
         }}
     });
 

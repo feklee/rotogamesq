@@ -18,7 +18,6 @@
 
 /*global define */
 
-// fixme: implement
 define(function () {
     'use strict';
 

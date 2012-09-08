@@ -32,13 +32,6 @@ define(function () {
                     }
                 });
             }
-        }},
-
-        // fixme: remove if unused
-        clearContainer: {value: function (el) {
-            while (el.firstChild) {
-                el.removeChild(el.firstChild);
-            }
         }}
     });
 });

@@ -18,75 +18,132 @@
 
 /*global define */
 
-define(function () {
+define(['boards', 'display_c_sys'], function (boards, displayCSys) {
     'use strict';
 
     var sideLen,
-        requestRedraw = true;
+        tiles, // tiles, in position *after* rotation
+        animIsRunning,
+        rectT, // tiles inside of this rectangle are rotated
+        startTime, // time when animation started, in milliseconds
+        startAngle, // rad
+        angle, // current angle, in rad
+        dir, // rotation direction (-1, or +1)
+        isVisible = false,
+        board;
 
-//fixme:    var sideLen; // side length of canvas
+    function renderTile(ctx, posT, rotCenter) {
+        var pos = displayCSys.posFromPosT(posT),
+            color = tiles[posT[0]][posT[1]].color,
+            tileSideLen = displayCSys.tileSideLen;
+
+        ctx.fillStyle = color;
+        ctx.fillRect(pos[0] - rotCenter[0], pos[1] - rotCenter[1],
+                     tileSideLen, tileSideLen);
+    }
 
     function render() {
-        var el = document.getElementById('rotAnimCanvas'),
-            ctx = el.getContext('2d');
+        var xT, yT,
+            el = document.getElementById('rotAnimCanvas'),
+            ctx = el.getContext('2d'),
+            xMinT = rectT[0][0],
+            yMinT = rectT[0][1],
+            xMaxT = rectT[1][0],
+            yMaxT = rectT[1][1],
+            center = displayCSys.posFromPosT(rectT.centerT),
+            rotCenter = [center[0] + displayCSys.tileSideLen / 2,
+                         center[1] + displayCSys.tileSideLen / 2];
 
         el.width = el.height = sideLen; // also clears canvas
 
         ctx.save();
+        ctx.translate(rotCenter[0], rotCenter[1]);
+        ctx.rotate(angle);
+
+        for (xT = xMinT; xT <= xMaxT; xT += 1) {
+            for (yT = yMinT; yT <= yMaxT; yT += 1) {
+                renderTile(ctx, [xT, yT], rotCenter);
+            }
+        }
 
         ctx.restore();
     }
 
-/*fixme:    function mainEl() {
-        return document.getElementById('rotationCanvas');
-    }*/
+    function shouldBeVisible() {
+        return animIsRunning;
+    }
 
-/*fixme:    function needsToBeRendered(newSideLen) {
-        return sideLen !== newSideLen;
-    }*/
+    function visibilityNeedsChange() {
+        return shouldBeVisible() !== isVisible;
+    }
 
-    // Also clears the canvas.
-/*fixme:    function updateDimensions(newSideLen) {
-        var el = mainEl();
-        el.height = el.width = sideLen = newSideLen;
-    }*/
+    function updateVisibility() {
+        var el = document.getElementById('rotAnimCanvas');
 
-/*fixme:    function render(newSideLen) {
-        updateDimensions(newSideLen);
-    }*/
+        isVisible = shouldBeVisible();
+        el.style.display = isVisible ? 'block' : 'none';
+    }
+
+    function passedTime() {
+        return Date.now() - startTime;
+    }
+
+    function updateAngle() {
+        var speed = 0.002; // rad / s
+
+        angle = startAngle + dir * speed * passedTime();
+    }
+
+    function updateDir(rotation) {
+        dir = rotation.cw ? 1 : -1;
+    }
+
+    function updateStartAngle(rotation) {
+        startAngle = ((-dir) *
+                      (rotation.rectT.isSquare ? Math.PI / 2 : Math.PI));
+    }
+
+    function rotationIsFinished() {
+        return dir < 0 ? angle >= 0 : angle <= 0;
+    }
 
     return Object.create(null, {
         animationStep: {value: function () {
-/*fixme:            if (needsToBeRendered(newSideLen)) {
-                render(newSideLen);
-            }*/
-        }},
+            if (visibilityNeedsChange()) {
+                updateVisibility();
+            }
 
-        sideLen: {set: function (x) {
-            if (x !== sideLen) {
-                sideLen = x;
-                requestRedraw = true;
+            if (animIsRunning) {
+                updateAngle();
+                if (rotationIsFinished()) {
+                    render();
+                } else {
+                    animIsRunning = false;
+                }
             }
         }},
 
-        staticCtx: {value: staticCtx},
+        sideLen: {set: function (x) {
+            sideLen = x;
+        }},
 
-        animIsRunning: {value: false}, // fixme
+        animIsRunning: {get: function () {
+            return animIsRunning;
+        }},
 
-        // fixme: createAnimation from tilesCanvas, when it is detected that
-        // tiles have changed but board stayed the same. Use last rotation as
-        // rotation (`board.lastRotation` - stored separate from undo/redo
-        // history, if defined).
-        //
-        // fixme: perhaps don't trigger from outside
-        //
-        // fixme: use posFromPosT, etc. from `tiles_canvas`
-        //
-        // Rotate with CSS3 transforms (margin: -50%, -50%)
-        //
-        // fixme: redraw when size changes
-        createAnimation: {value: function () {
-            // fixme: use lastRotation
+        isInRotRect: {value: function (posT) {
+            return rectT.contains(posT);
+        }},
+
+        // Starts new animation, showing the last rotation.
+        startAnim: {value: function (lastRotation) {
+            board = boards.selectedBoard;
+            tiles = board.tiles.copy();
+            rectT = lastRotation.rectT;
+            animIsRunning = true;
+            startTime = Date.now();
+            updateDir(lastRotation);
+            updateStartAngle(lastRotation);
         }}
     });
 });

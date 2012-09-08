@@ -25,15 +25,21 @@ define([
 
     var sideLen, tiles, board,
         needsToBeRendered = true,
-        selectedRectT; // selected rectangle in coordinates of tiles
+        selectedRectT, // selected rectangle in coordinates of tiles
+        animIsRunning;
 
     function selectedRectTNeedsChange() {
         return (selectedRectT === undefined ||
                 !selectedRectT.isEqualTo(rubberBandCanvas.selectedRectT));
     }
 
-    function tilesHaveChanged() {
+    function tilesNeedChange() {
         return tiles === undefined || !board.tiles.isEqualTo(tiles);
+    }
+
+    function animIsRunningNeedsChange() {
+        return (animIsRunning === undefined ||
+                animIsRunning !== rotAnimCanvas.animIsRunning);
     }
 
     function boardNeedsChange() {
@@ -64,21 +70,17 @@ define([
                 posT[1] <= selectedRectT[1][1]);
     }
 
-    // Renders tile either to the main canvas, or to the canvas that is rotated
-    // as part of a rotation animation.
     function renderTile(ctx, posT) {
         var pos = displayCSys.posFromPosT(posT),
-            color = tiles[posT[0]][posT[1]],
+            color = tiles[posT[0]][posT[1]].color,
             showSelection = rubberBandCanvas.isBeingDragged,
             tileSideLen = displayCSys.tileSideLen;
 
-        if (rotAnimCanvas.animInProgress &&
-                rotAnimCanvas.tileIsRotated(posT)) {
-            ctx = rotAnimCanvas.staticCtx;
-        } else {
-            ctx.globalAlpha = showSelection && tileIsSelected(posT) ? 0.5 : 1;
+        if (rotAnimCanvas.animIsRunning && rotAnimCanvas.isInRotRect(posT)) {
+            return; // don't show this tile, it's animated
         }
 
+        ctx.globalAlpha = showSelection && tileIsSelected(posT) ? 0.5 : 1;
         ctx.fillStyle = color;
         ctx.fillRect(pos[0], pos[1], tileSideLen, tileSideLen);
     }
@@ -105,10 +107,10 @@ define([
         }
     }
 
-    function initRotationAnim() {
+    function startRotationAnim() {
         var lastRotation = board.lastRotation;
-        if (lastRotation !== undefined) {
-            rotAnimCanvas.initAnim(lastRotation);
+        if (lastRotation !== null) {
+            rotAnimCanvas.startAnim(lastRotation);
         }
     }
 
@@ -126,12 +128,17 @@ define([
                 boardHasChanged = false;
             }
 
-            if (tilesHaveChanged()) {
+            if (tilesNeedChange()) {
                 needsToBeRendered = true;
                 tiles = board.tiles.copy();
                 if (!boardHasChanged) {
-                    initRotationAnim();
+                    startRotationAnim();
                 } // else: change in tiles not due to rotation
+            }
+
+            if (animIsRunningNeedsChange()) {
+                needsToBeRendered = true;
+                animIsRunning = rotAnimCanvas.animIsRunning;
             }
 
             if (selectedRectTNeedsChange()) {

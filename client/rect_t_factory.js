@@ -37,6 +37,18 @@ define(function () {
         }},
         heightT: {get: function () {
             return this[1][1] - this[0][1];
+        }},
+        centerT: {get: function () {
+            return [(this[0][0] + this[1][0]) / 2,
+                    (this[0][1] + this[1][1]) / 2];
+        }},
+        contains: {value: function (posT) {
+            var xT = posT[0], yT = posT[1];
+            return (xT >= this[0][0] && yT >= this[0][1] &&
+                    xT <= this[1][0] && yT <= this[1][1]);
+        }},
+        isSquare: {get: function () {
+            return this.widthT === this.heightT;
         }}
     });
 
