@@ -23,7 +23,7 @@ define(function () {
 
     var sideLen, board,
         tileSideLen = 0,
-        spacing = 0, 
+        spacing = 0,
         spacingIsDisabled = false;
 
     function updateDimensions() {

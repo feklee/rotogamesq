@@ -19,40 +19,108 @@
 /*global define */
 
 define([
-    'boards', 'util', 'board_thumb_factory'
-], function (boards, util, boardThumbFactory) {
+    'boards', 'board_thumb_factory'
+], function (boards, boardThumbFactory) {
     'use strict';
 
-    var selectedBoardThumb = boardThumbFactory.create(boards.selectedBoard),
-        prevBoardThumb = boardThumbFactory.create(boards.prevBoard),
-        nextBoardThumb = boardThumbFactory.create(boards.nextBoard),
-        width;
+    var width,
+        thumbs = [],
+        //fixme: animI = 0,
+        selectedBoardI = 0,
+        elementsNeedToBeAppended = true,
+        needsToBeRendered = true,
+        nSideThumbs = 3;  // thumbnails displayed to the left/right side of the
+                          // currently selected one (needs to be large enough
+                          // if e.g. the left-most thumb is the current)
 
-    util.whenDocumentIsReady(function () {
+    // Returns a board index that is within bounds, by cycling if `i` is too
+    // small or too large.
+    function cycledBoardI(i) {
+        return ((i % boards.length) + boards.length) % boards.length;
+    }
+
+    // Selected board is always in the middle of the thumbs.
+    function boardIFromThumbI(thumbI) {
+        return cycledBoardI(selectedBoardI + (thumbI - nSideThumbs));
+    }
+
+    function updateThumbsCoordinates() {
+        thumbs.forEach(function (thumb, i) {
+            thumb.sideLen = width / 10;
+            thumb.x = (i - nSideThumbs) * (width / 5) + width / 2;
+            thumb.y = 20; // fixme
+        });
+    }
+
+    function createThumbs() {
+        var i, thumb;
+
+        thumbs.length = 0;
+        for (i = 0; i < nSideThumbs + 1 + nSideThumbs; i += 1) {
+            thumb = boardThumbFactory.create(boardIFromThumbI(i));
+            thumbs.push(thumb);
+        }
+
+        updateThumbsCoordinates();
+    }
+
+    function updateThumbs() {
+        thumbs.forEach(function (thumb, i) {
+            thumb.boardI = boardIFromThumbI(i);
+        });
+    }
+
+    function thumbsAnimationSteps() {
+        thumbs.forEach(function (thumb) {
+            thumb.animationStep();
+        });
+    }
+
+    function appendElements(el) {
+        thumbs.forEach(function (thumb) {
+            el.appendChild(thumb.element);
+        });
+    }
+
+    function thumbsHaveBeenCreated() {
+        return thumbs.length > 0;
+    }
+
+    function render() {
         var el = document.getElementById('boardsNavigator');
 
-        el.appendChild(prevBoardThumb.element).className = 'prev boardThumb';
-        el.appendChild(selectedBoardThumb.element).className =
-            'selected boardThumb';
-        el.appendChild(nextBoardThumb.element).className = 'next boardThumb';
-    });
+        if (elementsNeedToBeAppended && thumbsHaveBeenCreated()) {
+            appendElements(el);
+            elementsNeedToBeAppended = false;
+        }
+    }
 
     return Object.create(null, {
         animationStep: {value: function () {
-            prevBoardThumb.board = boards.prevBoard;
-            prevBoardThumb.animationStep();
-            selectedBoardThumb.board = boards.selectedBoard;
-            selectedBoardThumb.animationStep();
-            nextBoardThumb.board = boards.nextBoard;
-            nextBoardThumb.animationStep();
+            if (selectedBoardI !== boards.selectedI) {
+                selectedBoardI = boards.selectedI;
+                updateThumbs();
+            }
+
+            if (needsToBeRendered) {
+                render();
+                needsToBeRendered = false;
+            }
+
+            thumbsAnimationSteps();
+        }},
+
+        activate: {value: function () {
+            // boards are now definitely loaded
+            createThumbs();
+            needsToBeRendered = true;
         }},
 
         width: {set: function (x) {
             if (x !== width) {
                 width = x;
-                selectedBoardThumb.sideLen = width / 5;
-                prevBoardThumb.sideLen = width / 10;
-                nextBoardThumb.sideLen = width / 10;
+                updateThumbsCoordinates();
+                needsToBeRendered = true;
             }
         }}
     });

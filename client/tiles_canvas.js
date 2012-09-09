@@ -55,7 +55,7 @@ define([
     }
 
     function boardNeedsUpdate() {
-        return board === undefined || board !== boards.selectedBoard;
+        return board === undefined || board !== boards.selected;
     }
 
     function onRubberBandDragStart() {
@@ -74,11 +74,11 @@ define([
 
     function onRubberBandDragEnd() {
         if (rotation !== undefined && rotation.makesSense &&
-                !boards.selectedBoard.isFinished) {
-            boards.selectedBoard.rotate(rotation);
+                !boards.selected.isFinished) {
+            boards.selected.rotate(rotation);
         }
 
-        if (boards.selectedBoard.isFinished) {
+        if (boards.selected.isFinished) {
             rubberBandCanvas.hide();
         } else {
             rubberBandCanvas.show();
@@ -160,7 +160,7 @@ define([
             startRotationAnim();
         } // else: change in tiles not due to rotation
 
-        if (boards.selectedBoard.isFinished) {
+        if (boards.selected.isFinished) {
             rubberBandCanvas.hide();
         } else {
             rubberBandCanvas.show(); // necessary e.g. after undoing finished
@@ -187,7 +187,7 @@ define([
 
             if (boardNeedsUpdate()) {
                 needsToBeRendered = true;
-                board = boards.selectedBoard;
+                board = boards.selected;
                 boardHasChanged = true;
             } else {
                 boardHasChanged = false;

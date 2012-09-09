@@ -55,6 +55,7 @@ define([
 
         show: {value: function () {
             isVisible = true;
+            boardsNavigator.activate();
             needsToBeRendered = true;
         }},
 

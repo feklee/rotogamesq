@@ -21,26 +21,47 @@
 define(['board_factory'], function (boardFactory) {
     'use strict';
 
-    var selectedI = 0, object;
+    var selectedI = 0,
+        object,
+        boardNames = ['13', 'smiley', 'rgbcmy'];
 
-    function load(onLoaded) {
-        boardFactory.load('smiley', function (board) {
-            object.push(board);
-            onLoaded();
-        });
+    function allBoardsAreLoaded() {
+        var i;
+
+        for (i = 0; i < boardNames.length; i += 1) {
+            if (object[i] === undefined) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     object = Object.create([], {
-        load: {value: load},
-        selectedBoard: {get: function () {
+        load: {value: function (onLoaded) {
+            this.length = boardNames.length;
+            boardNames.forEach(function (boardName, i) {
+                boardFactory.load(boardName, function (board) {
+                    object[i] = board;
+                    if (allBoardsAreLoaded()) {
+                        onLoaded();
+                    }
+                });
+            });
+        }},
+
+        selected: {get: function () {
             return this[selectedI];
         }},
-        prevBoard: {get: function () {
-            return this[Math.max(selectedI, 0)];
-        }},
-        nextBoard: {get: function () {
-            return this[Math.min(selectedI, this.length)];
-        }}
+
+        selectedI: {
+            get: function () {
+                return selectedI;
+            },
+            set: function (newSelectedI) {
+                selectedI = newSelectedI;
+            }
+        }
     });
 
     return object;

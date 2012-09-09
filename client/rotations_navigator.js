@@ -21,13 +21,12 @@
 define(['boards', 'util'], function (boards, util) {
     'use strict';
 
-    var nRotations, selectedBoard;
+    var nRotations, board;
 
     function needsToBeRendered() {
-        var newSelectedBoard = boards.selectedBoard;
+        var newBoard = boards.selected;
 
-        return (selectedBoard !== newSelectedBoard ||
-                nRotations !== selectedBoard.nRotations);
+        return board !== newBoard || nRotations !== board.nRotations;
     }
 
     function buttonEl(type) {
@@ -36,11 +35,11 @@ define(['boards', 'util'], function (boards, util) {
     }
 
     function onUndoClick() {
-        selectedBoard.undo();
+        board.undo();
     }
 
     function onRedoClick() {
-        selectedBoard.redo();
+        board.redo();
     }
 
     function setupButton(type, onClick) {
@@ -60,16 +59,16 @@ define(['boards', 'util'], function (boards, util) {
     }
 
     function renderUndoButton() {
-        renderButton('undo', !selectedBoard.undoIsPossible);
+        renderButton('undo', !board.undoIsPossible);
     }
 
     function renderRedoButton() {
-        renderButton('redo', !selectedBoard.redoIsPossible);
+        renderButton('redo', !board.redoIsPossible);
     }
 
     function render() {
-        selectedBoard = boards.selectedBoard;
-        nRotations = selectedBoard.nRotations;
+        board = boards.selected;
+        nRotations = board.nRotations;
 
         document.getElementById('nRotations').textContent = nRotations;
         renderUndoButton();

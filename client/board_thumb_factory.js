@@ -19,7 +19,7 @@
 
 /*global define */
 
-define(function () {
+define(['boards'], function (boards) {
     'use strict';
 
     function posFromPosT(posT, sideLen, sideLenT) {
@@ -46,12 +46,14 @@ define(function () {
     // tag, then it is smoothed/blurred, and there is no way to turn off that
     // behavior. In particular, there is no equivalent to Firefox 14.0's
     // `-moz-crisp-edges`.
-    function render(el, board, sideLen) {
+    function render(el, board, sideLen, x, y) {
         var xT, yT,
             sideLenT = board.sideLenT,
             ctx = el.getContext('2d');
 
         el.width = el.height = sideLen; // also clears canvas
+        el.style.left = (x - sideLen / 2) + 'px';
+        el.style.top = (y - sideLen / 2) + 'px';
 
         for (xT = 0; xT < sideLenT; xT += 1) {
             for (yT = 0; yT < sideLenT; yT += 1) {
@@ -61,30 +63,53 @@ define(function () {
     }
 
     return Object.create(null, {
-        create: {value: function (board) {
+        create: {value: function (boardI) {
             var el = document.createElement('canvas'),
                 needsToBeRendered = true,
-                sideLen = 0;
+                sideLen = 0,
+                x = 0, // x-position of center within outher container
+                y = 0;
+
+            el.addEventListener('click', function () {
+                boards.selectedI = boardI;
+            });
 
             return Object.create(null, {
                 element: {get: function () {
                     return el;
                 }},
-                sideLen: {set: function (x) {
-                    if (x !== sideLen) {
-                        sideLen = x;
+
+                boardI: {set: function (newBoardI) {
+                    if (newBoardI !== boardI) {
+                        boardI = newBoardI;
                         needsToBeRendered = true;
                     }
                 }},
-                board: {set: function (x) {
-                    if (x !== board) {
-                        board = x;
+
+                sideLen: {set: function (newSideLen) {
+                    if (newSideLen !== sideLen) {
+                        sideLen = newSideLen;
                         needsToBeRendered = true;
                     }
                 }},
+
+                x: {set: function (newX) {
+                    if (newX !== x) {
+                        x = newX;
+                        needsToBeRendered = true;
+                    }
+                }},
+
+                y: {set: function (newY) {
+                    if (newY !== y) {
+                        y = newY;
+                        needsToBeRendered = true;
+                    }
+                }},
+
                 animationStep: {value: function () {
                     if (needsToBeRendered) {
-                        render(el, board, sideLen);
+                        render(el, boards[boardI], sideLen, x, y);
                         needsToBeRendered = false;
                     }
                 }}

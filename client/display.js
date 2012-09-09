@@ -44,7 +44,7 @@ define([
 
     return Object.create(null, {
         animationStep: {value: function (newSideLen) {
-            displayCSys.board = boards.selectedBoard;
+            displayCSys.board = boards.selected;
             displayCSys.sideLen = newSideLen;
             tilesCanvas.sideLen = newSideLen;
             arrowCanvas.sideLen = newSideLen;

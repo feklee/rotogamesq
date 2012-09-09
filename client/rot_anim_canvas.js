@@ -120,7 +120,7 @@ define([
 
         // Starts new animation, showing the last rotation.
         startAnim: {value: function (lastRotation) {
-            board = boards.selectedBoard;
+            board = boards.selected;
             tiles = board.tiles.copy();
             rectT = lastRotation.rectT;
             animIsRunning = true;

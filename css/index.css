@@ -42,21 +42,14 @@ h1 em {
     position: absolute;
     bottom: 0;
     width: 100%;
-    text-align: center;
+    height: 20%;
     padding-bottom: 2%;
+    overflow: hidden;
 }
 
-#boardsNavigator>.boardThumb {
+#boardsNavigator>* {
     cursor: pointer;
-}
-
-#boardsNavigator>.selected.boardThumb {
-    margin: 0 10%;
-}
-
-#boardsNavigator canvas {
-    display: inline-block;
-    vertical-align: bottom;
+    position: absolute;
 }
 
 #stepsNavigator {
