@@ -43,6 +43,17 @@ define(function () {
 
         angleDeg: {get: function () {
             return this.direction * (this.rectT.isSquare ? 90 : 180);
+        }},
+
+        inverse: {get: function () {
+            var rectT = this.rectT, cw = !this.cw;
+
+            return Object.create(prototype, {
+                rectT: {get: function () { return rectT; }},
+
+                // direction (true: clock wise)
+                cw: {get: function () { return cw; }}
+            });
         }}
     });
 

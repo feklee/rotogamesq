@@ -54,13 +54,6 @@ define(['tiles_factory'], function (tilesFactory) {
         return 'boards/' + name + '/' + type + '.gif';
     }
 
-    function inverseRotation(rotation) {
-        return {
-            rectT: rotation.rectT,
-            cw: !rotation.cw
-        };
-    }
-
     function selectedTiles(tiles, x1T, y1T, x2T, y2T) {
         var sTiles, sTilesColumn, xT, yT;
 
@@ -126,7 +119,7 @@ define(['tiles_factory'], function (tilesFactory) {
 
     // Applies the inverse of the specified rotation.
     function rotateTilesInverse(tiles, rotation) {
-        rotateTiles(tiles, inverseRotation(rotation));
+        rotateTiles(tiles, rotation.inverse);
     }
 
     function isFinished(tiles, endTiles) {
@@ -150,7 +143,7 @@ define(['tiles_factory'], function (tilesFactory) {
                 internal.futureRotations.push(rotation);
                 rotateTilesInverse(this.tiles, rotation);
                 internal.isFinished = isFinished(this.tiles, this.endTiles);
-                internal.lastRotation = rotation;
+                internal.lastRotation = rotation.inverse;
             } // else: no more undo
         }},
 
