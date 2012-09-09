@@ -18,7 +18,9 @@
 
 /*global define */
 
-define(['boards', 'display_c_sys'], function (boards, displayCSys) {
+define([
+    'boards', 'display_c_sys', 'display_canvas_factory'
+], function (boards, displayCSys, displayCanvasFactory) {
     'use strict';
 
     var sideLen,
@@ -29,7 +31,6 @@ define(['boards', 'display_c_sys'], function (boards, displayCSys) {
         startAngle, // rad
         angle, // current angle, in rad
         dir, // rotation direction (-1, or +1)
-        isVisible = false,
         board;
 
     function renderTile(ctx, posT, rotCenter) {
@@ -42,9 +43,8 @@ define(['boards', 'display_c_sys'], function (boards, displayCSys) {
                      tileSideLen, tileSideLen);
     }
 
-    function render() {
+    function render(el) {
         var xT, yT,
-            el = document.getElementById('rotAnimCanvas'),
             ctx = el.getContext('2d'),
             xMinT = rectT[0][0],
             yMinT = rectT[0][1],
@@ -69,29 +69,22 @@ define(['boards', 'display_c_sys'], function (boards, displayCSys) {
         ctx.restore();
     }
 
-    function shouldBeVisible() {
-        return animIsRunning;
-    }
-
-    function visibilityNeedsChange() {
-        return shouldBeVisible() !== isVisible;
-    }
-
-    function updateVisibility() {
-        var el = document.getElementById('rotAnimCanvas');
-
-        isVisible = shouldBeVisible();
-        el.style.display = isVisible ? 'block' : 'none';
-    }
-
     function passedTime() {
         return Date.now() - startTime;
+    }
+
+    function rotationIsFinished() {
+        return dir < 0 ? angle <= 0 : angle >= 0;
     }
 
     function updateAngle() {
         var speed = 0.004; // rad / s
 
         angle = startAngle + dir * speed * passedTime();
+
+        if (rotationIsFinished()) {
+            angle = 0; // avoids rotation beyond 0 (would look ugly)
+        }
     }
 
     function updateDir(rotation) {
@@ -103,22 +96,21 @@ define(['boards', 'display_c_sys'], function (boards, displayCSys) {
                       (rotation.rectT.isSquare ? Math.PI / 2 : Math.PI));
     }
 
-    function rotationIsFinished() {
-        return dir < 0 ? angle >= 0 : angle <= 0;
-    }
-
-    return Object.create(null, {
+    return Object.create(displayCanvasFactory.create(), {
         animationStep: {value: function () {
-            if (visibilityNeedsChange()) {
-                updateVisibility();
+            var el = document.getElementById('rotAnimCanvas');
+
+            if (this.visibilityNeedsToBeUpdated) {
+                this.updateVisibility(el);
             }
 
             if (animIsRunning) {
                 updateAngle();
-                if (rotationIsFinished()) {
-                    render();
+                if (!rotationIsFinished()) {
+                    render(el);
                 } else {
                     animIsRunning = false;
+                    this.hide();
                 }
             }
         }},
@@ -144,6 +136,7 @@ define(['boards', 'display_c_sys'], function (boards, displayCSys) {
             startTime = Date.now();
             updateDir(lastRotation);
             updateStartAngle(lastRotation);
+            this.show();
         }}
     });
 });

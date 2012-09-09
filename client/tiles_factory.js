@@ -79,7 +79,7 @@ define(function () {
         return true;
     }
 
-    prototype = Object.defineProperties([], {
+    prototype = Object.create([], {
         areEqualTo: {value: function (tiles) {
             return areEqual(this, tiles, function (tile1, tile2) {
                 return tile1 === tile2;

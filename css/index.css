@@ -26,7 +26,7 @@ h1 em {
 }
 
 #panel, #display, #loadIndicator,
-#tilesCanvas, #rotAnimCanvas, #rubberBandCanvas {
+#tilesCanvas, #arrowCanvas, #rotAnimCanvas, #rubberBandCanvas {
     position: absolute;
 }
 

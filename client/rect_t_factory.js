@@ -27,7 +27,7 @@ define(function () {
         return pos1T[0] === pos2T[0] && pos1T[1] === pos2T[1];
     };
 
-    prototype = Object.defineProperties([], {
+    prototype = Object.create([], {
         isEqualTo: {value: function (rectT) {
             return (areSamePosT(this[0], rectT[0]) &&
                     areSamePosT(this[1], rectT[1]));

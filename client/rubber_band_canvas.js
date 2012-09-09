@@ -19,19 +19,19 @@
 /*global define */
 
 define([
-    'util', 'rect_t_factory', 'boards', 'display_c_sys'
-], function (util, rectTFactory, boards, displayCSys) {
+    'util', 'rect_t_factory', 'display_c_sys', 'display_canvas_factory'
+], function (util, rectTFactory, displayCSys, displayCanvasFactory) {
     'use strict';
 
     var sideLen, // side length of canvas
         pos1 = [0, 0], // 1st corner of rectangle
         pos2 = [0, 0], // 2nd corner of rectangle
         selectedRectT = rectTFactory.create([0, 0], [0, 0]),
-        isBeingDragged = false,
-        isVisible = false,
         needsToBeRendered = true,
+        isBeingDragged = false,
         lineWidth = 1,
-        onDragEnd2; // configurable handler, called at the end of `onDragEnd`
+        onDragEnd2, // configurable handler, called at the end of `onDragEnd`
+        object;
 
     // may be negative
     function width() {
@@ -43,24 +43,8 @@ define([
         return pos2[1] - pos1[1];
     }
 
-    function shouldBeVisible() {
-        return !boards.selectedBoard.isFinished;
-    }
-
-    function updateVisibility() {
-        var el = document.getElementById('rubberBandCanvas');
-
-        isVisible = shouldBeVisible();
-        el.style.display = isVisible ? 'block' : 'none';
-    }
-
-    function visibilityNeedsChange() {
-        return isVisible !== shouldBeVisible();
-    }
-
-    function render() {
-        var el = document.getElementById('rubberBandCanvas'),
-            ctx = el.getContext('2d');
+    function render(el) {
+        var ctx = el.getContext('2d');
 
         el.height = el.width = sideLen; // also clears canvas
         lineWidth = 0.005 * sideLen;
@@ -186,15 +170,17 @@ define([
         window.addEventListener('touchcancel', onTouchEnd);
     });
 
-    return Object.create(null, {
+    return Object.create(displayCanvasFactory.create(), {
         animationStep: {value: function () {
-            if (visibilityNeedsChange()) {
-                updateVisibility();
+            var el = document.getElementById('rubberBandCanvas');
+
+            if (this.visibilityNeedsToBeUpdated) {
+                this.updateVisibility(el);
                 needsToBeRendered = true;
             }
 
             if (needsToBeRendered) {
-                render();
+                render(el);
                 needsToBeRendered = false;
             }
         }},

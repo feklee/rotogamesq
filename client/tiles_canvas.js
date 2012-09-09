@@ -28,21 +28,21 @@ define([
         selectedRectT, // selected rectangle in coordinates of tiles
         animIsRunning;
 
-    function selectedRectTNeedsChange() {
+    function selectedRectTNeedsUpdate() {
         return (selectedRectT === undefined ||
                 !selectedRectT.isEqualTo(rubberBandCanvas.selectedRectT));
     }
 
-    function tilesNeedChange() {
+    function tilesNeedUpdate() {
         return tiles === undefined || !board.tiles.areEqualTo(tiles);
     }
 
-    function animIsRunningNeedsChange() {
+    function animIsRunningNeedsUpdate() {
         return (animIsRunning === undefined ||
                 animIsRunning !== rotAnimCanvas.animIsRunning);
     }
 
-    function boardNeedsChange() {
+    function boardNeedsUpdate() {
         return board === undefined || board !== boards.selectedBoard;
     }
 
@@ -60,6 +60,12 @@ define([
                 rectT: selectedRectT,
                 cw: rubberBandCanvas.draggedToTheRight
             });
+        }
+
+        if (boards.selectedBoard.isFinished) {
+            rubberBandCanvas.hide();
+        } else {
+            rubberBandCanvas.show();
         }
     }
 
@@ -121,7 +127,7 @@ define([
         animationStep: {value: function () {
             var boardHasChanged;
 
-            if (boardNeedsChange()) {
+            if (boardNeedsUpdate()) {
                 needsToBeRendered = true;
                 board = boards.selectedBoard;
                 boardHasChanged = true;
@@ -129,7 +135,7 @@ define([
                 boardHasChanged = false;
             }
 
-            if (tilesNeedChange()) {
+            if (tilesNeedUpdate()) {
                 needsToBeRendered = true;
                 tiles = board.tiles.copy();
                 if (!boardHasChanged) {
@@ -137,12 +143,12 @@ define([
                 } // else: change in tiles not due to rotation
             }
 
-            if (animIsRunningNeedsChange()) {
+            if (animIsRunningNeedsUpdate()) {
                 needsToBeRendered = true;
                 animIsRunning = rotAnimCanvas.animIsRunning;
             }
 
-            if (selectedRectTNeedsChange()) {
+            if (selectedRectTNeedsUpdate()) {
                 needsToBeRendered = true;
                 selectedRectT = rubberBandCanvas.selectedRectT;
             }

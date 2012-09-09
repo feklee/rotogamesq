@@ -24,8 +24,7 @@ define(['tiles_factory'], function (tilesFactory) {
     var prototype;
 
     function allTilesAreLoaded(board) {
-        return (board.hasOwnProperty('tiles') &&
-                board.hasOwnProperty('endTiles'));
+        return board.tiles !== undefined && board.endTiles !== undefined;
     }
 
     function onAllTilesLoaded(board, onLoaded) {
@@ -134,7 +133,7 @@ define(['tiles_factory'], function (tilesFactory) {
         return tiles.colorsAreEqualTo(endTiles);
     }
 
-    prototype = Object.defineProperties({}, {
+    prototype = Object.create(null, {
         rotate: {value: function (internal, rotation) {
             var rectT = rotation.rectT, cw = rotation.cw, tiles = this.tiles;
 
