@@ -67,7 +67,7 @@ define(function () {
                 sideLen = 0;
 
             return Object.create(null, {
-                el: {get: function () {
+                element: {get: function () {
                     return el;
                 }},
                 sideLen: {set: function (x) {

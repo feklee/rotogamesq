@@ -23,19 +23,37 @@ define([
 ], function (boards, util, boardThumbFactory) {
     'use strict';
 
-    var selectedBoardThumb = boardThumbFactory.create(boards.selectedBoard);
+    var selectedBoardThumb = boardThumbFactory.create(boards.selectedBoard),
+        prevBoardThumb = boardThumbFactory.create(boards.prevBoard),
+        nextBoardThumb = boardThumbFactory.create(boards.nextBoard),
+        width;
 
     util.whenDocumentIsReady(function () {
-        document.getElementById('boardsNavigator').appendChild(
-            selectedBoardThumb.el
-        );
+        var el = document.getElementById('boardsNavigator');
+
+        el.appendChild(prevBoardThumb.element).className = 'prev boardThumb';
+        el.appendChild(selectedBoardThumb.element).className =
+            'selected boardThumb';
+        el.appendChild(nextBoardThumb.element).className = 'next boardThumb';
     });
 
     return Object.create(null, {
-        animationStep: {value: function (newWidth) {
+        animationStep: {value: function () {
+            prevBoardThumb.board = boards.prevBoard;
+            prevBoardThumb.animationStep();
             selectedBoardThumb.board = boards.selectedBoard;
-            selectedBoardThumb.sideLen = newWidth / 5;
             selectedBoardThumb.animationStep();
+            nextBoardThumb.board = boards.nextBoard;
+            nextBoardThumb.animationStep();
+        }},
+
+        width: {set: function (x) {
+            if (x !== width) {
+                width = x;
+                selectedBoardThumb.sideLen = width / 5;
+                prevBoardThumb.sideLen = width / 10;
+                nextBoardThumb.sideLen = width / 10;
+            }
         }}
     });
 });

@@ -50,17 +50,24 @@ define([
     }
 
     function animationStep() {
-        updateDimensions();
-
-        loadIndicator.animationStep(width);
+        loadIndicator.animationStep();
         display.animationStep(height);
-        panel.animationStep(width - height, height);
+        panel.animationStep();
 
         window.requestAnimationFrame(animationStep);
     }
 
     function startAnimation() {
         window.requestAnimationFrame(animationStep);
+    }
+
+    function onResize() {
+        updateDimensions();
+
+        panel.width = width - height;
+        panel.height = height;
+
+        loadIndicator.width = width;
     }
 
     util.whenDocumentIsReady(function () {
@@ -70,5 +77,7 @@ define([
             display.show();
             loadIndicator.hide();
         });
+        onResize(); // captures initial size
+        window.addEventListener('resize', onResize);
     });
 });

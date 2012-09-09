@@ -19,61 +19,58 @@
 /*global define */
 
 define([
-    'boards', 'boards_navigator', 'rotations_navigator'
-], function (boards, boardsNavigator, rotationsNavigator) {
+    'boards_navigator', 'rotations_navigator'
+], function (boardsNavigator, rotationsNavigator) {
     'use strict';
 
-    var width, height, selectedBoard,
+    var width, height,
+        needsToBeRendered = true,
         isVisible = false;
 
-    function el() {
-        return document.getElementById('panel');
-    }
+    function render() {
+        var el = document.getElementById('panel'),
+            style = el.style,
+            padding = Math.round(0.01 * width);
 
-    function updateDimensions(e, newWidth, newHeight) {
-        var style = e.style,
-            newPadding = Math.round(0.01 * newWidth);
-
-        style.padding = newPadding + 'px';
-        style.width = (newWidth - 2 * newPadding) + 'px';
-        style.height = (newHeight - 2 * newPadding) + 'px';
-        style.left = newHeight + 'px';
-        style.fontSize = Math.ceil(newHeight / 25) + 'px';
-
-        width = newWidth;
-        height = newHeight;
-    }
-
-    function needsToBeRendered(newWidth, newHeight) {
-        var newSelectedBoard = boards.selectedBoard;
-
-        return (width !== newWidth || height !== newHeight ||
-                selectedBoard !== newSelectedBoard);
-    }
-
-    function render(newWidth, newHeight) {
-        var e = el();
-
-        updateDimensions(e, newWidth, newHeight);
-
-        selectedBoard = boards.selectedBoard;
+        style.display = 'block'; // unhides, if previously hidden
+        style.padding = padding + 'px';
+        style.width = (width - 2 * padding) + 'px';
+        style.height = (height - 2 * padding) + 'px';
+        style.left = height + 'px';
+        style.fontSize = Math.ceil(height / 25) + 'px';
     }
 
     return Object.create(null, {
-        animationStep: {value: function (newWidth, newHeight) {
+        animationStep: {value: function () {
             if (isVisible) {
-                if (needsToBeRendered(newWidth, newHeight)) {
-                    render(newWidth, newHeight);
+                if (needsToBeRendered) {
+                    render();
+                    needsToBeRendered = false;
                 }
 
-                boardsNavigator.animationStep(newWidth);
+                boardsNavigator.animationStep();
                 rotationsNavigator.animationStep();
             }
         }},
 
         show: {value: function () {
-            el().style.display = 'block';
             isVisible = true;
+            needsToBeRendered = true;
+        }},
+
+        width: {set: function (x) {
+            if (x !== width) {
+                width = x;
+                boardsNavigator.width = width;
+                needsToBeRendered = true;
+            }
+        }},
+
+        height: {set: function (newHeight) {
+            if (newHeight !== height) {
+                height = newHeight;
+                needsToBeRendered = true;
+            }
         }}
     });
 });

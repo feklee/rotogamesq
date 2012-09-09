@@ -21,26 +21,38 @@
 define(function () {
     'use strict';
 
-    var isVisible = true;
+    var isVisible = true,
+        needsToBeRendered = true,
+        width;
 
-    function el() {
-        return document.getElementById('loadIndicator');
+    function render() {
+        var style = document.getElementById('loadIndicator').style;
+
+        style.fontSize = Math.ceil(width / 20) + 'px';
+        style.top = style.left = Math.round(0.01 * width);
+        style.display = 'block';
     }
 
     return Object.create(null, {
         animationStep: {value: function (newWidth) {
             var style;
 
-            if (isVisible) {
-                style = el().style;
-                style.fontSize = Math.ceil(newWidth / 20) + 'px';
-                style.top = style.left = Math.round(0.01 * newWidth);
+            if (isVisible && needsToBeRendered) {
+                render();
+                needsToBeRendered = false;
             }
         }},
 
         hide: {value: function () {
+            document.getElementById('loadIndicator').style.display = 'none';
             isVisible = false;
-            el().style.display = 'none';
+        }},
+
+        width: {set: function (x) {
+            if (x !== width) {
+                width = x;
+                needsToBeRendered = true;
+            }
         }}
     });
 });

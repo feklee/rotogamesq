@@ -30,6 +30,10 @@ h1 em {
     position: absolute;
 }
 
+#loadIndicator {
+    display: none; /* hidden only until size is set */
+}
+
 #panel, #display {
     display: none;
 }
@@ -40,6 +44,14 @@ h1 em {
     width: 100%;
     text-align: center;
     padding-bottom: 2%;
+}
+
+#boardsNavigator>.boardThumb {
+    cursor: pointer;
+}
+
+#boardsNavigator>.selected.boardThumb {
+    margin: 0 10%;
 }
 
 #boardsNavigator canvas {

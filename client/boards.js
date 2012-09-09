@@ -21,17 +21,27 @@
 define(['board_factory'], function (boardFactory) {
     'use strict';
 
-    var selectedBoard;
+    var selectedI = 0, object;
 
     function load(onLoaded) {
         boardFactory.load('smiley', function (board) {
-            selectedBoard = board; // there's only one board at the moment
+            object.push(board);
             onLoaded();
         });
     }
 
-    return Object.create(null, {
-        'load': {value: load},
-        'selectedBoard': {get: function () { return selectedBoard; }}
+    object = Object.create([], {
+        load: {value: load},
+        selectedBoard: {get: function () {
+            return this[selectedI];
+        }},
+        prevBoard: {get: function () {
+            return this[Math.max(selectedI, 0)];
+        }},
+        nextBoard: {get: function () {
+            return this[Math.min(selectedI, this.length)];
+        }}
     });
+
+    return object;
 });
