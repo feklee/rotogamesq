@@ -29,7 +29,7 @@ define([
         selectedBoardI = 0,
         elementsNeedToBeAppended = true,
         needsToBeRendered = true,
-        nSideThumbs = 3;  // thumbnails displayed to the left/right side of the
+        nSideThumbs = 2;  // thumbnails displayed to the left/right side of the
                           // currently selected one (needs to be large enough
                           // if e.g. the left-most thumb is the current)
 
@@ -46,9 +46,9 @@ define([
 
     function updateThumbsCoordinates() {
         thumbs.forEach(function (thumb, i) {
-            thumb.sideLen = width / 10;
-            thumb.x = (i - nSideThumbs) * (width / 5) + width / 2;
-            thumb.y = 20; // fixme
+            thumb.sideLen = width / (4 + 2 * Math.abs(i - nSideThumbs));
+            thumb.x = (i - nSideThumbs) * (width / 3) + width / 2;
+            thumb.y = width / 8;
         });
     }
 
@@ -87,7 +87,11 @@ define([
     }
 
     function render() {
-        var el = document.getElementById('boardsNavigator');
+        var el = document.getElementById('boardsNavigator'),
+            s = el.style;
+
+        s.width = width + 'px';
+        s.height = width / 4 + 'px';
 
         if (elementsNeedToBeAppended && thumbsHaveBeenCreated()) {
             appendElements(el);
@@ -116,9 +120,9 @@ define([
             needsToBeRendered = true;
         }},
 
-        width: {set: function (x) {
-            if (x !== width) {
-                width = x;
+        width: {set: function (newWidth) {
+            if (newWidth !== width) {
+                width = newWidth;
                 updateThumbsCoordinates();
                 needsToBeRendered = true;
             }
