@@ -105,7 +105,11 @@ define([
         var pos = displayCSys.posFromPosT(posT),
             color = tiles[posT[0]][posT[1]].color,
             showSelection = rubberBandCanvas.isBeingDragged,
-            tileSideLen = displayCSys.tileSideLen;
+            tileSideLen = displayCSys.tileSideLen,
+
+            // to avoid ugly thin black lines when there is no spacing
+            // (rendering error with many browsers as of Sept. 2012)
+            lenAdd = displayCSys.spacing === 0 ? 1 : 0;
 
         if (rotAnimCanvas.animIsRunning && rotAnimCanvas.isInRotRect(posT)) {
             return; // don't show this tile, it's animated
@@ -113,29 +117,32 @@ define([
 
         ctx.globalAlpha = showSelection && tileIsSelected(posT) ? 0.5 : 1;
         ctx.fillStyle = color;
-        ctx.fillRect(pos[0], pos[1], tileSideLen, tileSideLen);
-    }
-
-    function updateBackgroundColor(el) {
-        el.style['background-color'] = ((boards.selectedBoard.isFinished &&
-                                         !rotAnimCanvas.animIsRunning) ?
-                                        'white' : 'black');
+        ctx.fillRect(pos[0], pos[1],
+                     tileSideLen + lenAdd, tileSideLen + lenAdd);
     }
 
     function render() {
         var xT, yT,
             sideLenT = board.sideLenT,
             el = document.getElementById('tilesCanvas'),
-            ctx = el.getContext('2d');
+            ctx = el.getContext('2d'),
+            renderAsFinished = (board.isFinished &&
+                                !rotAnimCanvas.animIsRunning);
 
         el.height = el.width = sideLen;
 
-        updateBackgroundColor(el);
+        if (renderAsFinished) {
+            displayCSys.disableSpacing();
+        }
 
         for (xT = 0; xT < sideLenT; xT += 1) {
             for (yT = 0; yT < sideLenT; yT += 1) {
                 renderTile(ctx, [xT, yT]);
             }
+        }
+
+        if (renderAsFinished) {
+            displayCSys.enableSpacing();
         }
     }
 

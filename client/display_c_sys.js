@@ -21,14 +21,17 @@
 define(function () {
     'use strict';
 
-    var sideLen, tileSideLen = 0, spacing = 0, board;
+    var sideLen, board,
+        tileSideLen = 0,
+        spacing = 0, 
+        spacingIsDisabled = false;
 
     function updateDimensions() {
         var sideLenT;
 
         if (board !== undefined) {
             sideLenT = board.sideLenT;
-            spacing = 0.05 * sideLen / sideLenT;
+            spacing = spacingIsDisabled ? 0 : 0.05 * sideLen / sideLenT;
             tileSideLen = (sideLen - spacing * (sideLenT + 1)) / sideLenT;
         }
     }
@@ -94,6 +97,20 @@ define(function () {
 
         tileSideLen: {get: function () {
             return tileSideLen;
+        }},
+
+        spacing: {get: function () {
+            return spacing;
+        }},
+
+        disableSpacing: {value: function () {
+            spacingIsDisabled = true;
+            updateDimensions();
+        }},
+
+        enableSpacing: {value: function () {
+            spacingIsDisabled = false;
+            updateDimensions();
         }}
     });
 });
