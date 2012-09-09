@@ -20,9 +20,11 @@
 
 define([
     'boards', 'rubber_band_canvas', 'rot_anim_canvas', 'arrow_canvas',
-    'display_c_sys', 'display_canvas_factory', 'rotation_factory'
+    'display_c_sys', 'display_canvas_factory', 'rotation_factory',
+    'rect_t_factory'
 ], function (boards, rubberBandCanvas, rotAnimCanvas, arrowCanvas,
-             displayCSys, displayCanvasFactory, rotationFactory) {
+             displayCSys, displayCanvasFactory, rotationFactory,
+             rectTFactory) {
     'use strict';
 
     var sideLen, tiles, board,
@@ -30,7 +32,7 @@ define([
         selectedRectT, // when dragged: currently selected rectangle
         animIsRunning,
         rotation,
-        initRotHasToBeTriggered; // fixme: use
+        initRotAnimHasToBeTriggered = true;
 
     function updateRotation() {
         if (selectedRectT === undefined) {
@@ -158,6 +160,16 @@ define([
         }
     }
 
+    // Triggers a rotation animation that is shown when the canvas is first
+    // displayed. This rotation serves as a hint concerning how the game works.
+    function triggerInitRotAnim() {
+        var initRotation = rotationFactory.create(
+            rectTFactory.create([0, 0], [tiles.widthT - 1, tiles.heightT - 1]),
+            true
+        );
+        rotAnimCanvas.startAnim(initRotation);
+    }
+
     rubberBandCanvas.onDragStart = onRubberBandDragStart;
     rubberBandCanvas.onDrag = onRubberBandDrag;
     rubberBandCanvas.onDragEnd = onRubberBandDragEnd;
@@ -177,6 +189,11 @@ define([
             if (tilesNeedUpdate()) {
                 updateTiles(boardHasChanged);
                 needsToBeRendered = true;
+            }
+
+            if (initRotAnimHasToBeTriggered) {
+                triggerInitRotAnim();
+                initRotAnimHasToBeTriggered = false;
             }
 
             if (animIsRunningNeedsUpdate()) {
