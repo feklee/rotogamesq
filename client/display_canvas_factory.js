@@ -59,6 +59,10 @@ define(function () {
                     return internal.visibilityNeedsToBeUpdated;
                 }},
 
+                isVisible: {get: function () {
+                    return internal.isVisible;
+                }},
+
                 updateVisibility: {value: function (el) {
                     updateVisibility(internal, el);
                 }},

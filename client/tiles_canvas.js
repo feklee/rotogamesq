@@ -19,18 +19,27 @@
 /*global define */
 
 define([
-    'boards', 'rubber_band_canvas', 'rot_anim_canvas', 'display_c_sys'
-], function (boards, rubberBandCanvas, rotAnimCanvas, displayCSys) {
+    'boards', 'rubber_band_canvas', 'rot_anim_canvas', 'arrow_canvas',
+    'display_c_sys', 'display_canvas_factory', 'rotation_factory'
+], function (boards, rubberBandCanvas, rotAnimCanvas, arrowCanvas,
+             displayCSys, displayCanvasFactory, rotationFactory) {
     'use strict';
 
     var sideLen, tiles, board,
         needsToBeRendered = true,
-        selectedRectT, // selected rectangle in coordinates of tiles
-        animIsRunning;
+        selectedRectT, // when dragged: currently selected rectangle
+        animIsRunning,
+        rotation;
 
-    function selectedRectTNeedsUpdate() {
-        return (selectedRectT === undefined ||
-                !selectedRectT.isEqualTo(rubberBandCanvas.selectedRectT));
+    function updateRotation() {
+        if (selectedRectT === undefined) {
+            rotation = undefined;
+        } else {
+            rotation = rotationFactory.create(
+                selectedRectT,
+                rubberBandCanvas.draggedToTheRight
+            );
+        }
     }
 
     function tilesNeedUpdate() {
@@ -46,20 +55,24 @@ define([
         return board === undefined || board !== boards.selectedBoard;
     }
 
-    function rotationMakesSense(selectedRectT) {
-        return selectedRectT.widthT > 0 || selectedRectT.heightT > 0;
+    function onRubberBandDragStart() {
+        arrowCanvas.show();
+    }
+
+    function onRubberBandDrag(newSelectedRectT) {
+        if (selectedRectT === undefined ||
+                !newSelectedRectT.isEqualTo(selectedRectT)) {
+            selectedRectT = newSelectedRectT;
+            needsToBeRendered = true;
+            updateRotation();
+            arrowCanvas.rotation = rotation;
+        }
     }
 
     function onRubberBandDragEnd() {
-        selectedRectT = rubberBandCanvas.selectedRectT; // to be on the safe
-                                                        // side
-
-        if (rotationMakesSense(selectedRectT) &&
+        if (rotation !== undefined && rotation.makesSense &&
                 !boards.selectedBoard.isFinished) {
-            boards.selectedBoard.rotate({
-                rectT: selectedRectT,
-                cw: rubberBandCanvas.draggedToTheRight
-            });
+            boards.selectedBoard.rotate(rotation);
         }
 
         if (boards.selectedBoard.isFinished) {
@@ -67,10 +80,19 @@ define([
         } else {
             rubberBandCanvas.show();
         }
+
+        arrowCanvas.hide();
+
+        selectedRectT = undefined;
+        updateRotation();
+
+        needsToBeRendered = true;
     }
 
     function tileIsSelected(posT) {
-        return (posT[0] >= selectedRectT[0][0] &&
+        return (rubberBandCanvas.isBeingDragged &&
+                selectedRectT !== undefined &&
+                posT[0] >= selectedRectT[0][0] &&
                 posT[0] <= selectedRectT[1][0] &&
                 posT[1] >= selectedRectT[0][1] &&
                 posT[1] <= selectedRectT[1][1]);
@@ -121,9 +143,25 @@ define([
         }
     }
 
+    function updateTiles(boardHasChanged) {
+        tiles = board.tiles.copy();
+
+        if (!boardHasChanged) {
+            startRotationAnim();
+        } // else: change in tiles not due to rotation
+
+        if (boards.selectedBoard.isFinished) {
+            rubberBandCanvas.hide();
+        } else {
+            rubberBandCanvas.show(); // necessary e.g. after undoing finished
+        }
+    }
+
+    rubberBandCanvas.onDragStart = onRubberBandDragStart;
+    rubberBandCanvas.onDrag = onRubberBandDrag;
     rubberBandCanvas.onDragEnd = onRubberBandDragEnd;
 
-    return Object.create(null, {
+    return Object.create(displayCanvasFactory.create(), {
         animationStep: {value: function () {
             var boardHasChanged;
 
@@ -136,21 +174,13 @@ define([
             }
 
             if (tilesNeedUpdate()) {
+                updateTiles(boardHasChanged);
                 needsToBeRendered = true;
-                tiles = board.tiles.copy();
-                if (!boardHasChanged) {
-                    startRotationAnim();
-                } // else: change in tiles not due to rotation
             }
 
             if (animIsRunningNeedsUpdate()) {
                 needsToBeRendered = true;
                 animIsRunning = rotAnimCanvas.animIsRunning;
-            }
-
-            if (selectedRectTNeedsUpdate()) {
-                needsToBeRendered = true;
-                selectedRectT = rubberBandCanvas.selectedRectT;
             }
 
             if (needsToBeRendered) {

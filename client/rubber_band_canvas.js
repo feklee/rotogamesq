@@ -30,8 +30,9 @@ define([
         needsToBeRendered = true,
         isBeingDragged = false,
         lineWidth = 1,
-        onDragEnd2, // configurable handler, called at the end of `onDragEnd`
-        object;
+        onDrag2, // configurable handler, called at the end of `onDrag`
+        onDragStart2,
+        onDragEnd2;
 
     // may be negative
     function width() {
@@ -91,22 +92,29 @@ define([
         updateSelectedRectT();
         isBeingDragged = true;
         needsToBeRendered = true;
+        if (onDragStart2 !== undefined) {
+            onDragStart2(selectedRectT);
+        }
     }
 
     function onDrag(pos) {
         pos2 = pos;
         updateSelectedRectT();
         needsToBeRendered = true;
+        if (onDrag2 !== undefined) {
+            onDrag2(selectedRectT);
+        }
     }
 
     function onDragEnd() {
         isBeingDragged = false;
+        updateSelectedRectT();
+        needsToBeRendered = true;
+        pos1 = pos2 = [0, 0]; // reset
+        updateSelectedRectT();
         if (onDragEnd2 !== undefined) {
             onDragEnd2();
         }
-        pos1 = pos2 = [0, 0]; // reset at the end - may be needed in `onDrag2`
-        updateSelectedRectT();
-        needsToBeRendered = true;
     }
 
     // Assumption: Rubber band canvas is located in the upper left corner.
@@ -176,7 +184,9 @@ define([
 
             if (this.visibilityNeedsToBeUpdated) {
                 this.updateVisibility(el);
-                needsToBeRendered = true;
+                if (this.isVisible) {
+                    needsToBeRendered = true;
+                }
             }
 
             if (needsToBeRendered) {
@@ -189,10 +199,6 @@ define([
             return isBeingDragged;
         }},
 
-        selectedRectT: {get: function () {
-            return selectedRectT;
-        }},
-
         sideLen: {set: function (x) {
             if (x !== sideLen) {
                 sideLen = x;
@@ -202,6 +208,14 @@ define([
 
         draggedToTheRight: {get: function () {
             return pos2[0] > pos1[0];
+        }},
+
+        onDragStart: {set: function (x) {
+            onDragStart2 = x;
+        }},
+
+        onDrag: {set: function (x) {
+            onDrag2 = x;
         }},
 
         onDragEnd: {set: function (x) {

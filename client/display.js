@@ -19,10 +19,10 @@
 /*global define */
 
 define([
-    'tiles_canvas', 'rubber_band_canvas', 'rot_anim_canvas', 'display_c_sys',
-    'boards'
-], function (tilesCanvas, rubberBandCanvas, rotAnimCanvas, displayCSys,
-             boards) {
+    'tiles_canvas', 'arrow_canvas', 'rubber_band_canvas', 'rot_anim_canvas',
+    'display_c_sys', 'boards'
+], function (tilesCanvas, arrowCanvas, rubberBandCanvas, rotAnimCanvas,
+             displayCSys, boards) {
     'use strict';
 
     var isVisible = false, sideLen;
@@ -47,11 +47,13 @@ define([
             displayCSys.board = boards.selectedBoard;
             displayCSys.sideLen = newSideLen;
             tilesCanvas.sideLen = newSideLen;
+            arrowCanvas.sideLen = newSideLen;
             rubberBandCanvas.sideLen = newSideLen;
             rotAnimCanvas.sideLen = newSideLen;
             if (isVisible) {
                 updateDimensions(newSideLen);
                 tilesCanvas.animationStep();
+                arrowCanvas.animationStep();
                 rubberBandCanvas.animationStep(newSideLen);
                 rotAnimCanvas.animationStep();
             }

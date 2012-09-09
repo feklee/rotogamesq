@@ -18,34 +18,48 @@
 
 /*global define */
 
-define(['display_c_sys'], function (displayCSys) {
+define([
+    'display_c_sys', 'display_canvas_factory'
+], function (displayCSys, displayCanvasFactory) {
     'use strict';
 
     var sideLen,
         isVisible = false,
         visibilityNeedsToBeUpdated = true,
-        needsToBeRendered = true;
+        needsToBeRendered = false,
+        rotation,
+        object;
 
-    function render() {
-        
+    function renderArrow(ctx, posT) {
+        var pos = displayCSys.posFromPosT(posT),
+            tsl = displayCSys.tileSideLen;
+
+        ctx.beginPath();
+        ctx.lineWidth = tsl / 20;
+        ctx.arc(pos[0] + tsl * 3 / 4, pos[1] + tsl * 3 / 4,
+                tsl / 8, 0, Math.PI);
+        ctx.stroke();
     }
 
-    function updateVisibility(el) {
-        if (isVisible) {
-            el.style.display = 'block';
-            needsToBeRendered = true;
-        } else {
-            el.style.display = 'none';
+    function render(el) {
+        var ctx = el.getContext('2d');
+
+        el.height = el.width = sideLen; // also clears canvas
+
+        if (rotation !== undefined) {
+            renderArrow(ctx, rotation.rectT[1]);
         }
-        visibilityNeedsToBeUpdated = false;
     }
 
-    return Object.create(null, {
+    object = Object.create(displayCanvasFactory.create(), {
         animationStep: {value: function () {
             var el = document.getElementById('arrowCanvas');
 
-            if (visibilityNeedsToBeUpdated) {
-                updateVisibility(el);
+            if (this.visibilityNeedsToBeUpdated) {
+                this.updateVisibility(el);
+                if (this.isVisible) {
+                    needsToBeRendered = true;
+                }
             }
 
             if (needsToBeRendered) {
@@ -54,25 +68,26 @@ define(['display_c_sys'], function (displayCSys) {
             }
         }},
 
-        show: {value: function () {
-            if (!isVisible) {
-                isVisible = true;
-                visibilityNeedsToBeUpdated = true;
-            }
-        }},
-
-        hide: {value: function () {
-            if (isVisible) {
-                isVisible = false;
-                visibilityNeedsToBeUpdated = true;
+        rotation: {set: function (x) {
+            if (rotation === undefined || !rotation.isEqualTo(x)) {
+                rotation = x;
+                if (this.isVisible) {
+                    needsToBeRendered = true;
+                }
             }
         }},
 
         sideLen: {set: function (x) {
             if (x !== sideLen) {
                 sideLen = x;
-                needsToBeRendered = true;
+                if (this.isVisible) {
+                    needsToBeRendered = true;
+                }
             }
         }}
     });
+
+    object.hide();
+
+    return object;
 });

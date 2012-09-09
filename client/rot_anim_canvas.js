@@ -87,15 +87,6 @@ define([
         }
     }
 
-    function updateDir(rotation) {
-        dir = rotation.cw ? 1 : -1;
-    }
-
-    function updateStartAngle(rotation) {
-        startAngle = ((-dir) *
-                      (rotation.rectT.isSquare ? Math.PI / 2 : Math.PI));
-    }
-
     return Object.create(displayCanvasFactory.create(), {
         animationStep: {value: function () {
             var el = document.getElementById('rotAnimCanvas');
@@ -134,8 +125,8 @@ define([
             rectT = lastRotation.rectT;
             animIsRunning = true;
             startTime = Date.now();
-            updateDir(lastRotation);
-            updateStartAngle(lastRotation);
+            dir = -lastRotation.direction;
+            startAngle = lastRotation.angleRad;
             this.show();
         }}
     });
