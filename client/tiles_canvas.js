@@ -29,7 +29,8 @@ define([
         needsToBeRendered = true,
         selectedRectT, // when dragged: currently selected rectangle
         animIsRunning,
-        rotation;
+        rotation,
+        initRotHasToBeTriggered; // fixme: use
 
     function updateRotation() {
         if (selectedRectT === undefined) {

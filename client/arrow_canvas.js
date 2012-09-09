@@ -24,21 +24,48 @@ define([
     'use strict';
 
     var sideLen,
-        isVisible = false,
-        visibilityNeedsToBeUpdated = true,
         needsToBeRendered = false,
         rotation,
         object;
 
-    function renderArrow(ctx, posT) {
-        var pos = displayCSys.posFromPosT(posT),
-            tsl = displayCSys.tileSideLen;
+    function renderArc(ctx, x, y, u, angleDeg) {
+        var endAngle = (angleDeg === 90 || angleDeg === -90 ?
+                        Math.PI / 2 : Math.PI);
+        ctx.beginPath();
+        ctx.arc(x + 10 * u, y + 10 * u, 1.5 * u, 0, endAngle);
+        ctx.stroke();
+    }
+
+    function renderTriangle(ctx, x, y, u, angleDeg) {
+        var s;
 
         ctx.beginPath();
-        ctx.lineWidth = tsl / 20;
-        ctx.arc(pos[0] + tsl * 3 / 4, pos[1] + tsl * 3 / 4,
-                tsl / 8, 0, Math.PI);
-        ctx.stroke();
+        if (angleDeg === 90 || angleDeg === 180 || angleDeg === -180) {
+            s = (angleDeg === -180) ? -3 * u : 0;
+            ctx.moveTo(x + 10 * u + s, y + 10 * u);
+            ctx.lineTo(x + 13 * u + s, y + 10 * u);
+            ctx.lineTo(x + 11.5 * u + s, y + 8 * u);
+            ctx.lineTo(x + 10 * u + s, y + 10 * u);
+        } else {
+            ctx.moveTo(x + 10 * u, y + 10 * u);
+            ctx.lineTo(x + 8 * u, y + 11.5 * u);
+            ctx.lineTo(x + 10 * u, y + 13 * u);
+            ctx.lineTo(x + 10 * u, y + 10 * u);
+        }
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function renderArrow(ctx, posT, angleDeg) {
+        var pos = displayCSys.posFromPosT(posT),
+            x = pos[0],
+            y = pos[1],
+            tsl = displayCSys.tileSideLen,
+            u = tsl / 14;
+
+        ctx.lineWidth = u;
+        renderArc(ctx, x, y, u, angleDeg);
+        renderTriangle(ctx, x, y, u, angleDeg);
     }
 
     function render(el) {
@@ -46,8 +73,8 @@ define([
 
         el.height = el.width = sideLen; // also clears canvas
 
-        if (rotation !== undefined) {
-            renderArrow(ctx, rotation.rectT[1]);
+        if (rotation !== undefined && rotation.makesSense) {
+            renderArrow(ctx, rotation.rectT[1], rotation.angleDeg);
         }
     }
 

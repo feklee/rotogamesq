@@ -28,7 +28,7 @@ define(function () {
 
         if (board !== undefined) {
             sideLenT = board.sideLenT;
-            spacing = 0.1 * sideLen / sideLenT;
+            spacing = 0.05 * sideLen / sideLenT;
             tileSideLen = (sideLen - spacing * (sideLenT + 1)) / sideLenT;
         }
     }
