@@ -41,13 +41,12 @@ define([
 
     return Object.create(null, {
         animStep: {value: function () {
-            displayCSys.board = boards.selected;
-
             if (isVisible) {
                 if (needsToBeRendered) {
                     render();
                     needsToBeRendered = false;
                 }
+                displayCSys.animStep();
                 tilesCanvas.animStep();
                 arrowCanvas.animStep();
                 rubberBandCanvas.animStep();

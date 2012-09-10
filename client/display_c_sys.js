@@ -18,7 +18,7 @@
 
 /*global define */
 
-define(function () {
+define(['boards'], function (boards) {
     'use strict';
 
     var sideLen, board,
@@ -44,9 +44,9 @@ define(function () {
             }
         }},
 
-        board: {set: function (x) {
-            if (x !== board) {
-                board = x;
+        animStep: {value: function () {
+            if (boards.selected !== board) {
+                board = boards.selected;
                 updateDimensions();
             }
         }},
