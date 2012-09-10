@@ -51,7 +51,7 @@ define([
 
     function animStep() {
         loadIndicator.animStep();
-        display.animStep(height);
+        display.animStep();
         panel.animStep();
 
         window.requestAnimationFrame(animStep);
@@ -64,6 +64,7 @@ define([
     function onResize() {
         updateDimensions();
 
+        display.sideLen = height;
         panel.width = width - height;
         panel.height = height;
 

@@ -147,7 +147,7 @@ define([
     }
 
     function updateThumbI() {
-        var speed = 0.01;
+        var speed = 0.005;
 
         animThumbI = (animStartThumbI +
                       animDirection * speed * animPassedTime());

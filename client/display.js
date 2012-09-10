@@ -25,43 +25,51 @@ define([
              displayCSys, boards) {
     'use strict';
 
-    var isVisible = false, sideLen;
+    var isVisible = false,
+        sideLen,
+        needsToBeRendered = true;
 
-    function el() {
-        return document.getElementById('display');
-    }
+    function render() {
+        var s = document.getElementById('display').style;
 
-    function updateDimensions(newSideLen) {
-        var style;
-
-        if (newSideLen !== sideLen) {
-            style = el().style;
-            style.width = newSideLen + 'px';
-            style.height = newSideLen + 'px';
-            sideLen = newSideLen;
+        if (isVisible) {
+            s.display = 'block';
         }
+        s.width = sideLen + 'px';
+        s.height = sideLen + 'px';
     }
 
     return Object.create(null, {
-        animStep: {value: function (newSideLen) {
+        animStep: {value: function () {
             displayCSys.board = boards.selected;
-            displayCSys.sideLen = newSideLen;
-            tilesCanvas.sideLen = newSideLen;
-            arrowCanvas.sideLen = newSideLen;
-            rubberBandCanvas.sideLen = newSideLen;
-            rotAnimCanvas.sideLen = newSideLen;
+
             if (isVisible) {
-                updateDimensions(newSideLen);
+                if (needsToBeRendered) {
+                    render();
+                    needsToBeRendered = false;
+                }
                 tilesCanvas.animStep();
                 arrowCanvas.animStep();
-                rubberBandCanvas.animStep(newSideLen);
+                rubberBandCanvas.animStep();
                 rotAnimCanvas.animStep();
             }
         }},
 
+        sideLen: {set: function (newSideLen) {
+            if (newSideLen !== sideLen) {
+                sideLen = newSideLen;
+                displayCSys.sideLen = sideLen;
+                tilesCanvas.sideLen = sideLen;
+                arrowCanvas.sideLen = sideLen;
+                rubberBandCanvas.sideLen = sideLen;
+                rotAnimCanvas.sideLen = sideLen;
+                needsToBeRendered = true;
+            }
+        }},
+
         show: {value: function () {
-            el().style.display = 'block';
             isVisible = true;
+            needsToBeRendered = true;
         }}
     });
 });
