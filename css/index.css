@@ -2,6 +2,8 @@ body {
     font-family: Arial, 'Liberation Sans', 'DejaVu Sans', sans-serif;
     color: white;
     background-color: black;
+    position: relative;
+    margin: 0 auto;
 }
 
 body * {

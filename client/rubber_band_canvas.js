@@ -87,8 +87,15 @@ define([
         selectedRectT = rectTFactory.create(tlPosT, brPosT);
     }
 
+    // Makes use of particularities of the layout.
+    function relativePos(pos) {
+        var s = window.getComputedStyle(document.body);
+        return [pos[0] - parseFloat(s['margin-left']),
+                pos[1] - parseFloat(s['margin-top'])];
+    }
+
     function onDragStart(pos) {
-        pos2 = pos1 = pos;
+        pos2 = pos1 = relativePos(pos);
         updateSelectedRectT();
         isBeingDragged = true;
         needsToBeRendered = true;
@@ -98,7 +105,7 @@ define([
     }
 
     function onDrag(pos) {
-        pos2 = pos;
+        pos2 = relativePos(pos);
         updateSelectedRectT();
         needsToBeRendered = true;
         if (onDrag2 !== undefined) {
@@ -108,7 +115,6 @@ define([
 
     function onDragEnd() {
         isBeingDragged = false;
-        updateSelectedRectT();
         needsToBeRendered = true;
         pos1 = pos2 = [0, 0]; // reset
         updateSelectedRectT();
@@ -117,7 +123,6 @@ define([
         }
     }
 
-    // Assumption: Rubber band canvas is located in the upper left corner.
     function onMouseDown(e) {
         onDragStart([e.pageX, e.pageY]);
     }

@@ -30,7 +30,7 @@ define([
         startTime, // time when animation started, in milliseconds
         startAngle, // rad
         angle, // current angle, in rad
-        dir, // rotation direction (-1, or +1)
+        direction, // rotation direction (-1, or +1)
         board;
 
     function renderTile(ctx, posT, rotCenter) {
@@ -74,13 +74,13 @@ define([
     }
 
     function rotationIsFinished() {
-        return dir < 0 ? angle <= 0 : angle >= 0;
+        return direction < 0 ? angle <= 0 : angle >= 0;
     }
 
     function updateAngle() {
         var speed = 0.004; // rad / s
 
-        angle = startAngle + dir * speed * passedTime();
+        angle = startAngle + direction * speed * passedTime();
 
         if (rotationIsFinished()) {
             angle = 0; // avoids rotation beyond 0 (would look ugly)
@@ -125,7 +125,7 @@ define([
             rectT = lastRotation.rectT;
             animIsRunning = true;
             startTime = Date.now();
-            dir = -lastRotation.direction;
+            direction = -lastRotation.direction;
             startAngle = lastRotation.angleRad;
             this.show();
         }}

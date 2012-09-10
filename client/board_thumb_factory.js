@@ -63,7 +63,7 @@ define(['boards'], function (boards) {
     }
 
     return Object.create(null, {
-        create: {value: function (boardI) {
+        create: {value: function (boardI, onThumbSelected) {
             var el = document.createElement('canvas'),
                 needsToBeRendered = true,
                 sideLen = 0,
@@ -72,6 +72,7 @@ define(['boards'], function (boards) {
 
             el.addEventListener('click', function () {
                 boards.selectedI = boardI;
+                onThumbSelected();
             });
 
             return Object.create(null, {

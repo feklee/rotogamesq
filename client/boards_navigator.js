@@ -25,13 +25,21 @@ define([
 
     var width,
         thumbs = [],
-        //fixme: animI = 0,
+        animThumbI = 0, // index of thumb shown in middle (fractional during
+                        // animation)
+        animStartThumbI,
+        animDirection, // direction of animation (-1, or +1)
+        animIsRunning = false,
+        animStartTime, // time when animation started, in milliseconds
         selectedBoardI = 0,
         elementsNeedToBeAppended = true,
         needsToBeRendered = true,
         nSideThumbs = 2;  // thumbnails displayed to the left/right side of the
                           // currently selected one (needs to be large enough
                           // if e.g. the left-most thumb is the current)
+                          //
+                          // thumb indexes go from `-nSideThumbs` to
+                          // `nSideThumbs`
 
     // Returns a board index that is within bounds, by cycling if `i` is too
     // small or too large.
@@ -41,33 +49,63 @@ define([
 
     // Selected board is always in the middle of the thumbs.
     function boardIFromThumbI(thumbI) {
-        return cycledBoardI(selectedBoardI + (thumbI - nSideThumbs));
+        return cycledBoardI(selectedBoardI + thumbI);
     }
 
     function updateThumbsCoordinates() {
+        var thumbI, thumb, j;
+
         thumbs.forEach(function (thumb, i) {
-            thumb.sideLen = width / (4 + 2 * Math.abs(i - nSideThumbs));
-            thumb.x = (i - nSideThumbs) * (width / 3) + width / 2;
+            var thumbI = i - nSideThumbs;
+            j = thumbI - animThumbI; // `j` is 0 => board centered
+            thumb.sideLen = width / (4 + 2 * Math.abs(j));
+            thumb.x = j * (width / 3) + width / 2;
             thumb.y = width / 8;
         });
     }
 
+    function updateThumbs() {
+        thumbs.forEach(function (thumb, i) {
+            var thumbI = i - nSideThumbs;
+            thumb.boardI = boardIFromThumbI(thumbI);
+        });
+    }
+
+    function updateSelectedBoardI() {
+        selectedBoardI = boards.selectedI;
+        updateThumbs();
+    }
+
+    // Note: The index of the selected thumb will become 0, after the thumbs
+    // have been rearrange (see: `updateThumbs`). So animation of the thumb
+    // index is always towards 0.
+    function startAnim(selectedThumbI) {
+        animStartThumbI = animThumbI - selectedThumbI;
+        animDirection = animStartThumbI > 0 ? -1 : 1;
+        animStartTime = Date.now();
+        animIsRunning = true;
+    }
+
+    function onThumbSelected(selectedThumbI) {
+        startAnim(selectedThumbI);
+        updateSelectedBoardI();
+    }
+
+    function newThumb(thumbI) {
+        return boardThumbFactory.create(boardIFromThumbI(thumbI), function () {
+            onThumbSelected(thumbI);
+        });
+    }
+
     function createThumbs() {
-        var i, thumb;
+        var thumbI;
 
         thumbs.length = 0;
-        for (i = 0; i < nSideThumbs + 1 + nSideThumbs; i += 1) {
-            thumb = boardThumbFactory.create(boardIFromThumbI(i));
-            thumbs.push(thumb);
+        for (thumbI = -nSideThumbs; thumbI <= nSideThumbs; thumbI += 1) {
+            thumbs.push(newThumb(thumbI));
         }
 
         updateThumbsCoordinates();
-    }
-
-    function updateThumbs() {
-        thumbs.forEach(function (thumb, i) {
-            thumb.boardI = boardIFromThumbI(i);
-        });
     }
 
     function thumbsAnimationSteps() {
@@ -99,19 +137,42 @@ define([
         }
     }
 
+    function animPassedTime() {
+        return Date.now() - animStartTime;
+    }
+
+    function animIsFinished() {
+        return ((animDirection > 0 && animThumbI >= 0) ||
+                (animDirection < 0 && animThumbI <= 0));
+    }
+
+    function updateThumbI() {
+        var speed = 0.01;
+
+        animThumbI = (animStartThumbI +
+                      animDirection * speed * animPassedTime());
+
+        if (animIsFinished()) {
+            animThumbI = 0; // avoids movement that is too far
+            animIsRunning = false;
+        }
+
+        updateThumbsCoordinates();
+    }
+
     return Object.create(null, {
         animationStep: {value: function () {
-            if (selectedBoardI !== boards.selectedI) {
-                selectedBoardI = boards.selectedI;
-                updateThumbs();
-            }
-
             if (needsToBeRendered) {
                 render();
                 needsToBeRendered = false;
             }
 
             thumbsAnimationSteps();
+
+            if (animIsRunning) {
+                updateThumbI();
+                updateThumbsCoordinates();
+            }
         }},
 
         activate: {value: function () {
