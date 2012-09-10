@@ -88,7 +88,7 @@ define([
     }
 
     return Object.create(displayCanvasFactory.create(), {
-        animationStep: {value: function () {
+        animStep: {value: function () {
             var el = document.getElementById('rotAnimCanvas');
 
             if (this.visibilityNeedsToBeUpdated) {

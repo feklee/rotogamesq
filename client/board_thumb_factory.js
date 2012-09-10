@@ -108,7 +108,7 @@ define(['boards'], function (boards) {
                     }
                 }},
 
-                animationStep: {value: function () {
+                animStep: {value: function () {
                     if (needsToBeRendered) {
                         render(el, boards[boardI], sideLen, x, y);
                         needsToBeRendered = false;

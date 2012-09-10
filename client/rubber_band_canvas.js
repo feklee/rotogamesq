@@ -184,7 +184,7 @@ define([
     });
 
     return Object.create(displayCanvasFactory.create(), {
-        animationStep: {value: function () {
+        animStep: {value: function () {
             var el = document.getElementById('rubberBandCanvas');
 
             if (this.visibilityNeedsToBeUpdated) {

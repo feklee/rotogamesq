@@ -43,7 +43,7 @@ define([
     }
 
     return Object.create(null, {
-        animationStep: {value: function (newSideLen) {
+        animStep: {value: function (newSideLen) {
             displayCSys.board = boards.selected;
             displayCSys.sideLen = newSideLen;
             tilesCanvas.sideLen = newSideLen;
@@ -52,10 +52,10 @@ define([
             rotAnimCanvas.sideLen = newSideLen;
             if (isVisible) {
                 updateDimensions(newSideLen);
-                tilesCanvas.animationStep();
-                arrowCanvas.animationStep();
-                rubberBandCanvas.animationStep(newSideLen);
-                rotAnimCanvas.animationStep();
+                tilesCanvas.animStep();
+                arrowCanvas.animStep();
+                rubberBandCanvas.animStep(newSideLen);
+                rotAnimCanvas.animStep();
             }
         }},
 

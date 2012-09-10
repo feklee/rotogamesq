@@ -182,7 +182,7 @@ define([
     rubberBandCanvas.onDragEnd = onRubberBandDragEnd;
 
     return Object.create(displayCanvasFactory.create(), {
-        animationStep: {value: function () {
+        animStep: {value: function () {
             var boardHasChanged;
 
             if (boardNeedsUpdate()) {

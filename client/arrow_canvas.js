@@ -79,7 +79,7 @@ define([
     }
 
     object = Object.create(displayCanvasFactory.create(), {
-        animationStep: {value: function () {
+        animStep: {value: function () {
             var el = document.getElementById('arrowCanvas');
 
             if (this.visibilityNeedsToBeUpdated) {

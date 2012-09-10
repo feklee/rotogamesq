@@ -49,16 +49,16 @@ define([
         document.body.style.height = height + 'px';
     }
 
-    function animationStep() {
-        loadIndicator.animationStep();
-        display.animationStep(height);
-        panel.animationStep();
+    function animStep() {
+        loadIndicator.animStep();
+        display.animStep(height);
+        panel.animStep();
 
-        window.requestAnimationFrame(animationStep);
+        window.requestAnimationFrame(animStep);
     }
 
-    function startAnimation() {
-        window.requestAnimationFrame(animationStep);
+    function startAnim() {
+        window.requestAnimationFrame(animStep);
     }
 
     function onResize() {
@@ -71,7 +71,7 @@ define([
     }
 
     util.whenDocumentIsReady(function () {
-        startAnimation();
+        startAnim();
         boards.load(function () {
             panel.show();
             display.show();

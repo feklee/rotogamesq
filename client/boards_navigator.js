@@ -110,7 +110,7 @@ define([
 
     function thumbsAnimationSteps() {
         thumbs.forEach(function (thumb) {
-            thumb.animationStep();
+            thumb.animStep();
         });
     }
 
@@ -161,7 +161,7 @@ define([
     }
 
     return Object.create(null, {
-        animationStep: {value: function () {
+        animStep: {value: function () {
             if (needsToBeRendered) {
                 render();
                 needsToBeRendered = false;

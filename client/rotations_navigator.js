@@ -81,7 +81,7 @@ define(['boards', 'util'], function (boards, util) {
     });
 
     return Object.create(null, {
-        animationStep: {value: function () {
+        animStep: {value: function () {
             if (needsToBeRendered()) {
                 render();
             }

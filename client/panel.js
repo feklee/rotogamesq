@@ -41,15 +41,15 @@ define([
     }
 
     return Object.create(null, {
-        animationStep: {value: function () {
+        animStep: {value: function () {
             if (isVisible) {
                 if (needsToBeRendered) {
                     render();
                     needsToBeRendered = false;
                 }
 
-                boardsNavigator.animationStep();
-                rotationsNavigator.animationStep();
+                boardsNavigator.animStep();
+                rotationsNavigator.animStep();
             }
         }},
 

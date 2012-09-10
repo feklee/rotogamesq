@@ -34,7 +34,7 @@ define(function () {
     }
 
     return Object.create(null, {
-        animationStep: {value: function (newWidth) {
+        animStep: {value: function (newWidth) {
             var style;
 
             if (isVisible && needsToBeRendered) {
