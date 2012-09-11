@@ -32,7 +32,7 @@ define(function () {
             {name: 'Gianna', nRotations: 11},
             {name: 'Sonya', nRotations: 12},
             {name: 'Johnny', nRotations: 42}
-        ].slice(maxLength);
+        ].slice(0, maxLength);
 
 /*fixme:    function loadJson(url) {
         var req = new XMLHttpRequest();
@@ -52,7 +52,7 @@ define(function () {
     }*/
 
     return Object.create(null, {
-        load: {value: function (onLoaded) {
+        load: {value: function (hiscoresUrl, onLoaded) {
             // fixme: do XHR here (later perhaps Socket.IO)
 
             onLoaded(fixmeInit);

@@ -21,13 +21,8 @@
 define(['boards', 'util'], function (boards, util) {
     'use strict';
 
-    var nRotations, board;
-
-    function needsToBeRendered() {
-        var newBoard = boards.selected;
-
-        return board !== newBoard || nRotations !== board.nRotations;
-    }
+    var nRotations, board,
+        needsToBeRendered = true;
 
     function buttonEl(type) {
         return document.querySelector('#rotationsNavigator>.' + type +
@@ -67,9 +62,6 @@ define(['boards', 'util'], function (boards, util) {
     }
 
     function render() {
-        board = boards.selected;
-        nRotations = board.nRotations;
-
         document.getElementById('nRotations').textContent = nRotations;
         renderUndoButton();
         renderRedoButton();
@@ -82,8 +74,19 @@ define(['boards', 'util'], function (boards, util) {
 
     return Object.create(null, {
         animStep: {value: function () {
-            if (needsToBeRendered()) {
+            if (boards.selected !== board) {
+                board = boards.selected;
+                needsToBeRendered = true;
+            }
+
+            if (board.nRotations !== nRotations) {
+                nRotations = board.nRotations;
+                needsToBeRendered = true;
+            }
+
+            if (needsToBeRendered) {
                 render();
+                needsToBeRendered = false;
             }
         }}
     });

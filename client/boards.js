@@ -23,7 +23,7 @@ define(['board_factory'], function (boardFactory) {
 
     var selectedI = 0,
         object,
-        boardNames = ['13', 'smiley', 'house', 'rgbcmy'];
+        boardNames = ['13', 'smiley', 'house', 'dogman', 'rgbcmy'];
 
     function allBoardsAreLoaded() {
         var i;

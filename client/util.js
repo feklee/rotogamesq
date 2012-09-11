@@ -32,6 +32,12 @@ define(function () {
                     }
                 });
             }
+        }},
+
+        clear: {value: function (el) {
+            while (el.firstChild) {
+                el.removeChild(el.firstChild);
+            }
         }}
     });
 });

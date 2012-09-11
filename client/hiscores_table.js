@@ -18,18 +18,46 @@
 
 /*global define */
 
-define(function () {
+define(['util', 'boards'], function (util, boards) {
     'use strict';
 
     // fixme: remove if unused
-    var needsToBeRendered = false;
+    var board;
+
+    function tdEl(text) {
+        var el = document.createElement('td');
+
+        el.appendChild(document.createTextNode(text));
+
+        return el;
+    }
+
+    function trEl(hiscoreEntry) {
+        var el = document.createElement('tr');
+
+        el.appendChild(tdEl(hiscoreEntry.name));
+        el.appendChild(tdEl(hiscoreEntry.nRotations));
+
+        return el;
+    }
 
     function render() {
+        var el = document.getElementById('hiscoresTable'),
+            hiscores = board.hiscores;
+
+        util.clear(el);
+
+        hiscores.forEach(function (hiscoreEntry) {
+            el.appendChild(trEl(hiscoreEntry));
+        });
     }
 
     return Object.create(null, {
         animStep: {value: function () {
-            console.log('fixme: anim');
+            if (boards.selected !== board) {
+                board = boards.selected;
+                render();
+            }
         }}
     });
 });

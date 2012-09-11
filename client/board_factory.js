@@ -18,7 +18,9 @@
 
 /*global define */
 
-define(['tiles_factory'], function (tilesFactory) {
+define([
+    'tiles_factory', 'hiscores_factory'
+], function (tilesFactory, hiscoresFactory) {
     'use strict';
 
     var prototype;
@@ -64,7 +66,7 @@ define(['tiles_factory'], function (tilesFactory) {
     }
 
     function imgUrl(name, type) {
-        return resourceUrl(type + '.gif');
+        return resourceUrl(name, type + '.gif');
     }
 
     function hiscoresUrl(name, type) {
@@ -225,7 +227,7 @@ define(['tiles_factory'], function (tilesFactory) {
         tilesFactory.load(imgUrl(name, 'end'), function (tiles) {
             onEndTilesLoaded(board, tiles, onLoaded);
         });
-        hiscoresFactory.load(hiscoresUrl(name), function () {
+        hiscoresFactory.load(hiscoresUrl(name), function (hiscores) {
             onHiscoresLoaded(board, hiscores, onLoaded);
         });
     }
