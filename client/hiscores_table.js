@@ -22,9 +22,10 @@ define(['util', 'boards'], function (util, boards) {
     'use strict';
 
     // fixme: remove if unused
-    var board;
+    var board, nameInputFieldEl, boardIsFinished, inputIsAllowed,
+        needsToBeRendered = true;
 
-    function tdEl(text) {
+    function newTdEl(text) {
         var el = document.createElement('td');
 
         el.appendChild(document.createTextNode(text));
@@ -32,23 +33,70 @@ define(['util', 'boards'], function (util, boards) {
         return el;
     }
 
-    function trEl(hiscoreEntry) {
+    function newTrEl(hiscore) {
         var el = document.createElement('tr');
 
-        el.appendChild(tdEl(hiscoreEntry.name));
-        el.appendChild(tdEl(hiscoreEntry.nRotations));
+        el.appendChild(newTdEl(hiscore.name));
+        el.appendChild(newTdEl(hiscore.nRotations));
+
+        return el;
+    }
+
+    // updates name in new hiscore entry, but does *not* save it yet
+    function onNameInputFieldBlur() {
+        board.hiscores.nameInProposal = nameInputFieldEl.value;
+    }
+
+    function newNameInputTdEl(name) {
+        var el = document.createElement('td');
+
+        if (nameInputFieldEl === undefined) {
+            nameInputFieldEl = document.createElement('input');
+            nameInputFieldEl.type = 'text';
+            nameInputFieldEl.maxLength = nameInputFieldEl.size =
+                board.hiscores.maxNameLen;
+            nameInputFieldEl.addEventListener('blur', onNameInputFieldBlur);
+        }
+        nameInputFieldEl.value = name;
+        el.appendChild(nameInputFieldEl);
+
+        return el;
+    }
+
+    function newSubmitButtonTdEl() {
+        var submitButtonEl = document.createElement('span'),
+            el = document.createElement('td');
+
+        submitButtonEl.appendChild(document.createTextNode('↵')); // &crarr;
+        el.appendChild(submitButtonEl);
+
+        return el;
+    }
+
+    function newInputTrEl(hiscore) {
+        var el = document.createElement('tr');
+
+        el.className = 'input';
+        el.appendChild(newNameInputTdEl(hiscore.name));
+        el.appendChild(newSubmitButtonTdEl());
 
         return el;
     }
 
     function render() {
-        var el = document.getElementById('hiscoresTable'),
-            hiscores = board.hiscores;
+        var i, hiscore,
+            el = document.getElementById('hiscoresTable'),
+            hiscores = board.hiscores,
+            maxI = hiscores.length;
 
         util.clear(el);
 
-        hiscores.forEach(function (hiscoreEntry) {
-            el.appendChild(trEl(hiscoreEntry));
+        board.hiscores.forEach(function (hiscore, i, isEditable) {
+            if (isEditable) {
+                el.appendChild(newInputTrEl(hiscore));
+            } else {
+                el.appendChild(newTrEl(hiscore));
+            }
         });
     }
 
@@ -56,7 +104,18 @@ define(['util', 'boards'], function (util, boards) {
         animStep: {value: function () {
             if (boards.selected !== board) {
                 board = boards.selected;
+                boardIsFinished = board.isFinished;
+                inputIsAllowed = false;
+                needsToBeRendered = true;
+            } else if (board.isFinished !== boardIsFinished) {
+                boardIsFinished = board.isFinished;
+                inputIsAllowed = boardIsFinished;
+                needsToBeRendered = true;
+            }
+
+            if (needsToBeRendered) {
                 render();
+                needsToBeRendered = false;
             }
         }}
     });

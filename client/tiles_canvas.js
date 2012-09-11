@@ -165,6 +165,8 @@ define([
         } else {
             rubberBandCanvas.show(); // necessary e.g. after undoing finished
         }
+
+        arrowCanvas.hide(); // necessary e.g. after undoing finished
     }
 
     // Triggers a rotation animation that is shown when the canvas is first

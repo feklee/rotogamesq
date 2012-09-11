@@ -1,17 +1,18 @@
-body {
-    font-family: Arial, 'Liberation Sans', 'DejaVu Sans', sans-serif;
-    color: white;
-    background-color: black;
-    position: relative;
-}
+* {
+    cursor: default;
 
-body * {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
-    -moz-user-select: -moz-none;
+    -moz-user-select: none;
     user-select: none;
-    cursor: default;
+}
+
+body {
+    font-family: Arial, 'Liberation Sans', 'DejaVu Sans', sans-serif;
+    color: white;
+    background: black;
+    position: relative;
 }
 
 #panel, #display, #loadIndicator,
@@ -68,8 +69,42 @@ h1 em {
     overflow: hidden;
 }
 
+#hiscoresTable td:first-child {
+    text-align: left;
+}
+
 #hiscoresTable td:last-child {
     text-align: right;
+}
+
+#hiscoresTable tr.input {
+    border-bottom: 1px solid white;
+    margin-bottom: -1px;
+}
+
+#hiscoresTable td input {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: white;
+    cursor: text;
+    font-size: 1em;
+
+    -webkit-touch-callout: default;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+}
+
+#hiscoresTable td input:focus {
+    outline-width: 0;
+}
+
+#hiscoresTable td span {
+    font-weight: bold;
+    cursor: pointer;
 }
 
 #boardsNavigator {

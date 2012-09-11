@@ -87,15 +87,9 @@ define([
         selectedRectT = rectTFactory.create(tlPosT, brPosT);
     }
 
-    // Makes use of particularities of the layout.
-    function relativePos(pos) {
-        var s = window.getComputedStyle(document.body);
-        return [pos[0] - parseFloat(s['margin-left']),
-                pos[1] - parseFloat(s['margin-top'])];
-    }
-
+    // assumes that canvas is at position 0, 0 in the document
     function onDragStart(pos) {
-        pos2 = pos1 = relativePos(pos);
+        pos2 = pos1 = pos;
         updateSelectedRectT();
         isBeingDragged = true;
         needsToBeRendered = true;
@@ -105,7 +99,7 @@ define([
     }
 
     function onDrag(pos) {
-        pos2 = relativePos(pos);
+        pos2 = pos;
         updateSelectedRectT();
         needsToBeRendered = true;
         if (onDrag2 !== undefined) {

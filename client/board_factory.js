@@ -141,8 +141,16 @@ define([
         rotateTiles(tiles, rotation.inverse);
     }
 
-    function isFinished(tiles, endTiles) {
-        return tiles.colorsAreEqualTo(endTiles);
+    function updateIsFinished(internal, board, rotation) {
+        if (board.tiles.colorsAreEqualTo(board.endTiles)) {
+            if (!internal.isFinished) {
+                internal.isFinished = true;
+                board.hiscores.propose(internal.rotations);
+            }
+        } else {
+            internal.isFinished = false;
+            board.hiscores.rmProposal();
+        }
     }
 
     prototype = Object.create(null, {
@@ -152,7 +160,7 @@ define([
             internal.rotations.push(rotation);
             internal.futureRotations.length = 0; // resets redo history
             rotateTiles(this.tiles, rotation);
-            internal.isFinished = isFinished(this.tiles, this.endTiles);
+            updateIsFinished(internal, this);
             internal.lastRotation = rotation;
         }},
 
@@ -161,7 +169,7 @@ define([
             if (rotation !== undefined) {
                 internal.futureRotations.push(rotation);
                 rotateTilesInverse(this.tiles, rotation);
-                internal.isFinished = isFinished(this.tiles, this.endTiles);
+                updateIsFinished(internal, this);
                 internal.lastRotation = rotation.inverse;
             } // else: no more undo
         }},
@@ -171,7 +179,7 @@ define([
             if (rotation !== undefined) {
                 internal.rotations.push(rotation);
                 rotateTiles(this.tiles, rotation);
-                internal.isFinished = isFinished(this.tiles, this.endTiles);
+                updateIsFinished(internal, this);
                 internal.lastRotation = rotation;
             } // else: no more redo
         }}
