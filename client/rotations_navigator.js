@@ -30,7 +30,7 @@ define(['boards', 'util'], function (boards, util) {
     }
 
     function buttonEl(type) {
-        return document.querySelector('#stepsNavigator>.' + type +
+        return document.querySelector('#rotationsNavigator>.' + type +
                                       '.button');
     }
 

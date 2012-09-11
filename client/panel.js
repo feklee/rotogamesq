@@ -19,8 +19,8 @@
 /*global define */
 
 define([
-    'boards_navigator', 'rotations_navigator'
-], function (boardsNavigator, rotationsNavigator) {
+    'boards_navigator', 'hiscores_table', 'rotations_navigator'
+], function (boardsNavigator, hiscoresTable, rotationsNavigator) {
     'use strict';
 
     var width, height,
@@ -29,13 +29,11 @@ define([
 
     function render() {
         var el = document.getElementById('panel'),
-            style = el.style,
-            padding = Math.round(0.01 * width);
+            style = el.style;
 
         style.display = 'block'; // unhides, if previously hidden
-        style.padding = padding + 'px';
-        style.width = (width - 2 * padding) + 'px';
-        style.height = (height - 2 * padding) + 'px';
+        style.width = width + 'px';
+        style.height = height + 'px';
         style.left = height + 'px';
         style.fontSize = Math.ceil(height / 25) + 'px';
     }
@@ -49,6 +47,7 @@ define([
                 }
 
                 boardsNavigator.animStep();
+                hiscoresTable.animStep();
                 rotationsNavigator.animStep();
             }
         }},

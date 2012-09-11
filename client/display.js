@@ -20,9 +20,9 @@
 
 define([
     'tiles_canvas', 'arrow_canvas', 'rubber_band_canvas', 'rot_anim_canvas',
-    'display_c_sys', 'boards'
+    'display_c_sys'
 ], function (tilesCanvas, arrowCanvas, rubberBandCanvas, rotAnimCanvas,
-             displayCSys, boards) {
+             displayCSys) {
     'use strict';
 
     var isVisible = false,

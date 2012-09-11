@@ -1,4 +1,4 @@
-// Creates lists of top players, associated with a certain board.
+// Displays the list of a board's top players as a table.
 
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
@@ -19,21 +19,17 @@
 /*global define */
 
 define(function () {
-    // fixme: remove, if unused
+    'use strict';
 
-    var prototype,
-        maxNTopPlayers = 5;
+    // fixme: remove if unused
+    var needsToBeRendered = false;
 
-    return Object.create([], {
-        create: {value: function (rectT, cw) {
-            var ;
+    function render() {
+    }
 
-            return Object.create(prototype, {
-                rectT: {get: function () { return rectT; }},
-
-                // direction (true: clock wise)
-                cw: {get: function () { return cw; }}
-            });
+    return Object.create(null, {
+        animStep: {value: function () {
+            console.log('fixme: anim');
         }}
     });
 });

@@ -1,0 +1,9 @@
+[
+    {name: 'Roger', nRotations: 6},
+    {name: 'Larry', nRotations: 8},
+    {name: 'Zak', nRotations: 9},
+    {name: 'Mario', nRotations: 10},
+    {name: 'Gianna', nRotations: 11},
+    {name: 'Sonya', nRotations: 12},
+    {name: 'Johnny', nRotations: 42}
+]

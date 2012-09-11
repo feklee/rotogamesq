@@ -23,11 +23,13 @@ define(['tiles_factory'], function (tilesFactory) {
 
     var prototype;
 
-    function allTilesAreLoaded(board) {
-        return board.tiles !== undefined && board.endTiles !== undefined;
+    function allResourcesAreLoaded(board) {
+        return (board.tiles !== undefined &&
+                board.endTiles !== undefined &&
+                board.hiscores !== undefined);
     }
 
-    function onAllTilesLoaded(board, onLoaded) {
+    function onAllResourcesLoaded(board, onLoaded) {
         Object.defineProperty(board, 'sideLenT', {value: board.tiles.length});
         onLoaded(board);
     }
@@ -35,23 +37,38 @@ define(['tiles_factory'], function (tilesFactory) {
     // Start tiles form the *mutable* start layout of blocks, i.e. the current
     // state of the board.
     function onStartTilesLoaded(board, tiles, onLoaded) {
-        Object.defineProperty(board, 'tiles', {value : tiles});
-        if (allTilesAreLoaded(board)) {
-            onAllTilesLoaded(board, onLoaded);
+        Object.defineProperty(board, 'tiles', {value: tiles});
+        if (allResourcesAreLoaded(board)) {
+            onAllResourcesLoaded(board, onLoaded);
         }
     }
 
     // Start tiles form the *immutable* start layout of blocks, the destination
     // state of the board.
     function onEndTilesLoaded(board, tiles, onLoaded) {
-        Object.defineProperty(board, 'endTiles', {value : tiles});
-        if (allTilesAreLoaded(board)) {
-            onAllTilesLoaded(board, onLoaded);
+        Object.defineProperty(board, 'endTiles', {value: tiles});
+        if (allResourcesAreLoaded(board)) {
+            onAllResourcesLoaded(board, onLoaded);
         }
     }
 
+    function onHiscoresLoaded(board, hiscores, onLoaded) {
+        Object.defineProperty(board, 'hiscores', {value: hiscores});
+        if (allResourcesAreLoaded(board)) {
+            onAllResourcesLoaded(board, onLoaded);
+        }
+    }
+
+    function resourceUrl(name, relativePath) {
+        return 'boards/' + name + '/' + relativePath;
+    }
+
     function imgUrl(name, type) {
-        return 'boards/' + name + '/' + type + '.gif';
+        return resourceUrl(type + '.gif');
+    }
+
+    function hiscoresUrl(name, type) {
+        return resourceUrl('hiscores.json');
     }
 
     function selectedTiles(tiles, x1T, y1T, x2T, y2T) {
@@ -207,6 +224,9 @@ define(['tiles_factory'], function (tilesFactory) {
         });
         tilesFactory.load(imgUrl(name, 'end'), function (tiles) {
             onEndTilesLoaded(board, tiles, onLoaded);
+        });
+        hiscoresFactory.load(hiscoresUrl(name), function () {
+            onHiscoresLoaded(board, hiscores, onLoaded);
         });
     }
 

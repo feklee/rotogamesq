@@ -3,7 +3,6 @@ body {
     color: white;
     background-color: black;
     position: relative;
-    margin: 0 auto;
 }
 
 body * {
@@ -13,18 +12,6 @@ body * {
     -moz-user-select: -moz-none;
     user-select: none;
     cursor: default;
-}
-
-h1 {
-    font-size: 2em;
-    font-weight: bold;
-    text-align: center;
-}
-
-h1 em {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-style: italic;
-    font-weight: normal;
 }
 
 #panel, #display, #loadIndicator,
@@ -40,6 +27,51 @@ h1 em {
     display: none;
 }
 
+h1 {
+    display: block;
+    width: 100%;
+    height: 13%;
+    padding-top: 2%;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+h1 em {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-style: italic;
+    font-weight: normal;
+}
+
+#rotationsNavigator {
+    width: 100%;
+    height: 15%;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+#rotationsNavigator .button {
+    cursor: pointer;
+}
+
+#rotationsNavigator .button.disabled {
+    text-align: center;
+    color: #777;
+    cursor: default;
+}
+
+#hiscoresTable {
+    width: 90%;
+    font-size: 1.5em;
+    margin: 0 5%;
+    overflow: hidden;
+}
+
+#hiscoresTable td:last-child {
+    text-align: right;
+}
+
 #boardsNavigator {
     position: absolute;
     left: 0;
@@ -51,20 +83,4 @@ h1 em {
 #boardsNavigator>* {
     cursor: pointer;
     position: absolute;
-}
-
-#stepsNavigator {
-    font-size: 2em;
-    font-weight: bold;
-    margin-top: 1ex;
-    text-align: center;
-}
-
-#stepsNavigator .button {
-    cursor: pointer;
-}
-
-#stepsNavigator .button.disabled {
-    color: #777;
-    cursor: default;
 }
