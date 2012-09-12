@@ -27,6 +27,7 @@ define([
         pos1 = [0, 0], // 1st corner of rectangle
         pos2 = [0, 0], // 2nd corner of rectangle
         selectedRectT = rectTFactory.create([0, 0], [0, 0]),
+        draggedToTheRight,
         needsToBeRendered = true,
         isBeingDragged = false,
         lineWidth = 1,
@@ -87,23 +88,29 @@ define([
         selectedRectT = rectTFactory.create(tlPosT, brPosT);
     }
 
+    function updateDraggedToTheRight() {
+        draggedToTheRight = pos2[0] > pos1[0];
+    }
+
     // assumes that canvas is at position 0, 0 in the document
     function onDragStart(pos) {
         pos2 = pos1 = pos;
         updateSelectedRectT();
+        updateDraggedToTheRight();
         isBeingDragged = true;
         needsToBeRendered = true;
         if (onDragStart2 !== undefined) {
-            onDragStart2(selectedRectT);
+            onDragStart2();
         }
     }
 
     function onDrag(pos) {
         pos2 = pos;
         updateSelectedRectT();
+        updateDraggedToTheRight();
         needsToBeRendered = true;
         if (onDrag2 !== undefined) {
-            onDrag2(selectedRectT);
+            onDrag2(selectedRectT, draggedToTheRight);
         }
     }
 
@@ -112,6 +119,7 @@ define([
         needsToBeRendered = true;
         pos1 = pos2 = [0, 0]; // reset
         updateSelectedRectT();
+        updateDraggedToTheRight();
         if (onDragEnd2 !== undefined) {
             onDragEnd2();
         }
@@ -203,10 +211,6 @@ define([
                 sideLen = x;
                 needsToBeRendered = true;
             }
-        }},
-
-        draggedToTheRight: {get: function () {
-            return pos2[0] > pos1[0];
         }},
 
         onDragStart: {set: function (x) {

@@ -30,6 +30,7 @@ define([
     var sideLen, tiles, board,
         needsToBeRendered = true,
         selectedRectT, // when dragged: currently selected rectangle
+        draggedToTheRight, // when dragged: current drag direction
         animIsRunning,
         rotation,
         initRotAnimHasToBeTriggered = true;
@@ -38,10 +39,8 @@ define([
         if (selectedRectT === undefined) {
             rotation = undefined;
         } else {
-            rotation = rotationFactory.create(
-                selectedRectT,
-                rubberBandCanvas.draggedToTheRight
-            );
+            rotation = rotationFactory.create(selectedRectT,
+                                              draggedToTheRight);
         }
     }
 
@@ -62,10 +61,12 @@ define([
         arrowCanvas.show();
     }
 
-    function onRubberBandDrag(newSelectedRectT) {
+    function onRubberBandDrag(newSelectedRectT, newDraggedToTheRight) {
         if (selectedRectT === undefined ||
-                !newSelectedRectT.isEqualTo(selectedRectT)) {
+                !newSelectedRectT.isEqualTo(selectedRectT) ||
+                newDraggedToTheRight !== draggedToTheRight) {
             selectedRectT = newSelectedRectT;
+            draggedToTheRight = newDraggedToTheRight;
             needsToBeRendered = true;
             updateRotation();
             arrowCanvas.rotation = rotation;

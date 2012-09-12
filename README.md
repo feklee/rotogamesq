@@ -8,6 +8,12 @@ Why a new Roto Game? Because: The [original author][2] has moved, and in his
 new home there are squared bathroom tiles.
 
 
+Installation
+============
+
+Serve index.html with UTF-8 encoding.
+
+
 Development notes
 =================
 

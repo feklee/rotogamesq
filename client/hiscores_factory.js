@@ -56,16 +56,42 @@ define(function () {
         return proposal !== null && proposal.nRotations <= hiscore.nRotations;
     }
 
-    function insertProposal(hiscores, proposal) {
-        var i, hiscore;
+    function keepHiscoresLengthInBounds(hiscores) {
+        hiscores.length = Math.min(hiscores.length, maxLength);
+    }
 
-        for (i = 0; i < hiscores.length; i += 1) {
-            hiscore = hiscores[i];
-            if (proposalIsBetterOrEqual(proposal, hiscore)) {
-                hiscores.splice(i, 0, proposal);
-                return; // insert was successful
+    // Inserts proposal into hiscore:
+    //
+    //   * if it has sufficiently small number of rotations,
+    //
+    //   * and if name is not empty,
+    //
+    //   * and if there are no duplicates (same name) with a lower number of
+    //     rotations.
+    function insertProposal(hiscores, proposal) {
+        var i, hiscore, proposalHasBeenInserted = false;
+
+        if (proposal.name !== '') {
+            for (i = 0; i < hiscores.length; i += 1) {
+                hiscore = hiscores[i];
+
+                if (proposal.name === hiscore.name &&
+                        proposal.nRotations >= hiscore.nRotations) {
+                    return; // duplicate with lower/same number of rotations
+                }
+
+                if (proposal.nRotations <= hiscore.nRotations &&
+                        !proposalHasBeenInserted) {
+                    hiscores.splice(i, 0, proposal);
+                    proposalHasBeenInserted = true;
+                } else if (proposal.name === hiscore.name) {
+                    hiscores.splice(i, 1); // duplicate that is not better
+                }
             }
         }
+
+        keepHiscoresLengthInBounds(hiscores); // done at the end (in case
+                                              // duplicates have been removed)
     }
 
     return Object.create(null, {
@@ -104,7 +130,7 @@ define(function () {
                 }},
 
                 nameInProposal: {set: function (name) {
-                    if (proposal !== undefined) {
+                    if (proposal !== null) {
                         name = name.substring(0, this.maxNameLen);
                         proposal.name = name;
                         lastNameSet = name;
@@ -112,10 +138,13 @@ define(function () {
                 }},
 
                 saveProposal: {value: function () {
-                    // fixme: send to server
+                    // fixme: send to server, or explain here and in README.md
+                    // that things are not saved to server.
 
-                    insertProposal(hiscores, proposal);
-                    proposal = null;
+                    if (proposal !== null) {
+                        insertProposal(hiscores, proposal);
+                        proposal = null;
+                    }
                 }},
 
                 // proposes a new hiscore (name is to be entered by the player)

@@ -22,7 +22,9 @@ define(['util', 'boards'], function (util, boards) {
     'use strict';
 
     // fixme: remove if unused
-    var board, nameInputFieldEl, boardIsFinished, inputIsAllowed,
+    var board, nameInputFieldEl, submitButtonEl,
+        boardIsFinished,
+        submitIsEnabled = false,
         needsToBeRendered = true;
 
     function newTdEl(text) {
@@ -47,6 +49,41 @@ define(['util', 'boards'], function (util, boards) {
         board.hiscores.nameInProposal = nameInputFieldEl.value;
     }
 
+    function onSubmit() {
+        if (submitIsEnabled) {
+            board.hiscores.nameInProposal = nameInputFieldEl.value;
+
+            // Note that repeated calls to this function have no effect, since
+            // after insertion (successful or not), the proposal is removed.
+            board.hiscores.saveProposal();
+
+            needsToBeRendered = true;
+        }
+    }
+
+    function updateSubmitButtonClasses() {
+        var className;
+
+        if (submitButtonEl !== undefined) {
+            className = 'submit button' + (submitIsEnabled ? '' : ' disabled');
+            submitButtonEl.className = className;
+        }
+    }
+
+    // Updates: no name => submit does not work, and submit button is disabled
+    function updateAbilityToSubmit() {
+        submitIsEnabled = nameInputFieldEl.value !== '';
+        updateSubmitButtonClasses();
+    }
+
+    function onKeyUpInNameInputField(e) {
+        updateAbilityToSubmit();
+        if (e.keyCode === 13) { // enter key
+            onSubmit();
+        }
+    }
+
+    // Caches the input field element.
     function newNameInputTdEl(name) {
         var el = document.createElement('td');
 
@@ -55,19 +92,36 @@ define(['util', 'boards'], function (util, boards) {
             nameInputFieldEl.type = 'text';
             nameInputFieldEl.maxLength = nameInputFieldEl.size =
                 board.hiscores.maxNameLen;
+            nameInputFieldEl.spellcheck = false;
             nameInputFieldEl.addEventListener('blur', onNameInputFieldBlur);
+            nameInputFieldEl.addEventListener('keyup',
+                                              onKeyUpInNameInputField);
+            nameInputFieldEl.addEventListener('propertychange',
+                                              updateAbilityToSubmit);
+            nameInputFieldEl.addEventListener('input', updateAbilityToSubmit);
+            nameInputFieldEl.addEventListener('paste', updateAbilityToSubmit);
         }
         nameInputFieldEl.value = name;
         el.appendChild(nameInputFieldEl);
 
+        updateAbilityToSubmit(); // depends on `name`
+
         return el;
     }
 
+    // Caches the submit button element.
     function newSubmitButtonTdEl() {
-        var submitButtonEl = document.createElement('span'),
-            el = document.createElement('td');
+        var el = document.createElement('td');
 
-        submitButtonEl.appendChild(document.createTextNode('↵')); // &crarr;
+        if (submitButtonEl === undefined) {
+            submitButtonEl = document.createElement('span');
+            submitButtonEl.appendChild(
+                document.createTextNode('↵') // &crarr;
+            );
+            submitButtonEl.addEventListener('click', onSubmit);
+            updateSubmitButtonClasses();
+        }
+
         el.appendChild(submitButtonEl);
 
         return el;
@@ -105,11 +159,9 @@ define(['util', 'boards'], function (util, boards) {
             if (boards.selected !== board) {
                 board = boards.selected;
                 boardIsFinished = board.isFinished;
-                inputIsAllowed = false;
                 needsToBeRendered = true;
             } else if (board.isFinished !== boardIsFinished) {
                 boardIsFinished = board.isFinished;
-                inputIsAllowed = boardIsFinished;
                 needsToBeRendered = true;
             }
 
