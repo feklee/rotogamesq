@@ -19,7 +19,7 @@
 /*global define */
 
 define([
-    'display', 'panel', 'boards', 'load_indicator', 'util', '../vendor/rAF'
+    'display', 'panel', 'boards', 'load_indicator', 'util', 'vendor/rAF'
 ], function (
     display,
     panel,

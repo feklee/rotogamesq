@@ -1,17 +1,17 @@
 Introduction
 ============
 
-ROTOGAMEsq is a variant of [Roto Game][1] with squared tiles. There is no code
-shared, however.
+ROTOGAMEsq is a variant of [Roto Game][1] with squared tiles. It is based on an
+entirely new code base: not a single line of code has been reused
 
 Why a new Roto Game? Because: The [original author][2] has moved, and in his
-new home there are squared bathroom tiles.
+new home there now are squared bathroom tiles.
 
 
 Installation
 ============
 
-Serve index.html with UTF-8 encoding.
+Serve `index.html` with UTF-8 encoding.
 
 
 Development notes
