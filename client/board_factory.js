@@ -70,7 +70,7 @@ define([
     }
 
     function hiscoresUrl(name, type) {
-        return resourceUrl('hiscores.json');
+        return resourceUrl(name, 'hiscores.json');
     }
 
     function selectedTiles(tiles, x1T, y1T, x2T, y2T) {
