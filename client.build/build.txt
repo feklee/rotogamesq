@@ -1,7 +1,7 @@
 
-game.js
+vendor/almond.js
 ----------------
-vendor/require.js
+vendor/almond.js
 tiles_factory.js
 hiscores_factory.js
 board_factory.js

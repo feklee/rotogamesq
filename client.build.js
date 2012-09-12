@@ -1,14 +1,11 @@
 ({
-    appDir: 'client',
     baseUrl: '.',
+    appDir: 'client',
     dir: 'client.build',
     removeCombined: true,
     optimize: 'none',
-    paths: {
-        'requireLib': 'vendor/require'
-    },
-    modules: [{
-        name: 'game',
-        include: 'requireLib'
-    }]
+    wrap: true,
+    name: 'vendor/almond',
+    include: ['game'],
+    insertRequire: ['game']
 })
