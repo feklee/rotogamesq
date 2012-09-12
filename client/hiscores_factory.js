@@ -19,8 +19,6 @@
 /*global define */
 
 define(function () {
-    // fixme: remove, if unused
-
     'use strict';
 
     var maxLength = 7,

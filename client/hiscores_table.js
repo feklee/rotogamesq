@@ -21,7 +21,6 @@
 define(['util', 'boards'], function (util, boards) {
     'use strict';
 
-    // fixme: remove if unused
     var board, nameInputFieldEl, submitButtonEl,
         boardIsFinished,
         submitIsEnabled = false,

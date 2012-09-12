@@ -8,6 +8,10 @@
     user-select: none;
 }
 
+html {
+    background: black;
+}
+
 body {
     font-family: Arial, 'Liberation Sans', 'DejaVu Sans', sans-serif;
     color: white;

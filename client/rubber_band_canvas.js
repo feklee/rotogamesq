@@ -130,9 +130,10 @@ define([
     }
 
     function onTouchStart(e) {
-        var touches = e.changedTouches;
+        var touches;
 
         e.preventDefault();
+        touches = e.changedTouches;
         if (touches.length > 0) {
             onDragStart([touches[0].pageX, touches[0].pageY]);
         }
