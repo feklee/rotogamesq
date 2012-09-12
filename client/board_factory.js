@@ -235,7 +235,9 @@ define([
         tilesFactory.load(imgUrl(name, 'end'), function (tiles) {
             onEndTilesLoaded(board, tiles, onLoaded);
         });
-        hiscoresFactory.load(hiscoresUrl(name), function (hiscores) {
+        hiscoresFactory.load(hiscoresUrl(name),
+                             'rotogamejs.' + name + '.hiscores',
+                             function (hiscores) {
             onHiscoresLoaded(board, hiscores, onLoaded);
         });
     }

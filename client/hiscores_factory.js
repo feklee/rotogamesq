@@ -92,8 +92,19 @@ define(function () {
                                               // duplicates have been removed)
     }
 
+    // Returns null, if raw hiscores cannot be retrieved from local storage.
+    function getFromLocalStorage(localStorageKey) {
+        var json = localStorage.getItem(localStorageKey);
+
+        return json === null ? null : JSON.parse(json);
+    }
+
+    function saveInLocalStorage(localStorageKey, rawHiscores) {
+        localStorage.setItem(localStorageKey, JSON.stringify(rawHiscores));
+    }
+
     // `rawHiscores`: raw internal hiscores data
-    function create(rawHiscores) {
+    function create(rawHiscores, localStorageKey) {
         var proposal = null; // new, proposed hiscore (editable)
 
         return Object.create(null, {
@@ -137,12 +148,10 @@ define(function () {
             }},
 
             saveProposal: {value: function () {
-                // fixme: send to server, or explain here and in README.md that
-                // things are not saved to server.
-
                 if (proposal !== null) {
                     insertProposal(rawHiscores, proposal);
                     proposal = null;
+                    saveInLocalStorage(localStorageKey, rawHiscores);
                 }
             }},
 
@@ -162,12 +171,26 @@ define(function () {
     }
 
     return Object.create(null, {
-        load: {value: function (hiscoresUrl, onLoaded) {
-            loadJson(hiscoresUrl, function (json) {
-                onLoaded(create(JSON.parse(json)));
-            }, function () {
-                onLoaded(create([])); // hiscores data couldn't be retrieved
-            });
+        // Tries to:
+        //
+        //  1. get hiscores from local storage, and if that fails
+        //
+        //  2. from JSON file.
+        load: {value: function (hiscoresUrl, localStorageKey, onLoaded) {
+            var rawHiscores = getFromLocalStorage(localStorageKey);
+
+            if (rawHiscores !== null) {
+                onLoaded(create(rawHiscores, localStorageKey));
+            } else {
+                // not in local storage => get initial hiscores from server
+                loadJson(hiscoresUrl, function (json) {
+                    onLoaded(create(JSON.parse(json), localStorageKey));
+                }, function () {
+                    // hiscores data couldn't be retrieved => init with empty
+                    // list
+                    onLoaded(create([]));
+                });
+            }
         }}
     });
 });
