@@ -29,10 +29,20 @@ define([
         object;
 
     function renderArc(ctx, x, y, u, angleDeg) {
-        var endAngle = (angleDeg === 90 || angleDeg === -90 ?
+        var startAngle = 0,
+            endAngle = (angleDeg === 90 || angleDeg === -90 ?
                         Math.PI / 2 : Math.PI);
+
+        // Angle is slightly extended, to avoid small gap to triangle, visible
+        // in some browsers as of September 2012 (precision errors).
+        if (angleDeg > 0) {
+            startAngle -= Math.PI / 8;
+        } else {
+            endAngle += Math.PI / 8;
+        }
+
         ctx.beginPath();
-        ctx.arc(x + 10 * u, y + 10 * u, 1.5 * u, 0, endAngle);
+        ctx.arc(x + 10 * u, y + 10 * u, 1.5 * u, startAngle, endAngle);
         ctx.stroke();
     }
 
