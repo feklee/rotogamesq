@@ -4,7 +4,10 @@ Introduction
 ROTOGAMEsq is a variant of [Roto Game][1] with squared tiles: The [author][6]
 has moved, and in his new home there now are squared bathroom tiles. ;-)
 
-ROTOGAMEsq has been written from scratch for the [JS13KGames][2] challenge.
+ROTOGAMEsq has been written from scratch for the [JS13KGames][2] challenge. It
+is based on ECMAScript 5 and HTML5.
+
+Hiscores are kept in the browser's local storage.
 
 
 Installation
@@ -51,20 +54,27 @@ To prepare code for JS13KGames:
  3. Open `client.build/vendor/almond.js` and compile it using
     [Closure Compiler Service][3] with *Simple Optimizations*.
  
- 4. Save the compilation results to: `js13kgames/client/game.js`
+ 4. Save the compilation results to: `js13kgames/game.js`
 
- 5. Change in `js13kgames/index.html`:
+ 5. Replace in `js13kgames/index.html`:
+
+        <link href="css/reset.css" rel="stylesheet" type="text/css">
+        <link href="css/index.css" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="images/favicon.gif">
+        <script data-main="client/game"
+                src="client/vendor/require.js"></script>
+
+    With:
+
+        <link href="reset.css" rel="stylesheet" type="text/css">
+        <link href="index.css" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.gif">
+        <script src="game.js"></script>
+
+ 6. Minimize HTML, using [HTML Minifier][4].
  
-        <script data-main="client/game" src="client/vendor/require.js"></script>
+ 7. Minimize CSS, using [CSS Optimizer][5].
 
-    To:
-
-        <script src="client/game.js"></script>
-
- 6. Minimize CSS, using [CSS Optimizer][4].
-
- 7. Minimize HTML, using [HTML Minifier][5].
- 
  8. Zip `js13kgames`, on Windows XP, using: *Send To* / *Compressed (zipped)
     Folder* (produces less bytes than WinRar's ZIP)
 
@@ -89,6 +99,6 @@ specific language governing permissions and limitations under the License.
 [1]: http://code.google.com/p/rotogame/
 [2]: http://js13kgames.com/
 [3]: http://closure-compiler.appspot.com/home
-[4]: http://www.cssoptimiser.com
-[5]: http://kangax.github.com/html-minifier/
+[4]: http://kangax.github.com/html-minifier/
+[5]: http://www.cssoptimiser.com
 [6]: mailto:felix.klee@inka.de
