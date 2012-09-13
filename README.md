@@ -5,7 +5,10 @@ ROTOGAMEsq is a variant of [Roto Game][1] with squared tiles: The [author][6]
 has moved, and in his new home the bathroom tiles are different. ;-)
 
 ROTOGAMEsq has been written from scratch for the [JS13KGames][2] challenge. It
-is based on ECMAScript 5 and HTML5.
+is based on ECMAScript 5 and HTML5. The version that has been submitted to the
+challenge is tagged:
+
+  
 
 Hiscores are kept in the browser's local storage.
 
