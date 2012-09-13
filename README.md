@@ -2,7 +2,7 @@ Introduction
 ============
 
 ROTOGAMEsq is a variant of [Roto Game][1] with squared tiles: The [author][6]
-has moved, and in his new home there now are squared bathroom tiles. ;-)
+has moved, and in his new home the bathroom tiles are different. ;-)
 
 ROTOGAMEsq has been written from scratch for the [JS13KGames][2] challenge. It
 is based on ECMAScript 5 and HTML5.
@@ -75,8 +75,9 @@ To prepare code for JS13KGames:
  
  7. Minimize CSS, using [CSS Optimizer][5].
 
- 8. Zip `js13kgames`, on Windows XP, using: *Send To* / *Compressed (zipped)
-    Folder* (produces less bytes than WinRar's ZIP)
+ 8. Zip *the inside* of `js13kgames`. On Windows XP, mark all files, and click:
+    *Send To* / *Compressed (zipped) Folder* (produces less bytes than WinRar's
+    ZIP)
 
 
 Legal
