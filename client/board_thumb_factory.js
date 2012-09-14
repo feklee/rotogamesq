@@ -28,37 +28,54 @@ define(['boards'], function (boards) {
         });
     }
 
-    function renderTile(ctx, board, posT, sideLen) {
+    function renderTile(ctx, board, posT, maxSideLenCeil) {
         var sideLenT = board.sideLenT,
             tiles = board.endTiles,
-            pos = posFromPosT(posT, sideLen, sideLenT),
+            pos = posFromPosT(posT, maxSideLenCeil, sideLenT),
             color = tiles[posT[0]][posT[1]].color,
-            tileSideLen = sideLen / sideLenT + 1; // +1 to avoid ugly spacing
+            tileSideLen = maxSideLenCeil / sideLenT + 1; // +1 to avoid ugly
+                                                         // spacing
 
         ctx.fillStyle = color;
         ctx.fillRect(pos[0], pos[1], tileSideLen, tileSideLen);
     }
 
-    // Renders the board to canvas.
+    // The canvas is only rendered when needed. One reason, aside from low
+    // resource consumption, is that with the canvas being rendered repeatedly
+    // in a quick succession, sometimes on the iPad with IOS 5.1.1, the canvas
+    // drawing on the canvas has no effect after increasing its size - it stays
+    // empty.
+    function renderCanvas(el, board, maxSideLenCeil) {
+        var xT, yT,
+            sideLenT = board.sideLenT,
+            ctx = el.getContext('2d');
+
+        for (xT = 0; xT < sideLenT; xT += 1) {
+            for (yT = 0; yT < sideLenT; yT += 1) {
+                renderTile(ctx, board, [xT, yT], maxSideLenCeil);
+            }
+        }
+    }
+
+    // Renders the board to canvas, and/or just repositions and scales down the
+    // canvas with CSS.
     //
     // Why not simply display the board image in an `<img>` tag, and scale
     // that? Rationale: As of Chrome 21.0, when scaling an image in an `<img>`
     // tag, then it is smoothed/blurred, and there is no way to turn off that
     // behavior. In particular, there is no equivalent to Firefox 14.0's
     // `-moz-crisp-edges`.
-    function render(el, board, sideLen, x, y) {
-        var xT, yT,
-            sideLenT = board.sideLenT,
-            ctx = el.getContext('2d');
+    function render(el, board, sideLen, maxSideLenCeil, x, y,
+                    canvasNeedsToBeRendered) {
+        var s = el.style;
 
-        el.width = el.height = sideLen; // also clears canvas
-        el.style.left = (x - sideLen / 2) + 'px';
-        el.style.top = (y - sideLen / 2) + 'px';
+        s.width = s.height = sideLen + 'px';
+        s.left = (x - sideLen / 2) + 'px';
+        s.top = (y - sideLen / 2) + 'px';
 
-        for (xT = 0; xT < sideLenT; xT += 1) {
-            for (yT = 0; yT < sideLenT; yT += 1) {
-                renderTile(ctx, board, [xT, yT], sideLen);
-            }
+        if (canvasNeedsToBeRendered) {
+            el.width = el.height = maxSideLenCeil;
+            renderCanvas(el, board, maxSideLenCeil);
         }
     }
 
@@ -66,7 +83,9 @@ define(['boards'], function (boards) {
         create: {value: function (boardI, onThumbSelected) {
             var el = document.createElement('canvas'),
                 needsToBeRendered = true,
-                sideLen = 0,
+                canvasNeedsToBeRendered = true,
+                maxSideLenCeil = 0, // max. side length (size of canvas, int)
+                sideLen = 0, // actual side length, set with CSS
                 x = 0, // x-position of center within outher container
                 y = 0;
 
@@ -84,6 +103,7 @@ define(['boards'], function (boards) {
                     if (newBoardI !== boardI) {
                         boardI = newBoardI;
                         needsToBeRendered = true;
+                        canvasNeedsToBeRendered = true;
                     }
                 }},
 
@@ -91,6 +111,15 @@ define(['boards'], function (boards) {
                     if (newSideLen !== sideLen) {
                         sideLen = newSideLen;
                         needsToBeRendered = true;
+                    }
+                }},
+
+                maxSideLen: {set: function (newMaxSideLen) {
+                    var newMaxSideLenCeil = Math.ceil(newMaxSideLen);
+                    if (newMaxSideLenCeil !== maxSideLenCeil) {
+                        maxSideLenCeil = newMaxSideLenCeil;
+                        needsToBeRendered = true;
+                        canvasNeedsToBeRendered = true;
                     }
                 }},
 
@@ -108,10 +137,13 @@ define(['boards'], function (boards) {
                     }
                 }},
 
-                animStep: {value: function () {
+                animStep: {value: function (fixmeI) {
                     if (needsToBeRendered) {
-                        render(el, boards[boardI], sideLen, x, y);
+                        render(el, boards[boardI],
+                               sideLen, maxSideLenCeil, x, y,
+                               canvasNeedsToBeRendered);
                         needsToBeRendered = false;
+                        canvasNeedsToBeRendered = false;
                     }
                 }}
             });

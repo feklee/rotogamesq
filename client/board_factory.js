@@ -226,6 +226,10 @@ define([
 
             lastRotation: {get: function () {
                 return internal.lastRotation;
+            }},
+
+            name: {get: function () {
+                return name;
             }}
         });
 

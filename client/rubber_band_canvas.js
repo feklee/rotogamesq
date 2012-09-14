@@ -71,7 +71,7 @@ define([
     //
     // * 0: position (tile coordinates) of top left selected tile
     //
-    // * 1: position bottom right selected tile
+    // * 1: position of bottom right selected tile
     //
     // A tile is selected, if it is inside or if it is touched by the rubber
     // band. Spacing is *not* part of tiles!
@@ -178,7 +178,7 @@ define([
         el.addEventListener('touchstart', onTouchStart);
 
         // Some events are assigned to `window` so that they are also
-        // registered when the mouse is moved outside of the window.
+        // registered when the mouse is moved outside of the element.
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('touchmove', onTouchMove);
         window.addEventListener('mouseup', onMouseUp);

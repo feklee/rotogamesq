@@ -52,14 +52,23 @@ define([
         return cycledBoardI(selectedBoardI + thumbI);
     }
 
+    function thumbSideLen(displayedThumbI) {
+        return width / (4 + 2 * Math.abs(displayedThumbI));
+    }
+
+    // `thumbI` is 0 => board centered
+    function thumbX(displayedThumbI) {
+        return displayedThumbI * (width / 3) + width / 2;
+    }
+
     function updateThumbsCoordinates() {
-        var thumbI, thumb, j;
+        var thumbI, thumb;
 
         thumbs.forEach(function (thumb, i) {
             var thumbI = i - nSideThumbs;
-            j = thumbI - animThumbI; // `j` is 0 => board centered
-            thumb.sideLen = width / (4 + 2 * Math.abs(j));
-            thumb.x = j * (width / 3) + width / 2;
+            thumb.maxSideLen = thumbSideLen(0); // center is largest
+            thumb.sideLen = thumbSideLen(thumbI - animThumbI);
+            thumb.x = thumbX(thumbI - animThumbI);
             thumb.y = width / 8;
         });
     }
@@ -108,9 +117,12 @@ define([
         updateThumbsCoordinates();
     }
 
+    var fixmeI = 0;
+
     function thumbsAnimationSteps() {
+        fixmeI += 1;
         thumbs.forEach(function (thumb) {
-            thumb.animStep();
+            thumb.animStep(fixmeI);
         });
     }
 
@@ -132,6 +144,7 @@ define([
         s.height = width / 4 + 'px';
 
         if (elementsNeedToBeAppended && thumbsHaveBeenCreated()) {
+            // initializes (only once, at the beginning)
             appendElements(el);
             elementsNeedToBeAppended = false;
         }
@@ -147,7 +160,7 @@ define([
     }
 
     function updateThumbI() {
-        var speed = 0.005;
+        var speed = 0.005; // fixme: 0.005;
 
         animThumbI = (animStartThumbI +
                       animDirection * speed * animPassedTime());
