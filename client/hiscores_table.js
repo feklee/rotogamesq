@@ -133,6 +133,11 @@ define(['util', 'boards'], function (util, boards) {
         el.appendChild(newNameInputTdEl(hiscore.name));
         el.appendChild(newSubmitButtonTdEl());
 
+        // focuses text entry when clicking anywhere in the line:
+        el.addEventListener('mouseup', function () {
+            nameInputFieldEl.focus();
+        });
+
         return el;
     }
 
@@ -147,6 +152,7 @@ define(['util', 'boards'], function (util, boards) {
         board.hiscores.forEach(function (hiscore, i, isEditable) {
             if (isEditable) {
                 el.appendChild(newInputTrEl(hiscore));
+                nameInputFieldEl.focus();
             } else {
                 el.appendChild(newTrEl(hiscore));
             }

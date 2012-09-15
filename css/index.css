@@ -92,7 +92,7 @@ h1 em {
     color: white;
     cursor: text;
     font-size: 1em;
-    width: 7em;
+    width: 100%;
 
     -webkit-touch-callout: default;
     -webkit-user-select: text;

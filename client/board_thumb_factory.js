@@ -44,7 +44,7 @@ define(['boards'], function (boards) {
     // resource consumption, is that with the canvas being rendered repeatedly
     // in a quick succession, sometimes on the iPad with IOS 5.1.1, the canvas
     // drawing on the canvas has no effect after increasing its size - it stays
-    // empty.
+    // empty. The new code minimizes situations like that.
     function renderCanvas(el, board, maxSideLenCeil) {
         var xT, yT,
             sideLenT = board.sideLenT,
