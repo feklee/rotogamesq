@@ -1,4 +1,4 @@
-// For selecting the current board.
+// Widget for selecting the current board.
 
 // There are two ways to select a board:
 
@@ -30,13 +30,30 @@ define([
     'use strict';
 
     var width,
+
+        nSideThumbs = 2,  // thumbnails displayed to the left/right side of the
+                          // currently selected one (needs to be large enough
+                          // if e.g. the left-most thumb is the current)
+                          //
+                          // thumb indexes go from `-nSideThumbs` to
+                          // `nSideThumbs`
+
+        // Thumbs. Thumbs are referenced using *thumb indexes*. To get the
+        // index for the array below, simply add `nSideThumbs` to a *thumb
+        // index*.
         thumbs = [],
 
+        // Index of thumb shown in the widget's center (index may be fractional
+        // during animation or dragging, e.g. 0.5 means that the widget's
+        // center is empty with thumbs on both sides):
+        thumbIInCenter = 0,
+
+        // Index of the board in the middle of the `thumbs` array:
+        middleBoardI = 0,
+
         // values for animation:
-        animThumbI = 0, // index of thumb shown in middle (fractional during
-                        // animation)
-        animThumbX,
-        animStartThumbI,
+        animStartThumbIInCenter,
+        animEndThumbIInCenter, // destination
         animDirection, // direction of animation (-1, or +1)
         animIsRunning = false,
         animStartTime, // time when animation started, in milliseconds
@@ -45,16 +62,9 @@ define([
         dragStartX, // input device x position
         dragStartAnimThumbX,
 
-        selectedBoardI = 0,
         elementsNeedToBeAppended = true,
         isBeingDragged = false,
-        needsToBeRendered = true,
-        nSideThumbs = 4;  // thumbnails displayed to the left/right side of the
-                          // currently selected one (needs to be large enough
-                          // if e.g. the left-most thumb is the current)
-                          //
-                          // thumb indexes go from `-nSideThumbs` to
-                          // `nSideThumbs`
+        needsToBeRendered = true;
 
     // Returns a board index that is within bounds, by cycling if `i` is too
     // small or too large.
@@ -62,18 +72,12 @@ define([
         return ((i % boards.length) + boards.length) % boards.length;
     }
 
-    // Selected board is always in the middle of the thumbs.
-    function boardI(thumbI) {
-        return cycledBoardI(selectedBoardI + thumbI);
+    function thumbSideLen(thumbI) {
+        return width / (4 + 2 * Math.abs(thumbI - thumbIInCenter));
     }
 
-    function displayedThumbSideLen(displayedThumbI) {
-        return width / (4 + 2 * Math.abs(displayedThumbI));
-    }
-
-    // `thumbI` is 0 => board centered
-    function displayedThumbX(displayedThumbI) {
-        return displayedThumbI * (width / 3) + width / 2;
+    function thumbX(thumbI) {
+        return (thumbI - thumbIInCenter) * (width / 3) + width / 2;
     }
 
     // inverse of `displayedThumbX`
@@ -84,35 +88,47 @@ define([
     function updateThumbsCoordinates() {
         var thumbI, thumb;
 
-        animThumbX = displayedThumbX(animThumbI);
-
         thumbs.forEach(function (thumb, i) {
             var thumbI = i - nSideThumbs;
-            thumb.maxSideLen = displayedThumbSideLen(0); // center is largest
-            thumb.sideLen = displayedThumbSideLen(thumbI - animThumbI);
-            thumb.x = displayedThumbX(thumbI - animThumbI);
+            thumb.maxSideLen = thumbSideLen(0); // center is largest
+            thumb.sideLen = thumbSideLen(thumbI);
+            thumb.x = thumbX(thumbI);
             thumb.y = width / 8;
         });
     }
 
-    function updateThumbs() {
-        thumbs.forEach(function (thumb, i) {
-            var thumbI = i - nSideThumbs;
-            thumb.boardI = boardI(thumbI);
-        });
+    // The index of the board (in `boards`) that corresponds to `thumbI`.
+    function boardI(thumbI) {
+        return cycledBoardI(middleBoardI + thumbI);
     }
 
-    function updateSelectedBoardI() {
-        selectedBoardI = boards.selectedI;
-        updateThumbs();
+    // Updates the thumbnail images (reassigns board indexes) so that
+    // `thumbIInCenter` is as close as possible to 0. This is necessary so that
+    // there will be no missing thumbs at one side of the widget.
+    function updateThumbs() {
+        var delta = Math.round(thumbIInCenter);
+
+        if (delta !== 0) {
+            middleBoardI += delta;
+            thumbIInCenter -= delta;
+            animStartThumbIInCenter -= delta;
+            animEndThumbIInCenter -= delta;
+
+            thumbs.forEach(function (thumb, i) {
+                var thumbI = i - nSideThumbs;
+                thumb.boardI = boardI(thumbI);
+            });
+        }
     }
 
     // Note: The index of the selected thumb will become 0, after the thumbs
     // have been rearrange (see: `updateThumbs`). So animation of the thumb
     // index is always towards 0.
     function startAnim(selectedThumbI) {
-        animStartThumbI = animThumbI - selectedThumbI;
-        animDirection = animStartThumbI > 0 ? -1 : 1;
+        animStartThumbIInCenter = thumbIInCenter;
+        animEndThumbIInCenter = selectedThumbI;
+        animDirection = (animEndThumbIInCenter > animStartThumbIInCenter ?
+                         1 : -1);
         animStartTime = Date.now();
         animIsRunning = true;
     }
@@ -127,7 +143,6 @@ define([
 
     function onThumbSelected(selectedThumbI) {
         startAnim(selectedThumbI);
-        updateSelectedBoardI();
     }
 
     function newThumb(thumbI) {
@@ -182,21 +197,25 @@ define([
     }
 
     function animIsFinished() {
-        return ((animDirection > 0 && animThumbI >= 0) ||
-                (animDirection < 0 && animThumbI <= 0));
+        return ((animDirection > 0 &&
+                 thumbIInCenter >= animEndThumbIInCenter) ||
+                (animDirection < 0 &&
+                 thumbIInCenter <= animEndThumbIInCenter));
     }
 
     function updateThumbI() {
         var speed = 0.0005; // fixme: 0.005
 
-        animThumbI = (animStartThumbI +
-                      animDirection * speed * animPassedTime());
+        thumbIInCenter = (animStartThumbIInCenter +
+                          animDirection * speed * animPassedTime());
 
         if (animIsFinished()) {
-            animThumbI = 0; // avoids movement that is too far
+            thumbIInCenter = animEndThumbIInCenter; // avoids movement that is
+                                                    // too far
             animIsRunning = false;
         }
 
+        updateThumbs();
         updateThumbsCoordinates();
     }
 
@@ -204,11 +223,10 @@ define([
         pauseAnim();
         isBeingDragged = true;
         dragStartX = x;
-        dragStartAnimThumbX = animThumbX;
     }
 
     function onDrag(x) {
-        animThumbI = displayedThumbI(dragStartAnimThumbX - (x - dragStartX));
+        //fixme:animThumbI = displayedThumbI(dragStartAnimThumbX - (x - dragStartX));
         updateThumbsCoordinates();
     }
 
@@ -218,10 +236,10 @@ define([
         resumeAnim();
         isBeingDragged = false;
 
-        newSelectedBoardI = cycledBoardI(selectedBoardI +
-                                         Math.round(animThumbI));
+/*fixme:        newSelectedBoardI = cycledBoardI(selectedBoardI +
+                                         Math.round(animThumbI));*/
 
-        console.log(newSelectedBoardI); // fixme
+//        console.log(newSelectedBoardI); // fixme
         // fixme: if necessary, also update direction
 
 /*fixme:        if (newSelectedBoardI !== selectedBoardI) {
@@ -232,22 +250,11 @@ define([
         // fixme: update boards. Cancel further propagation or similar, if
         // cursor has been moved during drag. (perhaps set: dragWithMove =
         // true, and then cancel propagation right in mouse event, see
-        // downwards.
-    }
-
-    function onDragCancel() {
-        isBeingDragged = false;
-        resumeAnim();
+        // downwards. Or: define click event here manually.)
     }
 
     function onMouseDown(e) {
         onDragStart(e.pageX);
-    }
-
-    function onMouseOut(e) {
-        if (isBeingDragged) {
-            onDragCancel();
-        }
     }
 
     function onMouseMove(e) {
@@ -266,7 +273,6 @@ define([
         var el = document.getElementById('boardsNavigator');
 
         el.addEventListener('mousedown', onMouseDown);
-        el.addEventListener('mouseout', onMouseOut);
 
         // Some events are assigned to `window` so that they are also
         // registered when the mouse is moved outside of the element.
