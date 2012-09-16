@@ -84,10 +84,15 @@ define(function () {
                     rawHiscores.splice(i, 1); // duplicate that is not better
                 }
             }
+
+            if (!proposalHasBeenInserted) {
+                rawHiscores.push(proposal);
+            }
         }
 
         keepHiscoresLengthInBounds(rawHiscores); // done at the end (in case
-                                              // duplicates have been removed)
+                                                 // duplicates have been
+                                                 // removed)
     }
 
     // Returns null, if raw hiscores cannot be retrieved from local storage.
@@ -113,12 +118,6 @@ define(function () {
                     maxI = rawHiscores.length,
                     proposalHasBeenShown = false;
 
-                if (maxI === 0 && proposal !== null) {
-                    // hiscore empty & proposal available => just show proposal
-                    callback(proposal, 0, true);
-                    return;
-                }
-
                 for (i = 0; i < maxI; i += 1) {
                     hiscore = rawHiscores[i];
                     if (proposalIsBetterOrEqual(proposal, hiscore) &&
@@ -130,6 +129,13 @@ define(function () {
                     } else {
                         callback(hiscore, i, false);
                     }
+                }
+
+                if (i < maxLength && proposal !== null &&
+                        !proposalHasBeenShown) {
+                    // still space & proposal not shown
+                    callback(proposal, i, true);
+                    return;
                 }
             }},
 

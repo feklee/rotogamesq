@@ -137,7 +137,7 @@ define(['boards'], function (boards) {
                     }
                 }},
 
-                animStep: {value: function (fixmeI) {
+                animStep: {value: function () {
                     if (needsToBeRendered) {
                         render(el, boards[boardI],
                                sideLen, maxSideLenCeil, x, y,
