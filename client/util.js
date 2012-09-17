@@ -38,6 +38,19 @@ define(function () {
             while (el.firstChild) {
                 el.removeChild(el.firstChild);
             }
+        }},
+
+
+        // Returns position of element on page, in pixels.
+        pagePos: {value: function (el) {
+            var pos = [0, 0];
+
+            do {
+                pos = [pos[0] + el.offsetLeft, pos[1] + el.offsetTop];
+                el = el.offsetParent;
+            } while (el);
+
+            return pos;
         }}
     });
 });

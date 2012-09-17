@@ -90,8 +90,7 @@ define(['boards'], function (boards) {
                 y = 0;
 
             el.addEventListener('click', function () {
-                boards.selectedI = boardI;
-                onThumbSelected();
+                onThumbSelected(boards.selectedI);
             });
 
             return Object.create(null, {

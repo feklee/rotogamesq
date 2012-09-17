@@ -59,8 +59,11 @@ define([
         animStartTime, // time when animation started, in milliseconds
 
         // values when dragging started:
-        dragStartX, // input device x position
-        dragStartAnimThumbX,
+        dragStartCursorX, // cursor x position on page
+        dragStartThumbXAtCursor,
+        dragStartThumbIInCenter,
+
+        hasBeenClicked, // to differentiate between clicks and drags
 
         elementsNeedToBeAppended = true,
         isBeingDragged = false,
@@ -76,13 +79,14 @@ define([
         return width / (4 + 2 * Math.abs(thumbI - thumbIInCenter));
     }
 
+    // position of thumb with index `thumbI`
     function thumbX(thumbI) {
         return (thumbI - thumbIInCenter) * (width / 3) + width / 2;
     }
 
-    // inverse of `displayedThumbX`
-    function displayedThumbI(thumbX) {
-        return 3 * thumbX / width - 3 / 2;
+    // inverse of `thumbX`
+    function thumbIFromThumbX(thumbX) {
+        return 3 * thumbX / width - 3 / 2 + thumbIInCenter;
     }
 
     function updateThumbsCoordinates() {
@@ -111,8 +115,14 @@ define([
         if (delta !== 0) {
             middleBoardI += delta;
             thumbIInCenter -= delta;
-            animStartThumbIInCenter -= delta;
-            animEndThumbIInCenter -= delta;
+            if (animIsRunning) {
+                animStartThumbIInCenter -= delta;
+                animEndThumbIInCenter -= delta;
+            }
+
+            if (isBeingDragged) {
+                dragStartThumbIInCenter -= delta;
+            }
 
             thumbs.forEach(function (thumb, i) {
                 var thumbI = i - nSideThumbs;
@@ -133,7 +143,7 @@ define([
         animIsRunning = true;
     }
 
-    function pauseAnim() {
+    function stopAnim() {
         animIsRunning = false;
     }
 
@@ -146,9 +156,15 @@ define([
     }
 
     function newThumb(thumbI) {
-        return boardThumbFactory.create(boardI(thumbI), function () {
-            onThumbSelected(thumbI);
-        });
+        return boardThumbFactory.create(
+            boardI(thumbI),
+            function (selectedBoardI) {
+                if (hasBeenClicked) {
+                    boards.selectedI = selectedBoardI;
+                    onThumbSelected(thumbI);
+                }
+            }
+        );
     }
 
     function createThumbs() {
@@ -204,7 +220,7 @@ define([
     }
 
     function updateThumbI() {
-        var speed = 0.0005; // fixme: 0.005
+        var speed = 0.005;
 
         thumbIInCenter = (animStartThumbIInCenter +
                           animDirection * speed * animPassedTime());
@@ -219,42 +235,56 @@ define([
         updateThumbsCoordinates();
     }
 
-    function onDragStart(x) {
-        pauseAnim();
+    function onDragStart(cursorX) {
+        var elPagePos =
+                util.pagePos(document.getElementById('boardsNavigator')),
+            thumbXAtCursor = cursorX - elPagePos[0];
+
+        stopAnim();
         isBeingDragged = true;
-        dragStartX = x;
+        dragStartCursorX = cursorX;
+        dragStartThumbXAtCursor = thumbXAtCursor;
+        dragStartThumbIInCenter = thumbIInCenter;
+
+        hasBeenClicked = true; // may change later
     }
 
-    function onDrag(x) {
-        //fixme:animThumbI = displayedThumbI(dragStartAnimThumbX - (x - dragStartX));
+    function onDrag(cursorX) {
+        var deltaX = cursorX - dragStartCursorX,
+            thumbXAtCursor = dragStartThumbXAtCursor + deltaX,
+            deltaI = (thumbIFromThumbX(dragStartThumbXAtCursor) -
+                      thumbIFromThumbX(thumbXAtCursor));
+
+        if (deltaX !== 0) {
+            hasBeenClicked = false;
+        }
+
+        thumbIInCenter = dragStartThumbIInCenter + deltaI;
+
+        updateThumbs();
         updateThumbsCoordinates();
     }
 
     function onDragEnd() {
-        var newSelectedBoardI;
+        if (!hasBeenClicked) {
+            // was a drag => select thumb closest to center
+            startAnim(0);
+        }
 
-        resumeAnim();
         isBeingDragged = false;
-
-/*fixme:        newSelectedBoardI = cycledBoardI(selectedBoardI +
-                                         Math.round(animThumbI));*/
-
-//        console.log(newSelectedBoardI); // fixme
-        // fixme: if necessary, also update direction
-
-/*fixme:        if (newSelectedBoardI !== selectedBoardI) {
-            boards.selectedI = newSelectedBoardI;
-            updateSelectedBoardI();
-        }*/
-
-        // fixme: update boards. Cancel further propagation or similar, if
-        // cursor has been moved during drag. (perhaps set: dragWithMove =
-        // true, and then cancel propagation right in mouse event, see
-        // downwards. Or: define click event here manually.)
     }
 
     function onMouseDown(e) {
         onDragStart(e.pageX);
+    }
+
+    function onTouchStart(e) {
+        var touches;
+
+        touches = e.changedTouches;
+        if (touches.length > 0) {
+            onDragStart(touches[0].pageX);
+        }
     }
 
     function onMouseMove(e) {
@@ -263,7 +293,26 @@ define([
         }
     }
 
-    function onMouseUp(e) {
+    function onTouchMove(e) {
+        var touches = e.changedTouches;
+
+        if (isBeingDragged) {
+            if (touches.length > 0) {
+                onDrag(touches[0].pageX);
+            }
+        }
+    }
+
+    function onMouseUp() {
+        if (isBeingDragged) {
+            onDragEnd();
+        }
+    }
+
+    function onTouchEnd(e) {
+        var touches = e.changedTouches;
+
+        e.preventDefault();
         if (isBeingDragged) {
             onDragEnd();
         }
@@ -273,11 +322,15 @@ define([
         var el = document.getElementById('boardsNavigator');
 
         el.addEventListener('mousedown', onMouseDown);
+        el.addEventListener('touchstart', onTouchStart);
 
         // Some events are assigned to `window` so that they are also
         // registered when the mouse is moved outside of the element.
         window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('touchmove', onTouchMove);
         window.addEventListener('mouseup', onMouseUp);
+        window.addEventListener('touchend', onTouchEnd);
+        window.addEventListener('touchcancel', onTouchEnd);
     });
 
     return Object.create(null, {
