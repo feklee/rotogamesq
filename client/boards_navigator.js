@@ -264,10 +264,7 @@ define([
     }
 
     function onDragEnd() {
-        if (!hasBeenClicked) {
-            // was a drag => select thumb closest to center
-            startAnim(0);
-        }
+        startAnim(0);
 
         isBeingDragged = false;
     }

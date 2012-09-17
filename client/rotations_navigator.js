@@ -1,4 +1,5 @@
-// Shows the number of steps and allows undo and redo operations.
+// Shows the number of steps and allows undo and redo operations. Allows binds
+// keys for undo / redo.
 
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
@@ -37,6 +38,27 @@ define(['boards', 'util'], function (boards, util) {
         board.redo();
     }
 
+    function onKeyUp(e) {
+        if (e.ctrlKey) {
+            // Ctrl pressed (e.g. on Windows)
+            switch (e.keyCode) {
+            case 90: // z
+                board.undo();
+                break;
+            case 89: // y
+                board.redo();
+                break;
+            }
+        } else if (e.metaKey && e.keyCode === 90) {
+            // Meta or Command pressed with 'z' (e.g. on Mac OS X)
+            if (e.shiftKey) {
+                board.redo();
+            } else {
+                board.undo();
+            }
+        }
+    }
+
     function setupButton(type, onClick) {
         buttonEl(type).addEventListener('click', onClick);
     }
@@ -70,6 +92,8 @@ define(['boards', 'util'], function (boards, util) {
     util.whenDocumentIsReady(function () {
         setupButton('undo', onUndoClick);
         setupButton('redo', onRedoClick);
+
+        window.addEventListener('keyup', onKeyUp);
     });
 
     return Object.create(null, {
