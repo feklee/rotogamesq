@@ -147,10 +147,6 @@ define([
         animIsRunning = false;
     }
 
-    function resumeAnim() {
-        animIsRunning = true;
-    }
-
     function onThumbSelected(selectedThumbI) {
         startAnim(selectedThumbI);
     }
@@ -263,6 +259,8 @@ define([
 
         updateThumbs();
         updateThumbsCoordinates();
+
+        boards.selectedI = boardI(0);
     }
 
     function onDragEnd() {
