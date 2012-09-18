@@ -14,22 +14,25 @@
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
   </head>
   <body>
+    <h1 id="title">ROTOGAME<em>sq</em></h1>
+
     <div id="display">
       <canvas id="tilesCanvas"></canvas>
       <canvas id="arrowCanvas"></canvas>
       <canvas id="rotAnimCanvas"></canvas>
       <canvas id="rubberBandCanvas"></canvas>
     </div>
-    <div id="panel">
-      <h1>ROTOGAME<em>sq</em></h1>
-      <p id="rotationsNavigator">
-        <span class="undo button disabled">↶</span>
-        <span id="nRotations">0</span>
-        <span class="redo button disabled">↷</span>
-      </p>
-      <table id="hiscoresTable"><tbody></tbody></table>
-      <div id="boardsNavigator"></div>
-    </div>
+
+    <div id="boardsNavigator"></div>
+
+    <p id="rotationsNavigator">
+      <span class="undo button disabled">↶</span>
+      <span id="nRotations">0</span>
+      <span class="redo button disabled">↷</span>
+    </p>
+
+    <table id="hiscoresTable"><tbody></tbody></table>
+
     <div id="loadIndicator">
       <p>…</p>
     </div>

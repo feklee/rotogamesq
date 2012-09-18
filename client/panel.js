@@ -1,5 +1,7 @@
 // Panel that shows information such as the game's name.
 
+// fixme: remove if unused
+
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not

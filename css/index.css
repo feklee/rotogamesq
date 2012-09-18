@@ -28,8 +28,8 @@ body {
     cursor: default;
 }
 
-#panel, #display, #loadIndicator,
-#tilesCanvas, #arrowCanvas, #rotAnimCanvas, #rubberBandCanvas {
+#display, #title,
+#loadIndicator, #tilesCanvas, #arrowCanvas, #rotAnimCanvas, #rubberBandCanvas {
     position: absolute;
 }
 
@@ -37,21 +37,16 @@ body {
     display: none; /* hidden only until size is set */
 }
 
-#panel, #display {
+#display {
     display: none;
 }
 
-h1 {
-    display: block;
-    width: 100%;
-    height: 13%;
-    padding-top: 2%;
-    font-size: 2em;
+#title {
     font-weight: bold;
     text-align: center;
 }
 
-h1 em {
+#title em {
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-style: italic;
     font-weight: normal;

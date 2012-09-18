@@ -17,6 +17,14 @@ Installation
 Serve `index.html` with UTF-8 encoding.
 
 
+Portrait and landscape layouts
+==============================
+
+To give optimal user experience espcially on mobile devices, the game adapts
+the layout depending on whether the browser's viewport is in landscape (width >
+height) or portrait mode.
+
+
 Development notes
 =================
 

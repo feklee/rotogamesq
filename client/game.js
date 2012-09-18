@@ -19,12 +19,17 @@
 /*global define */
 
 define([
-    'display', 'panel', 'boards', 'load_indicator', 'util', 'vendor/rAF'
+    'display', 'boards', 'load_indicator',
+    'title', 'rotations_navigator', 'hiscores_table', 'boards_navigator',
+    'util', 'vendor/rAF'
 ], function (
     display,
-    panel,
     boards,
     loadIndicator,
+    title,
+    rotationsNavigator,
+    hiscoresTable,
+    boardsNavigator,
     util
 ) {
     'use strict';
@@ -33,26 +38,62 @@ define([
 
     // The game takes up the space of a golden ratio rectangle that takes up
     // maximum space in the browser window.
-    function updateDimensions() {
+    function updateLandscapeLayout(viewportWidth, viewportHeight) {
         var goldenRatio = 1.61803398875,
-            innerRatio = window.innerWidth / window.innerHeight;
+            viewportRatio = viewportWidth / viewportHeight,
+            s = document.body.style;
 
-        if (innerRatio < goldenRatio) {
-            width = window.innerWidth;
+        if (viewportRatio < goldenRatio) {
+            width = viewportWidth;
             height = Math.floor(width / goldenRatio);
         } else {
-            height = window.innerHeight;
+            height = viewportHeight;
             width = Math.floor(height * goldenRatio);
         }
 
-        document.body.style.width = width + 'px';
-        document.body.style.height = height + 'px';
+        s.width = width + 'px';
+        s.height = height + 'px';
+//fixme:        s.fontSize = Math.ceil(height / 25) + 'px';
+
+        display.sideLen = height;
+        [
+            title
+/*fixme,
+            rotationsNavigator,
+            hiscoresTable,
+            boardsNavigator*/
+        ].forEach(function (x) {
+// fixme:            x.left = height;
+            x.layout = {
+                landscape: true,
+                width: width - height,
+                height: 0.1 * height,
+                left: height
+            };
+/*fixme:            x.renderInLandscapeLayout = true;
+            x.width = width;*/
+        });
+    }
+
+    function updatePortraitLayout() {
+        return; // fixme: do something
+    }
+
+    function updateLayout() {
+        var viewportWidth = window.innerWidth,
+            viewportHeight = window.innerHeight;
+
+        if (viewportWidth > viewportHeight) {
+            updateLandscapeLayout(viewportWidth, viewportHeight);
+        } else {
+            updatePortraitLayout(viewportWidth, viewportHeight);
+        }
     }
 
     function animStep() {
         loadIndicator.animStep();
         display.animStep();
-        panel.animStep();
+        title.animStep();
 
         window.requestAnimationFrame(animStep);
     }
@@ -62,11 +103,10 @@ define([
     }
 
     function onResize() {
-        updateDimensions();
+        updateLayout();
 
-        display.sideLen = height;
-        panel.width = width - height;
-        panel.height = height;
+// fixme:        panel.width = width - height;
+// fixme:        panel.height = height;
 
         loadIndicator.width = width;
     }
@@ -74,7 +114,7 @@ define([
     util.whenDocumentIsReady(function () {
         startAnim();
         boards.load(function () {
-            panel.show();
+//fixme:            panel.show();
             display.show();
             loadIndicator.hide();
         });
