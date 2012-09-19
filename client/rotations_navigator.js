@@ -23,7 +23,13 @@ define(['boards', 'util'], function (boards, util) {
     'use strict';
 
     var nRotations, board,
-        needsToBeRendered = true;
+        needsToBeRendered = true,
+        layout = {width: 1, height: 1, left: 0, top: 0};
+
+
+    function style() {
+        return document.getElementById('rotationsNavigator').style;
+    }
 
     function buttonEl(type) {
         return document.querySelector('#rotationsNavigator>.' + type +
@@ -84,6 +90,14 @@ define(['boards', 'util'], function (boards, util) {
     }
 
     function render() {
+        var s = style();
+
+        s.width = layout.width + 'px';
+        s.lineHeight = s.height = layout.height + 'px';
+        s.left = layout.left + 'px';
+        s.fontSize = Math.ceil(0.8 * layout.height) + 'px';
+        s.top = layout.top + 'px';
+
         document.getElementById('nRotations').textContent = nRotations;
         renderUndoButton();
         renderRedoButton();
@@ -112,6 +126,15 @@ define(['boards', 'util'], function (boards, util) {
                 render();
                 needsToBeRendered = false;
             }
+        }},
+
+        layout: {set: function (newLayout) {
+            layout = newLayout;
+            needsToBeRendered = true;
+        }},
+
+        show: {value: function () {
+            style().display = 'block';
         }}
     });
 });

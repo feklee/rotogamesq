@@ -34,7 +34,9 @@ define([
 ) {
     'use strict';
 
-    var width, height; // px
+    var loaded = false,
+        width, // px
+        height; // px
 
     // The game takes up the space of a golden ratio rectangle that takes up
     // maximum space in the browser window.
@@ -53,26 +55,29 @@ define([
 
         s.width = width + 'px';
         s.height = height + 'px';
-//fixme:        s.fontSize = Math.ceil(height / 25) + 'px';
 
-        display.sideLen = height;
-        [
-            title
-/*fixme,
-            rotationsNavigator,
-            hiscoresTable,
-            boardsNavigator*/
-        ].forEach(function (x) {
-// fixme:            x.left = height;
-            x.layout = {
-                landscape: true,
+        // fixme: maybe introduce "landscape"
+
+        if (loaded) {
+            display.sideLen = height;
+            title.layout = {
+                width: width - height,
+                left: height,
+                height: 0.1 * height
+            };
+            boardsNavigator.layout = {
+                width: width - height,
+                left: height,
+                height: (width - height) / 4,
+                top: 0.8 * height
+            };
+            rotationsNavigator.layout = {
                 width: width - height,
                 height: 0.1 * height,
-                left: height
+                left: height,
+                top: 0.135 * height
             };
-/*fixme:            x.renderInLandscapeLayout = true;
-            x.width = width;*/
-        });
+        }
     }
 
     function updatePortraitLayout() {
@@ -88,12 +93,19 @@ define([
         } else {
             updatePortraitLayout(viewportWidth, viewportHeight);
         }
+
+        loadIndicator.width = width;
     }
 
     function animStep() {
-        loadIndicator.animStep();
-        display.animStep();
-        title.animStep();
+        if (loaded) {
+            display.animStep();
+            title.animStep();
+            boardsNavigator.animStep();
+            rotationsNavigator.animStep();
+        } else {
+            loadIndicator.animStep();
+        }
 
         window.requestAnimationFrame(animStep);
     }
@@ -104,19 +116,22 @@ define([
 
     function onResize() {
         updateLayout();
+    }
 
-// fixme:        panel.width = width - height;
-// fixme:        panel.height = height;
-
-        loadIndicator.width = width;
+    function onLoaded() {
+        loaded = true;
+        display.show();
+        title.show();
+        boardsNavigator.show();
+        rotationsNavigator.show();
+        loadIndicator.hide();
+        updateLayout();
     }
 
     util.whenDocumentIsReady(function () {
         startAnim();
         boards.load(function () {
-//fixme:            panel.show();
-            display.show();
-            loadIndicator.hide();
+            onLoaded();
         });
         onResize(); // captures initial size
         window.addEventListener('resize', onResize);

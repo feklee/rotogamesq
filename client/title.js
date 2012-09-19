@@ -24,15 +24,14 @@ define(function () {
     'use strict';
 
     var needsToBeRendered = true,
-        layout = {
-            landscape: true,
-            width: 1, // px
-            height: 1, // px
-            left: 0 // px
-        };
+        layout = {width: 1, height: 1, left: 0};
+
+    function style() {
+        return document.getElementById('title').style;
+    }
 
     function render() {
-        var s = document.getElementById('title').style;
+        var s = style();
 
         s.width = layout.width + 'px';
         s.lineHeight = s.height = layout.height + 'px';
@@ -51,6 +50,10 @@ define(function () {
         layout: {set: function (newLayout) {
             layout = newLayout;
             needsToBeRendered = true;
+        }},
+
+        show: {value: function () {
+            style().display = 'block';
         }}
     });
 });

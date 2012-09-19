@@ -29,9 +29,7 @@ define([
 ], function (boards, boardThumbFactory, util) {
     'use strict';
 
-    var width,
-
-        nSideThumbs = 2,  // thumbnails displayed to the left/right side of the
+    var nSideThumbs = 2,  // thumbnails displayed to the left/right side of the
                           // currently selected one (needs to be large enough
                           // if e.g. the left-most thumb is the current)
                           //
@@ -67,7 +65,13 @@ define([
 
         elementsNeedToBeAppended = true,
         isBeingDragged = false,
-        needsToBeRendered = true;
+        needsToBeRendered = true,
+
+        layout = {width: 1, height: 1, left: 0, top: 0};
+
+    function style() {
+        return document.getElementById('boardsNavigator').style;
+    }
 
     // Returns a board index that is within bounds, by cycling if `i` is too
     // small or too large.
@@ -76,17 +80,18 @@ define([
     }
 
     function thumbSideLen(thumbI) {
-        return width / (4 + 2 * Math.abs(thumbI - thumbIInCenter));
+        return layout.width / (4 + 2 * Math.abs(thumbI - thumbIInCenter));
     }
 
     // position of thumb with index `thumbI`
     function thumbX(thumbI) {
-        return (thumbI - thumbIInCenter) * (width / 3) + width / 2;
+        return ((thumbI - thumbIInCenter) * (layout.width / 3) +
+                layout.width / 2);
     }
 
     // inverse of `thumbX`
     function thumbIFromThumbX(thumbX) {
-        return 3 * thumbX / width - 3 / 2 + thumbIInCenter;
+        return 3 * thumbX / layout.width - 3 / 2 + thumbIInCenter;
     }
 
     function updateThumbsCoordinates() {
@@ -97,7 +102,7 @@ define([
             thumb.maxSideLen = thumbSideLen(0); // center is largest
             thumb.sideLen = thumbSideLen(thumbI);
             thumb.x = thumbX(thumbI);
-            thumb.y = width / 8;
+            thumb.y = layout.width / 8;
         });
     }
 
@@ -191,15 +196,16 @@ define([
     }
 
     function render() {
-        var el = document.getElementById('boardsNavigator'),
-            s = el.style;
+        var s = style();
 
-        s.width = width + 'px';
-        s.height = width / 4 + 'px';
+        s.width = layout.width + 'px';
+        s.height = layout.height + 'px';
+        s.left = layout.left + 'px';
+        s.top = layout.top + 'px';
 
         if (elementsNeedToBeAppended && thumbsHaveBeenCreated()) {
             // initializes (only once, at the beginning)
-            appendElements(el);
+            appendElements(document.getElementById('boardsNavigator'));
             elementsNeedToBeAppended = false;
         }
     }
@@ -343,18 +349,17 @@ define([
             }
         }},
 
-        activate: {value: function () {
-            // boards are now definitely loaded
-            createThumbs();
+        layout: {set: function (newLayout) {
+            layout = newLayout;
+            updateThumbsCoordinates();
             needsToBeRendered = true;
         }},
 
-        width: {set: function (newWidth) {
-            if (newWidth !== width) {
-                width = newWidth;
-                updateThumbsCoordinates();
-                needsToBeRendered = true;
-            }
+        show: {value: function () {
+            // boards are now definitely loaded
+            createThumbs();
+            style().display = 'block';
+            needsToBeRendered = true;
         }}
     });
 });
