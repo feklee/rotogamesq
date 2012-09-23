@@ -69,13 +69,19 @@ define([
                 width: width - height,
                 left: height,
                 height: (width - height) / 4,
-                top: 0.8 * height
+                top: 0.99 * height - (width - height) / 4
             };
             rotationsNavigator.layout = {
                 width: width - height,
                 height: 0.1 * height,
                 left: height,
                 top: 0.135 * height
+            };
+            hiscoresTable.layout = {
+                width: 0.9 * (width - height),
+                height: 0.5 * height,
+                left: height + 0.05 * (width - height),
+                top: 0.28 * height
             };
         }
     }
@@ -103,6 +109,7 @@ define([
             title.animStep();
             boardsNavigator.animStep();
             rotationsNavigator.animStep();
+            hiscoresTable.animStep();
         } else {
             loadIndicator.animStep();
         }
@@ -124,6 +131,7 @@ define([
         title.show();
         boardsNavigator.show();
         rotationsNavigator.show();
+        hiscoresTable.show();
         loadIndicator.hide();
         updateLayout();
     }

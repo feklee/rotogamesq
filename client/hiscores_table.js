@@ -24,7 +24,13 @@ define(['util', 'boards'], function (util, boards) {
     var board, nameInputFieldEl, submitButtonEl,
         boardIsFinished,
         submitIsEnabled = false,
-        needsToBeRendered = true;
+        needsToBeRendered = true,
+
+        layout = {width: 1, height: 1, left: 0, top: 0};
+
+    function style() {
+        return document.getElementById('hiscoresTable').style;
+    }
 
     function newTdEl(text) {
         var el = document.createElement('td');
@@ -144,8 +150,14 @@ define(['util', 'boards'], function (util, boards) {
     function render() {
         var i, hiscore,
             el = document.getElementById('hiscoresTable'),
+            s = style(),
             hiscores = board.hiscores,
             maxI = hiscores.length;
+
+        s.width = layout.width + 'px';
+        s.left = layout.left + 'px';
+        s.fontSize = Math.ceil(0.12 * layout.height) + 'px';
+        s.top = layout.top + 'px';
 
         util.clear(el);
 
@@ -174,6 +186,15 @@ define(['util', 'boards'], function (util, boards) {
                 render();
                 needsToBeRendered = false;
             }
+        }},
+
+        layout: {set: function (newLayout) {
+            layout = newLayout;
+            needsToBeRendered = true;
+        }},
+
+        show: {value: function () {
+            style().display = 'table';
         }}
     });
 });

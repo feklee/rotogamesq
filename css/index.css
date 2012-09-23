@@ -28,7 +28,7 @@ body {
     cursor: default;
 }
 
-#title, #display, #boardsNavigator, #rotationsNavigator,
+#title, #display, #boardsNavigator, #rotationsNavigator, #hiscoresTable,
 #loadIndicator, #tilesCanvas, #arrowCanvas, #rotAnimCanvas, #rubberBandCanvas {
     position: absolute;
 }
@@ -60,10 +60,15 @@ body {
 }
 
 #hiscoresTable {
-    width: 90%;
-    font-size: 1.5em;
-    margin: 0 5%;
+    display: none;
     overflow: hidden;
+    line-height: 110%;
+}
+
+#hiscoresTable td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #hiscoresTable td:first-child {
