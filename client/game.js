@@ -38,6 +38,40 @@ define([
         width, // px
         height; // px
 
+    function updateElementsLandscapeLayout(width, height) {
+        // panel = panel with all the elements on the right of the board
+        var panelWidth = width - height,
+            panelLeft = height,
+            panelInsideMargin = Math.floor(0.05 * panelWidth),
+            panelInsideWidth = panelWidth - 2 * panelInsideMargin,
+            panelInsideLeft = panelLeft + panelInsideMargin;
+
+        display.sideLen = height;
+        title.layout = {
+            width: panelWidth,
+            left: panelLeft,
+            height: Math.round(0.1 * height)
+        };
+        boardsNavigator.layout = {
+            width: panelInsideWidth,
+            height: Math.round((width - height) / 4),
+            left: panelInsideLeft,
+            top: Math.round(0.99 * height - (width - height) / 4)
+        };
+        rotationsNavigator.layout = {
+            width: panelInsideWidth,
+            height: Math.round(0.1 * height),
+            left: panelInsideLeft,
+            top: Math.round(0.135 * height)
+        };
+        hiscoresTable.layout = {
+            width: panelInsideWidth,
+            height: Math.round(0.5 * height),
+            left: panelInsideLeft,
+            top: Math.round(0.28 * height)
+        };
+    }
+
     // The game takes up the space of a golden ratio rectangle that takes up
     // maximum space in the browser window.
     function updateLandscapeLayout(viewportWidth, viewportHeight) {
@@ -59,30 +93,7 @@ define([
         // fixme: maybe introduce "landscape"
 
         if (loaded) {
-            display.sideLen = height;
-            title.layout = {
-                width: width - height,
-                left: height,
-                height: 0.1 * height
-            };
-            boardsNavigator.layout = {
-                width: width - height,
-                left: height,
-                height: (width - height) / 4,
-                top: 0.99 * height - (width - height) / 4
-            };
-            rotationsNavigator.layout = {
-                width: width - height,
-                height: 0.1 * height,
-                left: height,
-                top: 0.135 * height
-            };
-            hiscoresTable.layout = {
-                width: 0.9 * (width - height),
-                height: 0.5 * height,
-                left: height + 0.05 * (width - height),
-                top: 0.28 * height
-            };
+            updateElementsLandscapeLayout(width, height);
         }
     }
 
