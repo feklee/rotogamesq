@@ -80,7 +80,7 @@ define([
     }
 
     function thumbSideLen(thumbI) {
-        return layout.width / (4 + 2 * Math.abs(thumbI - thumbIInCenter));
+        return layout.height / (1 + 0.5 * Math.abs(thumbI - thumbIInCenter));
     }
 
     // position of thumb with index `thumbI`
@@ -102,7 +102,7 @@ define([
             thumb.maxSideLen = thumbSideLen(0); // center is largest
             thumb.sideLen = thumbSideLen(thumbI);
             thumb.x = thumbX(thumbI);
-            thumb.y = layout.width / 8;
+            thumb.y = layout.height / 2;
         });
     }
 

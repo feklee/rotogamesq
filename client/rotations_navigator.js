@@ -94,10 +94,12 @@ define(['boards', 'util'], function (boards, util) {
 
         s.width = layout.width + 'px';
         s.lineHeight = s.height = layout.height + 'px';
-        if (s.right !== undefined) {
+        if (layout.right !== undefined) {
+            s.left = 'auto';
             s.right = layout.right + 'px';
         } else {
             s.left = layout.left + 'px';
+            s.right = 'auto';
         }
         s.fontSize = Math.ceil(0.8 * layout.height) + 'px';
         s.top = layout.top + 'px';
