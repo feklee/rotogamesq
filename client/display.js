@@ -26,17 +26,19 @@ define([
     'use strict';
 
     var isVisible = false,
-        sideLen,
-        needsToBeRendered = true;
+        needsToBeRendered = true,
+        layout = {width: 1, height: 1, left: 0, top: 0};
+
+    function style() {
+        return document.getElementById('display').style;
+    }
 
     function render() {
-        var s = document.getElementById('display').style;
+        var s = style();
 
-        if (isVisible) {
-            s.display = 'block';
-        }
-        s.width = sideLen + 'px';
-        s.height = sideLen + 'px';
+        s.width = layout.sideLen + 'px';
+        s.height = layout.sideLen + 'px';
+        s.top = layout.top + 'px';
     }
 
     return Object.create(null, {
@@ -54,21 +56,19 @@ define([
             }
         }},
 
-        sideLen: {set: function (newSideLen) {
-            if (newSideLen !== sideLen) {
-                sideLen = newSideLen;
-                displayCSys.sideLen = sideLen;
-                tilesCanvas.sideLen = sideLen;
-                arrowCanvas.sideLen = sideLen;
-                rubberBandCanvas.sideLen = sideLen;
-                rotAnimCanvas.sideLen = sideLen;
-                needsToBeRendered = true;
-            }
+        layout: {set: function (newLayout) {
+            layout = newLayout;
+            displayCSys.sideLen = layout.sideLen;
+            tilesCanvas.sideLen = layout.sideLen;
+            arrowCanvas.sideLen = layout.sideLen;
+            rubberBandCanvas.sideLen = layout.sideLen;
+            rotAnimCanvas.sideLen = layout.sideLen;
+            needsToBeRendered = true;
         }},
 
         show: {value: function () {
+            style().display = 'block';
             isVisible = true;
-            needsToBeRendered = true;
         }}
     });
 });

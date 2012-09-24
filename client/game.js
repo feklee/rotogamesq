@@ -35,10 +35,12 @@ define([
     'use strict';
 
     var loaded = false,
+        goldenRatio = 1.61803398875,
         width, // px
         height; // px
 
-    function updateElementsLandscapeLayout(width, height) {
+    // Updates GUI components for landscape layout.
+    function updateComponentsLandscapeLayout(width, height) {
         // panel = panel with all the elements on the right of the board
         var panelWidth = width - height,
             panelLeft = height,
@@ -46,11 +48,15 @@ define([
             panelInsideWidth = panelWidth - 2 * panelInsideMargin,
             panelInsideLeft = panelLeft + panelInsideMargin;
 
-        display.sideLen = height;
+        display.layout = {
+            sideLen: height,
+            top: 0
+        };
         title.layout = {
             width: panelWidth,
             left: panelLeft,
-            height: Math.round(0.1 * height)
+            height: Math.round(0.1 * height),
+            textAlign: 'center'
         };
         boardsNavigator.layout = {
             width: panelInsideWidth,
@@ -72,11 +78,11 @@ define([
         };
     }
 
-    // The game takes up the space of a golden ratio rectangle that takes up
-    // maximum space in the browser window.
+    // Gives the game lanscape layout. The game is sized so that it takes up
+    // the space of a golden ratio rectangle that takes up maximum space in the
+    // browser window.
     function updateLandscapeLayout(viewportWidth, viewportHeight) {
-        var goldenRatio = 1.61803398875,
-            viewportRatio = viewportWidth / viewportHeight,
+        var viewportRatio = viewportWidth / viewportHeight,
             s = document.body.style;
 
         if (viewportRatio < goldenRatio) {
@@ -93,11 +99,85 @@ define([
         // fixme: maybe introduce "landscape"
 
         if (loaded) {
-            updateElementsLandscapeLayout(width, height);
+            updateComponentsLandscapeLayout(width, height);
         }
     }
 
-    function updatePortraitLayout() {
+    // Updates components for portrait layout.
+    function updateComponentsPortraitLayout(width, height) {
+        var remainingHeight = height - width, // height without board display 
+            componentHeight,
+            componentTop;
+
+        console.log('fixme: ', height, width);
+
+        componentHeight = Math.round(remainingHeight * 0.18);
+        title.layout = {
+            width: width,
+            left: 0,
+            height: componentHeight,
+            textAlign: 'left'
+        };
+        componentTop = componentHeight;
+        componentHeight = width;
+        display.layout = {
+            sideLen: componentHeight,
+            top: componentTop
+        };
+        componentTop += componentHeight;
+        componentHeight = Math.round(height * 18 / 300);
+        boardsNavigator.layout = {
+            width: width,
+            height: componentHeight,
+            left: 0,
+            top: componentTop
+        };
+        componentTop += componentHeight;
+        componentHeight = Math.round(height * 18 / 300);
+        rotationsNavigator.layout = {
+            width: width,
+            height: componentHeight,
+            left: 0,
+            top: componentTop
+        };
+        componentTop += componentHeight;
+        componentHeight = Math.round(height * 18 / 300);
+        hiscoresTable.layout = {
+            width: width,
+            height: componentHeight,
+            left: 0,
+            top: componentTop
+        };
+    }
+
+    // Gives the game portrait layout. The game is sized so that it takes up
+    // maximum space in the browser window. It's aspect ratio is set in limits:
+    // between 3:4 and reciprocal golden ratio.
+    function updatePortraitLayout(viewportWidth, viewportHeight) {
+        var viewportRatio = viewportWidth / viewportHeight,
+            s = document.body.style;
+
+        width = viewportWidth;
+        height = viewportHeight;
+
+        // restricts aspect ratio:
+        if (viewportRatio < 1 / goldenRatio) {
+            // thinner than reciprocal golden ratio => restrict height
+            height = Math.floor(width * goldenRatio);
+            console.log('goldenRatio');
+        } else if (viewportRatio > 3 / 4) {
+            // wider than 3:4 => restrict width
+            width = Math.floor(height * 3 / 4);
+            console.log('3:4');
+        }
+
+        s.width = width + 'px';
+        s.height = height + 'px';
+
+        if (loaded) {
+            updateComponentsPortraitLayout(width, height);
+        }
+
         return; // fixme: do something
     }
 

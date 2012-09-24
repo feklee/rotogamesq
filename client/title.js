@@ -24,7 +24,7 @@ define(function () {
     'use strict';
 
     var needsToBeRendered = true,
-        layout = {width: 1, height: 1, left: 0};
+        layout = {width: 1, height: 1, left: 0, textAlign: 'left'};
 
     function style() {
         return document.getElementById('title').style;
@@ -37,6 +37,7 @@ define(function () {
         s.lineHeight = s.height = layout.height + 'px';
         s.left = layout.left + 'px';
         s.fontSize = Math.ceil(0.8 * layout.height) + 'px';
+        s.textAlign = layout.textAlign;
     }
 
     return Object.create(null, {

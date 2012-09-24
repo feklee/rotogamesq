@@ -25,7 +25,6 @@ define(['util', 'boards'], function (util, boards) {
         boardIsFinished,
         submitIsEnabled = false,
         needsToBeRendered = true,
-
         layout = {width: 1, height: 1, left: 0, top: 0};
 
     function style() {
