@@ -68,7 +68,8 @@ define([
             width: panelInsideWidth,
             height: Math.round(0.1 * height),
             left: panelInsideLeft,
-            top: Math.round(0.135 * height)
+            top: Math.round(0.135 * height),
+            textAlign: 'center'
         };
         hiscoresTable.layout = {
             width: panelInsideWidth,
@@ -111,6 +112,7 @@ define([
 
         console.log('fixme: ', height, width);
 
+        componentTop = 0;
         componentHeight = Math.round(remainingHeight * 0.18);
         title.layout = {
             width: width,
@@ -118,7 +120,14 @@ define([
             height: componentHeight,
             textAlign: 'left'
         };
-        componentTop = componentHeight;
+        rotationsNavigator.layout = {
+            width: width,
+            height: componentHeight,
+            right: 0,
+            top: componentTop,
+            textAlign: 'right'
+        };
+        componentTop += componentHeight;
         componentHeight = width;
         display.layout = {
             sideLen: componentHeight,
@@ -127,14 +136,6 @@ define([
         componentTop += componentHeight;
         componentHeight = Math.round(height * 18 / 300);
         boardsNavigator.layout = {
-            width: width,
-            height: componentHeight,
-            left: 0,
-            top: componentTop
-        };
-        componentTop += componentHeight;
-        componentHeight = Math.round(height * 18 / 300);
-        rotationsNavigator.layout = {
             width: width,
             height: componentHeight,
             left: 0,
@@ -164,11 +165,9 @@ define([
         if (viewportRatio < 1 / goldenRatio) {
             // thinner than reciprocal golden ratio => restrict height
             height = Math.floor(width * goldenRatio);
-            console.log('goldenRatio');
         } else if (viewportRatio > 3 / 4) {
             // wider than 3:4 => restrict width
             width = Math.floor(height * 3 / 4);
-            console.log('3:4');
         }
 
         s.width = width + 'px';

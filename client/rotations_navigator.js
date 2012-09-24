@@ -94,9 +94,14 @@ define(['boards', 'util'], function (boards, util) {
 
         s.width = layout.width + 'px';
         s.lineHeight = s.height = layout.height + 'px';
-        s.left = layout.left + 'px';
+        if (s.right !== undefined) {
+            s.right = layout.right + 'px';
+        } else {
+            s.left = layout.left + 'px';
+        }
         s.fontSize = Math.ceil(0.8 * layout.height) + 'px';
         s.top = layout.top + 'px';
+        s.textAlign = layout.textAlign;
 
         document.getElementById('nRotations').textContent = nRotations;
         renderUndoButton();

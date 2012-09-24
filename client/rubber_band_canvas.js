@@ -24,6 +24,7 @@ define([
     'use strict';
 
     var sideLen, // side length of canvas
+        canvasPagePos, // position of canvas on page
         pos1 = [0, 0], // 1st corner of rectangle
         pos2 = [0, 0], // 2nd corner of rectangle
         selectedRectT = rectTFactory.create([0, 0], [0, 0]),
@@ -92,9 +93,16 @@ define([
         draggedToTheRight = pos2[0] > pos1[0];
     }
 
+    // Needed for calculating position when dragging.
+    function updateCanvasPagePos() {
+        canvasPagePos =
+            util.pagePos(document.getElementById('rubberBandCanvas'));
+    }
+
     // assumes that canvas is at position 0, 0 in the document
     function onDragStart(pos) {
-        pos2 = pos1 = pos;
+        updateCanvasPagePos();
+        pos2 = pos1 = [pos[0] - canvasPagePos[0], pos[1] - canvasPagePos[1]];
         updateSelectedRectT();
         updateDraggedToTheRight();
         isBeingDragged = true;
@@ -105,7 +113,7 @@ define([
     }
 
     function onDrag(pos) {
-        pos2 = pos;
+        pos2 = [pos[0] - canvasPagePos[0], pos[1] - canvasPagePos[1]];
         updateSelectedRectT();
         updateDraggedToTheRight();
         needsToBeRendered = true;
