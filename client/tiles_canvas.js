@@ -73,17 +73,22 @@ define([
         }
     }
 
+    function updateRubberBandCanvasVisibility() {
+        var board = boards.selected;
+        if (board.isFinished || !board.rotationIsPossible) {
+            rubberBandCanvas.hide();
+        } else {
+            rubberBandCanvas.show(); // necessary e.g. after undoing finished
+        }
+    }
+
     function onRubberBandDragEnd() {
         if (rotation !== undefined && rotation.makesSense &&
                 !boards.selected.isFinished) {
             boards.selected.rotate(rotation);
         }
 
-        if (boards.selected.isFinished) {
-            rubberBandCanvas.hide();
-        } else {
-            rubberBandCanvas.show();
-        }
+        updateRubberBandCanvasVisibility();
 
         arrowCanvas.hide();
 
@@ -161,11 +166,7 @@ define([
             startRotationAnim();
         } // else: change in tiles not due to rotation
 
-        if (boards.selected.isFinished) {
-            rubberBandCanvas.hide();
-        } else {
-            rubberBandCanvas.show(); // necessary e.g. after undoing finished
-        }
+        updateRubberBandCanvasVisibility();
 
         arrowCanvas.hide(); // necessary e.g. after undoing finished
     }

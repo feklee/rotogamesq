@@ -204,6 +204,10 @@ define([
                 return internal.rotations.length;
             }},
 
+            rotationIsPossible: {get: function () {
+                return internal.rotations.length < 99;
+            }},
+
             undoIsPossible: {get: function () {
                 return internal.rotations.length > 0;
             }},

@@ -210,7 +210,7 @@ define(['util', 'boards'], function (util, boards) {
             lineHeight = layout.height / 7;
         }
         cts.lineHeight = ts.lineHeight = lineHeight + 'px';
-        cts.fontSize = ts.fontSize = (0.95 * lineHeight) + 'px';
+        cts.fontSize = ts.fontSize = (0.85 * lineHeight) + 'px';
 
         renderRows();
     }

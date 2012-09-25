@@ -47,6 +47,12 @@ body {
     display: none;
 }
 
+#title em {
+    font-family: 'Allan', Georgia, 'Times New Roman', Times, serif;
+    font-style: italic;
+    font-weight: normal;
+}
+
 #rotationsNavigator {
     display: none;
     font-weight: bold;
