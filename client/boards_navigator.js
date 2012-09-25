@@ -203,12 +203,12 @@ define([
         if (layout.portrait) {
             s.left = 0;
             s.margin = '0 ' + layout.horizontalMargin + 'px';
-            s.width = layout.width + 'px';
         } else {
             s.left = layout.left + 'px';
             s.margin = 0;
-            s.width = layout.width + 'px';
         }
+        s.width = Math.floor(layout.width) + 'px'; // to integer, to avoid
+                                                   // display bugs in Chrome 21
 
         if (elementsNeedToBeAppended && thumbsHaveBeenCreated()) {
             // initializes (only once, at the beginning)

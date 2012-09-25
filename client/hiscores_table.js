@@ -25,10 +25,18 @@ define(['util', 'boards'], function (util, boards) {
         boardIsFinished,
         submitIsEnabled = false,
         needsToBeRendered = true,
-        layout = {width: 1, height: 1, left: 0, top: 0};
+        layout = {width: 1, height: 1, left: 0, top: 0, portrait: false};
 
-    function style() {
-        return document.getElementById('hiscoresTable').style;
+    function groupEl() {
+        return document.getElementById('hiscoresTableGroup');
+    }
+
+    function tableEl() {
+        return document.querySelector('#hiscoresTableGroup>table');
+    }
+
+    function contTableEl() {
+        return document.querySelector('#hiscoresTableGroup>table.cont');
     }
 
     function newTdEl(text) {
@@ -146,28 +154,62 @@ define(['util', 'boards'], function (util, boards) {
         return el;
     }
 
-    function render() {
-        var i, hiscore,
-            el = document.getElementById('hiscoresTable'),
-            s = style(),
-            hiscores = board.hiscores,
-            maxI = hiscores.length;
-
-        s.width = layout.width + 'px';
-        s.left = layout.left + 'px';
-        s.fontSize = Math.ceil(0.12 * layout.height) + 'px';
-        s.top = layout.top + 'px';
+    function renderRows() {
+        var el = tableEl(),
+            elc = contTableEl(),
+            currentEl = el,
+            iToContinue = Math.ceil(board.hiscores.length / 2);
 
         util.clear(el);
+        util.clear(elc);
 
         board.hiscores.forEach(function (hiscore, i, isEditable) {
             if (isEditable) {
-                el.appendChild(newInputTrEl(hiscore));
+                iToContinue -= 1; // editable row needs more vertical space =>
+                                  // continue earlier
+            }
+
+            if (layout.portrait && i >= iToContinue) {
+                currentEl = elc;
+            }
+
+            if (isEditable) {
+                currentEl.appendChild(newInputTrEl(hiscore));
                 nameInputFieldEl.focus();
             } else {
-                el.appendChild(newTrEl(hiscore));
+                currentEl.appendChild(newTrEl(hiscore));
             }
         });
+    }
+
+    function render() {
+        var s = groupEl().style,
+            ts = tableEl().style,
+            cts = contTableEl().style,
+            width2,
+            lineHeight;
+
+        s.width = layout.width + 'px';
+        s.height = layout.height + 'px';
+        s.top = layout.top + 'px';
+        if (layout.portrait) {
+            // portrait => continue results display in second table
+            cts.display = 'table';
+            width2 = Math.floor((layout.width - layout.horizontalMargin) / 2);
+            s.left = layout.horizontalMargin + 'px';
+            cts.left = (width2 + layout.horizontalMargin) + 'px';
+            ts.width = cts.width = width2 + 'px';
+            lineHeight = layout.height / 4;
+        } else {
+            cts.display = 'none';
+            s.left = layout.left + 'px';
+            ts.width = s.width;
+            lineHeight = layout.height / 7;
+        }
+        cts.lineHeight = ts.lineHeight = lineHeight + 'px';
+        cts.fontSize = ts.fontSize = (0.95 * lineHeight) + 'px';
+
+        renderRows();
     }
 
     return Object.create(null, {
@@ -193,7 +235,7 @@ define(['util', 'boards'], function (util, boards) {
         }},
 
         show: {value: function () {
-            style().display = 'table';
+            groupEl().style.display = 'block';
         }}
     });
 });

@@ -94,7 +94,7 @@ define(['boards', 'util'], function (boards, util) {
 
         s.width = layout.width + 'px';
         s.lineHeight = s.height = layout.height + 'px';
-        s.fontSize = Math.ceil(0.8 * layout.height) + 'px';
+        s.fontSize = (0.8 * layout.height) + 'px';
         s.top = layout.top + 'px';
         if (layout.portrait) {
             s.left = 'auto';

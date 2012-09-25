@@ -73,6 +73,7 @@ define([
             top: Math.round(0.135 * height)
         };
         hiscoresTable.layout = {
+            portrait: false,
             width: panelInsideWidth,
             height: Math.round(0.5 * height),
             left: panelInsideLeft,
@@ -98,8 +99,6 @@ define([
         s.width = width + 'px';
         s.height = height + 'px';
         s.margin = 0;
-
-        // fixme: maybe introduce "landscape"
 
         if (loaded) {
             updateComponentsLandscapeLayout(width, height);
@@ -134,7 +133,7 @@ define([
             top: componentTop
         };
         componentTop += componentHeight + remainingHeight * 0.02;
-        componentHeight = Math.floor(remainingHeight * 0.3);
+        componentHeight = Math.floor(remainingHeight * 0.28);
         boardsNavigator.layout = {
             portrait: true,
             width: width - 2 * horizontalMargin,
@@ -142,13 +141,14 @@ define([
             top: componentTop,
             horizontalMargin: horizontalMargin
         };
-        componentTop += componentHeight;
-        componentHeight = Math.floor(remainingHeight * 0.5);
+        componentTop += componentHeight + remainingHeight * 0.03;
+        componentHeight = Math.floor(remainingHeight * 0.49);
         hiscoresTable.layout = {
-            width: width,
+            portrait: true,
+            width: width - 2 * horizontalMargin,
             height: componentHeight,
-            left: 0,
-            top: componentTop
+            top: componentTop,
+            horizontalMargin: horizontalMargin
         };
     }
 

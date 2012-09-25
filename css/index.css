@@ -28,7 +28,8 @@ body {
     cursor: default;
 }
 
-#title, #display, #boardsNavigator, #rotationsNavigator, #hiscoresTable,
+#title, #display, #boardsNavigator, #rotationsNavigator,
+#hiscoresTableGroup, #hiscoresTableGroup>table,
 #loadIndicator, #tilesCanvas, #arrowCanvas, #rotAnimCanvas, #rubberBandCanvas {
     position: absolute;
 }
@@ -58,31 +59,29 @@ body {
     letter-spacing: 0.1em;
 }
 
-#hiscoresTable {
-    display: none;
+#hiscoresTableGroup {
     overflow: hidden;
-    line-height: 110%;
 }
 
-#hiscoresTable td {
+#hiscoresTableGroup>table td {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-#hiscoresTable td:first-child {
+#hiscoresTableGroup>table td:first-child {
     text-align: left;
 }
 
-#hiscoresTable td:last-child {
+#hiscoresTableGroup>table td:last-child {
     text-align: right;
 }
 
-#hiscoresTable tr.input {
+#hiscoresTableGroup>table tr.input {
     border-bottom: 0.2ex solid white;
 }
 
-#hiscoresTable td input {
+#hiscoresTableGroup>table td input {
     border: 0;
     margin: 0;
     padding: 0;
@@ -99,11 +98,11 @@ body {
     user-select: text;
 }
 
-#hiscoresTable td input:focus {
+#hiscoresTableGroup>table td input:focus {
     outline-width: 0;
 }
 
-#hiscoresTable td span {
+#hiscoresTableGroup>table td span {
     font-weight: bold;
 }
 

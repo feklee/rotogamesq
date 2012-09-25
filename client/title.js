@@ -34,7 +34,7 @@ define(function () {
         var s = style();
 
         s.lineHeight = s.height = layout.height + 'px';
-        s.fontSize = Math.ceil(0.8 * layout.height) + 'px';
+        s.fontSize = (0.8 * layout.height) + 'px';
         if (layout.portrait) {
             s.left = 0;
             s.marginLeft = layout.leftMargin + 'px';

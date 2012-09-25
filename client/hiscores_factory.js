@@ -114,17 +114,16 @@ define(function () {
             // Calls callback with two parameters: hiscore, index, and whether
             // the hiscore is editable (only appears once)
             forEach: {value: function (callback) {
-                var i, hiscore,
+                var i, iOffs = 0, hiscore,
                     maxI = rawHiscores.length,
                     proposalHasBeenShown = false;
 
                 for (i = 0; i < maxI; i += 1) {
-                    hiscore = rawHiscores[i];
+                    hiscore = rawHiscores[i + iOffs];
                     if (proposalIsBetterOrEqual(proposal, hiscore) &&
                             !proposalHasBeenShown) {
                         callback(proposal, i, true);
-                        i -= 1; // repeat current hiscore in next run
-                        maxI = Math.min(maxI, maxLength - 1);
+                        iOffs = -1; // repeat current hiscore in next run
                         proposalHasBeenShown = true;
                     } else {
                         callback(hiscore, i, false);
@@ -133,10 +132,14 @@ define(function () {
 
                 if (i < maxLength && proposal !== null &&
                         !proposalHasBeenShown) {
-                    // still space & proposal not shown
+                    // there is still space, and proposal hasn't been shown
                     callback(proposal, i, true);
                     return;
                 }
+            }},
+
+            length: {get: function () {
+                return rawHiscores.length;
             }},
 
             maxNameLen: {get: function () {
