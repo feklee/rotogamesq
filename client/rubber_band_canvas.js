@@ -96,7 +96,7 @@ define([
     // Needed for calculating position when dragging.
     function updateCanvasPagePos() {
         canvasPagePos =
-            util.pagePos(document.getElementById('rubberBandCanvas'));
+            util.viewportPos(document.getElementById('rubberBandCanvas'));
     }
 
     // assumes that canvas is at position 0, 0 in the document

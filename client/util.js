@@ -41,16 +41,10 @@ define(function () {
         }},
 
 
-        // Returns position of element on page, in pixels.
-        pagePos: {value: function (el) {
-            var pos = [0, 0];
-
-            do {
-                pos = [pos[0] + el.offsetLeft, pos[1] + el.offsetTop];
-                el = el.offsetParent;
-            } while (el);
-
-            return pos;
+        // Returns position of element on viewport, in pixels.
+        viewportPos: {value: function (el) {
+            var rect = el.getBoundingClientRect();
+            return [rect.left, rect.top];
         }}
     });
 });

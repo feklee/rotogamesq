@@ -198,10 +198,17 @@ define([
     function render() {
         var s = style();
 
-        s.width = layout.width + 'px';
         s.height = layout.height + 'px';
-        s.left = layout.left + 'px';
         s.top = layout.top + 'px';
+        if (layout.portrait) {
+            s.left = 0;
+            s.margin = '0 ' + layout.horizontalMargin + 'px';
+            s.width = layout.width + 'px';
+        } else {
+            s.left = layout.left + 'px';
+            s.margin = 0;
+            s.width = layout.width + 'px';
+        }
 
         if (elementsNeedToBeAppended && thumbsHaveBeenCreated()) {
             // initializes (only once, at the beginning)
@@ -239,7 +246,7 @@ define([
 
     function onDragStart(cursorX) {
         var elPagePos =
-                util.pagePos(document.getElementById('boardsNavigator')),
+                util.viewportPos(document.getElementById('boardsNavigator')),
             thumbXAtCursor = cursorX - elPagePos[0];
 
         stopAnim();

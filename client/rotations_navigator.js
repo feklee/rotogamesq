@@ -94,16 +94,21 @@ define(['boards', 'util'], function (boards, util) {
 
         s.width = layout.width + 'px';
         s.lineHeight = s.height = layout.height + 'px';
-        if (layout.right !== undefined) {
+        s.fontSize = Math.ceil(0.8 * layout.height) + 'px';
+        s.top = layout.top + 'px';
+        if (layout.portrait) {
             s.left = 'auto';
-            s.right = layout.right + 'px';
+            s.right = 0;
+            s.marginRight = layout.rightMargin + 'px';
+            s.width = 'auto';
+            s.textAlign = 'right';
         } else {
             s.left = layout.left + 'px';
             s.right = 'auto';
+            s.marginRight = 0;
+            s.width = layout.width;
+            s.textAlign = 'center';
         }
-        s.fontSize = Math.ceil(0.8 * layout.height) + 'px';
-        s.top = layout.top + 'px';
-        s.textAlign = layout.textAlign;
 
         document.getElementById('nRotations').textContent = nRotations;
         renderUndoButton();

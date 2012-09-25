@@ -55,6 +55,7 @@ body {
 #rotationsNavigator {
     display: none;
     font-weight: bold;
+    letter-spacing: 0.1em;
 }
 
 #hiscoresTable {

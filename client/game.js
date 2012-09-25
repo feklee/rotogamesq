@@ -53,23 +53,24 @@ define([
             top: 0
         };
         title.layout = {
+            portrait: false,
             width: panelWidth,
             left: panelLeft,
-            height: Math.round(0.1 * height),
-            textAlign: 'center'
+            height: Math.round(0.1 * height)
         };
         boardsNavigator.layout = {
+            portrait: false,
             width: panelInsideWidth,
             height: Math.round((width - height) / 4),
             left: panelInsideLeft,
             top: Math.round(0.99 * height - (width - height) / 4)
         };
         rotationsNavigator.layout = {
+            portrait: false,
             width: panelInsideWidth,
             height: Math.round(0.1 * height),
             left: panelInsideLeft,
-            top: Math.round(0.135 * height),
-            textAlign: 'center'
+            top: Math.round(0.135 * height)
         };
         hiscoresTable.layout = {
             width: panelInsideWidth,
@@ -96,6 +97,7 @@ define([
 
         s.width = width + 'px';
         s.height = height + 'px';
+        s.margin = 0;
 
         // fixme: maybe introduce "landscape"
 
@@ -108,24 +110,22 @@ define([
     function updateComponentsPortraitLayout(width, height) {
         var remainingHeight = height - width, // height without board display 
             componentHeight,
-            componentTop;
+            componentTop,
+            horizontalMargin = 0.01 * width;
 
-        console.log('fixme: ', height, width);
-
+        // `Math.floor` to avoid total to be taller than `height`
         componentTop = 0;
-        componentHeight = Math.round(remainingHeight * 0.18);
+        componentHeight = Math.floor(remainingHeight * 0.18);
         title.layout = {
-            width: width,
-            left: 0,
+            portrait: true,
             height: componentHeight,
-            textAlign: 'left'
+            leftMargin: horizontalMargin
         };
         rotationsNavigator.layout = {
-            width: width,
+            portrait: true,
             height: componentHeight,
-            right: 0,
             top: componentTop,
-            textAlign: 'right'
+            rightMargin: horizontalMargin
         };
         componentTop += componentHeight;
         componentHeight = width;
@@ -133,16 +133,17 @@ define([
             sideLen: componentHeight,
             top: componentTop
         };
-        componentTop += componentHeight;
-        componentHeight = Math.round(height * 18 / 300);
+        componentTop += componentHeight + remainingHeight * 0.02;
+        componentHeight = Math.floor(remainingHeight * 0.3);
         boardsNavigator.layout = {
-            width: width,
+            portrait: true,
+            width: width - 2 * horizontalMargin,
             height: componentHeight,
-            left: 0,
-            top: componentTop
+            top: componentTop,
+            horizontalMargin: horizontalMargin
         };
         componentTop += componentHeight;
-        componentHeight = Math.round(height * 18 / 300);
+        componentHeight = Math.floor(remainingHeight * 0.5);
         hiscoresTable.layout = {
             width: width,
             height: componentHeight,
@@ -172,6 +173,7 @@ define([
 
         s.width = width + 'px';
         s.height = height + 'px';
+        s.margin = '0 auto'; // centers horizontally
 
         if (loaded) {
             updateComponentsPortraitLayout(width, height);

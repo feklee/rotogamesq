@@ -24,7 +24,7 @@ define(function () {
     'use strict';
 
     var needsToBeRendered = true,
-        layout = {width: 1, height: 1, left: 0, textAlign: 'left'};
+        layout = {width: 1, height: 1, portrait: false};
 
     function style() {
         return document.getElementById('title').style;
@@ -33,11 +33,19 @@ define(function () {
     function render() {
         var s = style();
 
-        s.width = layout.width + 'px';
         s.lineHeight = s.height = layout.height + 'px';
-        s.left = layout.left + 'px';
         s.fontSize = Math.ceil(0.8 * layout.height) + 'px';
-        s.textAlign = layout.textAlign;
+        if (layout.portrait) {
+            s.left = 0;
+            s.marginLeft = layout.leftMargin + 'px';
+            s.textAlign = 'left';
+            s.width = 'auto';
+        } else {
+            s.left = layout.left + 'px';
+            s.marginLeft = 0;
+            s.textAlign = 'center';
+            s.width = layout.width + 'px';
+        }
     }
 
     return Object.create(null, {
