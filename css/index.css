@@ -13,7 +13,7 @@ html {
 }
 
 body {
-    font-family: Arial, 'Liberation Sans', 'DejaVu Sans', sans-serif;
+    font-family: 'Droid Sans', Arial, 'Liberation Sans', 'DejaVu Sans', sans-serif;
     color: white;
     background: black;
     position: relative;
@@ -45,12 +45,6 @@ body {
 #title {
     font-weight: bold;
     display: none;
-}
-
-#title em {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-style: italic;
-    font-weight: normal;
 }
 
 #rotationsNavigator {

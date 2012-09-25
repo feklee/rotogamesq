@@ -165,8 +165,10 @@ define(['util', 'boards'], function (util, boards) {
 
         board.hiscores.forEach(function (hiscore, i, isEditable) {
             if (isEditable) {
-                iToContinue -= 1; // editable row needs more vertical space =>
-                                  // continue earlier
+                if (iToContinue >= 4) {
+                    iToContinue -= 1; // editable row needs more vertical space
+                                      // => continue earlier
+                }
             }
 
             if (layout.portrait && i >= iToContinue) {
@@ -195,9 +197,10 @@ define(['util', 'boards'], function (util, boards) {
         if (layout.portrait) {
             // portrait => continue results display in second table
             cts.display = 'table';
-            width2 = Math.floor((layout.width - layout.horizontalMargin) / 2);
+            width2 = Math.floor((layout.width - 2 * layout.horizontalMargin) /
+                                2);
             s.left = layout.horizontalMargin + 'px';
-            cts.left = (width2 + layout.horizontalMargin) + 'px';
+            cts.left = (width2 + 2 * layout.horizontalMargin) + 'px';
             ts.width = cts.width = width2 + 'px';
             lineHeight = layout.height / 4;
         } else {

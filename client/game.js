@@ -114,7 +114,7 @@ define([
 
         // `Math.floor` to avoid total to be taller than `height`
         componentTop = 0;
-        componentHeight = Math.floor(remainingHeight * 0.18);
+        componentHeight = Math.floor(remainingHeight * 0.2);
         title.layout = {
             portrait: true,
             height: componentHeight,
@@ -132,8 +132,8 @@ define([
             sideLen: componentHeight,
             top: componentTop
         };
-        componentTop += componentHeight + remainingHeight * 0.02;
-        componentHeight = Math.floor(remainingHeight * 0.28);
+        componentTop += componentHeight + remainingHeight * 0.03;
+        componentHeight = Math.floor(remainingHeight * 0.33);
         boardsNavigator.layout = {
             portrait: true,
             width: width - 2 * horizontalMargin,
@@ -141,8 +141,8 @@ define([
             top: componentTop,
             horizontalMargin: horizontalMargin
         };
-        componentTop += componentHeight + remainingHeight * 0.03;
-        componentHeight = Math.floor(remainingHeight * 0.49);
+        componentTop += componentHeight + remainingHeight * 0.05;
+        componentHeight = Math.floor(remainingHeight * 0.39);
         hiscoresTable.layout = {
             portrait: true,
             width: width - 2 * horizontalMargin,

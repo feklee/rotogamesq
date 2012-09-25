@@ -124,6 +124,7 @@ define(function () {
                             !proposalHasBeenShown) {
                         callback(proposal, i, true);
                         iOffs = -1; // repeat current hiscore in next run
+                        maxI = Math.min(maxI + 1, maxLength);
                         proposalHasBeenShown = true;
                     } else {
                         callback(hiscore, i, false);
