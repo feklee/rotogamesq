@@ -191,6 +191,10 @@ define(['util', 'boards'], function (util, boards) {
             width2,
             lineHeight;
 
+        // Setting `table-layout` to `fixed` in CSS file somehow has no effect
+        // in Chrome 21.0, at least for the hiscores table group. Therefore:
+        ts.tableLayout = cts.tableLayout = 'fixed';
+
         s.width = layout.width + 'px';
         s.height = layout.height + 'px';
         s.top = layout.top + 'px';

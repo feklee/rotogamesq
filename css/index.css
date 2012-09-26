@@ -9,14 +9,14 @@
   font-family: 'Droid Sans';
   font-style: normal;
   font-weight: bold;
-  src: local('Droid Sans Bold'), local('DroidSans-Bold'), url(../fonts/DroidSans-Bold.woff) format('woff');
+  src: local('Droid Sans Bold'), local('DroidSans-Bold'), url(../fonts/DroidSans-Bold-min.woff) format('woff');
 }
 
 @font-face {
   font-family: 'Allan';
   font-style: normal;
   font-weight: normal;
-  src: local('Allan'), local('Allan-Regular'), url(../fonts/Allan.woff) format('woff');
+  src: local('Allan'), local('Allan-Regular'), url(../fonts/Allan-min.woff) format('woff');
 }
 
 * {
@@ -85,17 +85,19 @@ body {
 }
 
 #hiscoresTableGroup>table td {
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+    overflow: hidden;
 }
 
 #hiscoresTableGroup>table td:first-child {
     text-align: left;
+    width: 85%;
+    text-overflow: ellipsis;
 }
 
 #hiscoresTableGroup>table td:last-child {
     text-align: right;
+    width: 15%;
 }
 
 #hiscoresTableGroup>table tr.input {
