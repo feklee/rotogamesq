@@ -207,7 +207,7 @@ define([
             s.left = layout.left + 'px';
             s.margin = 0;
         }
-        s.width = Math.floor(layout.width) + 'px'; // to integer, to avoid
+        s.width = Math.round(layout.width) + 'px'; // to integer, to avoid
                                                    // display bugs in Chrome 21
 
         if (elementsNeedToBeAppended && thumbsHaveBeenCreated()) {

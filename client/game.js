@@ -44,7 +44,7 @@ define([
         // panel = panel with all the elements on the right of the board
         var panelWidth = width - height,
             panelLeft = height,
-            panelInsideMargin = Math.floor(0.05 * panelWidth),
+            panelInsideMargin = Math.round(0.05 * panelWidth),
             panelInsideWidth = panelWidth - 2 * panelInsideMargin,
             panelInsideLeft = panelLeft + panelInsideMargin;
 
@@ -90,10 +90,10 @@ define([
 
         if (viewportRatio < goldenRatio) {
             width = viewportWidth;
-            height = Math.floor(width / goldenRatio);
+            height = Math.round(width / goldenRatio);
         } else {
             height = viewportHeight;
-            width = Math.floor(height * goldenRatio);
+            width = Math.round(height * goldenRatio);
         }
 
         s.width = width + 'px';
@@ -112,9 +112,8 @@ define([
             componentTop,
             horizontalMargin = 0.01 * width;
 
-        // `Math.floor` to avoid total to be taller than `height`
         componentTop = 0;
-        componentHeight = Math.floor(remainingHeight * 0.2);
+        componentHeight = Math.round(remainingHeight * 0.2);
         title.layout = {
             portrait: true,
             height: componentHeight,
@@ -133,7 +132,7 @@ define([
             top: componentTop
         };
         componentTop += componentHeight + remainingHeight * 0.03;
-        componentHeight = Math.floor(remainingHeight * 0.33);
+        componentHeight = Math.round(remainingHeight * 0.33);
         boardsNavigator.layout = {
             portrait: true,
             width: width - 2 * horizontalMargin,
@@ -142,7 +141,7 @@ define([
             horizontalMargin: horizontalMargin
         };
         componentTop += componentHeight + remainingHeight * 0.05;
-        componentHeight = Math.floor(remainingHeight * 0.39);
+        componentHeight = Math.round(remainingHeight * 0.39);
         hiscoresTable.layout = {
             portrait: true,
             width: width - 2 * horizontalMargin,
@@ -165,10 +164,10 @@ define([
         // restricts aspect ratio:
         if (viewportRatio < 1 / goldenRatio) {
             // thinner than reciprocal golden ratio => restrict height
-            height = Math.floor(width * goldenRatio);
+            height = Math.round(width * goldenRatio);
         } else if (viewportRatio > 3 / 4) {
             // wider than 3:4 => restrict width
-            width = Math.floor(height * 3 / 4);
+            width = Math.round(height * 3 / 4);
         }
 
         s.width = width + 'px';
@@ -178,8 +177,6 @@ define([
         if (loaded) {
             updateComponentsPortraitLayout(width, height);
         }
-
-        return; // fixme: do something
     }
 
     function updateLayout() {
