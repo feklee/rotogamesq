@@ -17,12 +17,15 @@ Installation
 Serve `index.html` with UTF-8 encoding.
 
 
-Portrait and landscape layouts
-==============================
+User interface
+==============
 
-To give optimal user experience espcially on mobile devices, the game adapts
-the layout depending on whether the browser's viewport is in landscape (width >
-height) or portrait mode.
+  * Portrait and landscape layouts: To give optimal user experience espcially
+    on mobile devices, the game adapts the layout depending on whether the
+    browser's viewport is in landscape (width > height) or portrait mode.
+
+  * Undo/redo is accessible by standard keyboard shortcuts: Ctrl-Z / Command-Z,
+    Ctrl-Y / Shift-Command-Y
 
 
 Development notes

@@ -9,14 +9,14 @@
   font-family: 'Droid Sans';
   font-style: normal;
   font-weight: bold;
-  src: local('Droid Sans Bold'), local('DroidSans-Bold'), url(../fonts/DroidSans-Bold-min.woff) format('woff');
+  src: local('Droid Sans Bold'), local('DroidSans-Bold'), url(../fonts/DroidSans-Bold_subset.woff) format('woff');
 }
 
 @font-face {
   font-family: 'Allan';
-  font-style: italic;
+  font-style: normal;
   font-weight: normal;
-  src: local('Allan'), local('Allan-Regular'), url(../fonts/Allan-min.woff) format('woff');
+  src: local('Allan'), local('Allan-Regular'), url(../fonts/Allan-Regular_subset.woff) format('woff');
 }
 
 * {
@@ -70,8 +70,7 @@ body {
 }
 
 #title em {
-    font-family: 'Allan', serif;
-    font-style: italic;
+    font-family: 'Allan', cursive;
     font-weight: normal;
 }
 
