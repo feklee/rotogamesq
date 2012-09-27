@@ -19,13 +19,11 @@
 /*global define */
 
 define([
-    'display', 'boards', 'load_indicator',
-    'title', 'rotations_navigator', 'hiscores_table', 'boards_navigator',
-    'util', 'vendor/rAF'
+    'display', 'boards', 'title', 'rotations_navigator', 'hiscores_table',
+    'boards_navigator', 'util', 'vendor/rAF'
 ], function (
     display,
     boards,
-    loadIndicator,
     title,
     rotationsNavigator,
     hiscoresTable,
@@ -188,20 +186,14 @@ define([
         } else {
             updatePortraitLayout(viewportWidth, viewportHeight);
         }
-
-        loadIndicator.width = width;
     }
 
     function animStep() {
-        if (loaded) {
-            display.animStep();
-            title.animStep();
-            boardsNavigator.animStep();
-            rotationsNavigator.animStep();
-            hiscoresTable.animStep();
-        } else {
-            loadIndicator.animStep();
-        }
+        display.animStep();
+        title.animStep();
+        boardsNavigator.animStep();
+        rotationsNavigator.animStep();
+        hiscoresTable.animStep();
 
         window.requestAnimationFrame(animStep);
     }
@@ -214,20 +206,27 @@ define([
         updateLayout();
     }
 
+    function hideLoadScreen() {
+        document.getElementById('loadScreen').style.display = 'none';
+    }
+
     function onLoaded() {
         loaded = true;
+
+        hideLoadScreen();
+
+        // Resize not beforen now, to avoid jumpy load screen animation.
+        onResize(); // captures initial size
+        window.addEventListener('resize', onResize);
+
         display.isVisible = true;
         boardsNavigator.activate();
-        loadIndicator.hide();
         updateLayout();
+
+        startAnim();
     }
 
     util.whenDocumentIsReady(function () {
-        startAnim();
-        boards.load(function () {
-            onLoaded();
-        });
-        onResize(); // captures initial size
-        window.addEventListener('resize', onResize);
+        boards.load(onLoaded);
     });
 });
