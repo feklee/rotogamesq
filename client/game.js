@@ -216,11 +216,8 @@ define([
 
     function onLoaded() {
         loaded = true;
-        display.show();
-        title.show();
-        boardsNavigator.show();
-        rotationsNavigator.show();
-        hiscoresTable.show();
+        display.isVisible = true;
+        boardsNavigator.activate();
         loadIndicator.hide();
         updateLayout();
     }

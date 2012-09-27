@@ -30,7 +30,6 @@ define(function () {
 
         style.fontSize = Math.ceil(width / 20) + 'px';
         style.top = style.left = Math.round(0.01 * width);
-        style.display = 'block';
     }
 
     return Object.create(null, {

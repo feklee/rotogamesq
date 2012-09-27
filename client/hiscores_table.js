@@ -239,10 +239,6 @@ define(['util', 'boards'], function (util, boards) {
         layout: {set: function (newLayout) {
             layout = newLayout;
             needsToBeRendered = true;
-        }},
-
-        show: {value: function () {
-            groupEl().style.display = 'block';
         }}
     });
 });

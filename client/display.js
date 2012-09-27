@@ -66,8 +66,7 @@ define([
             needsToBeRendered = true;
         }},
 
-        show: {value: function () {
-            style().display = 'block';
+        isVisible: {set: function () {
             isVisible = true;
         }}
     });

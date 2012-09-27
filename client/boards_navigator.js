@@ -362,10 +362,9 @@ define([
             needsToBeRendered = true;
         }},
 
-        show: {value: function () {
+        activate: {value: function () {
             // boards are now definitely loaded
             createThumbs();
-            style().display = 'block';
             needsToBeRendered = true;
         }}
     });

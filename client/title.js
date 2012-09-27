@@ -59,10 +59,6 @@ define(function () {
         layout: {set: function (newLayout) {
             layout = newLayout;
             needsToBeRendered = true;
-        }},
-
-        show: {value: function () {
-            style().display = 'block';
         }}
     });
 });
