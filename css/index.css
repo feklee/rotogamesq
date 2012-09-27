@@ -22,6 +22,31 @@
        url(../fonts/Allan-Regular_subset.woff) format('woff');
 }
 
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@-moz-keyframes spin {
+  0% { -moz-transform: rotate(0deg); }
+  100% { -moz-transform: rotate(360deg); }
+}
+
+@-ms-keyframes spin {
+  0% { -ms-transform: rotate(0deg); }
+  100% { -ms-transform: rotate(360deg); }
+}
+
+@-o-keyframes spin {
+  0% { -o-transform: rotate(0deg); }
+  100% { -o-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 * {
     cursor: default;
 
@@ -68,10 +93,44 @@ body {
     background: black;
 }
 
+/* container with square aspect ratio */
 #loadScreen>div {
+    position: relative;
+    width: 6%;
+    padding-bottom: 6%;
+}
+
+#spinner {
+    position: absolute;
+    top: 25%;
+    bottom: 25%;
+    left: 43%;
+    right: 43%;
     background: white;
-    width: 10%;
-    height: 10%;
+
+    -webkit-animation-name: spin;
+    -moz-animation-name: spin;
+    -ms-animation-name: spin;
+    -o-animation-name: spin;
+    animation-name: spin;
+    
+    -webkit-animation-duration: 0.6s;
+    -moz-animation-duration: 0.6s;
+    -ms-animation-duration: 0.6s;
+    -o-animation-duration: 0.6s;
+    animation-duration: 0.6s;
+    
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    -ms-animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+  
+    -webkit-animation-timing-function: linear;
+    -moz-animation-timing-function: linear;
+    -ms-animation-timing-function: linear;
+    -o-animation-timing-function: linear;
+    animation-timing-function: linear;
 }
 
 #title {

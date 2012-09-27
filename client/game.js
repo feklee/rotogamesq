@@ -198,10 +198,6 @@ define([
         window.requestAnimationFrame(animStep);
     }
 
-    function startAnim() {
-        window.requestAnimationFrame(animStep);
-    }
-
     function onResize() {
         updateLayout();
     }
@@ -223,7 +219,8 @@ define([
         boardsNavigator.activate();
         updateLayout();
 
-        startAnim();
+        animStep(); // Refreshes display right away (to avoid flicker), then
+                    // continues with animation
     }
 
     util.whenDocumentIsReady(function () {

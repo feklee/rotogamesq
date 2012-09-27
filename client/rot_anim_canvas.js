@@ -78,7 +78,7 @@ define([
     }
 
     function updateAngle() {
-        var speed = 0.004; // rad / s
+        var speed = 0.004; // rad / ms
 
         angle = startAngle + direction * speed * passedTime();
 
