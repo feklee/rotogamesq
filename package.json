@@ -1,0 +1,13 @@
+{
+    "name": "rotogamesq",
+    "description": "ROTOGAMEsq, a game inspired by bathroom tiles",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "start": "node app"
+    },
+    "dependencies": {
+        "express": "3.0.x",
+        "jade": "0.27.x"
+    }
+}
