@@ -54,46 +54,6 @@ Development notes
   * Version number schema: major.minor.bugfix
 
 
-js13kGames
-==========
-
-To prepare code for js13kGames:
-
- 1. Copy relevant assets into: `js13kgames`
-
- 2. Create new build:
- 
-        $ node r.js -o client.build.js
-
- 3. Open `client.build/vendor/almond.js` and compile it using
-    [Closure Compiler Service][3] with *Simple Optimizations*.
- 
- 4. Save the compilation results to: `js13kgames/game.js`
-
- 5. Replace in `js13kgames/index.html`:
-
-        <link href="css/reset.css" rel="stylesheet" type="text/css">
-        <link href="css/index.css" rel="stylesheet" type="text/css">
-        <link rel="shortcut icon" href="images/favicon.gif">
-        <script data-main="client/game"
-                src="client/vendor/require.js"></script>
-
-    With:
-
-        <link href="reset.css" rel="stylesheet" type="text/css">
-        <link href="index.css" rel="stylesheet" type="text/css">
-        <link rel="shortcut icon" href="favicon.gif">
-        <script src="game.js"></script>
-
- 6. Minimize HTML, using [HTML Minifier][4].
- 
- 7. Minimize CSS, using [CSS Optimizer][5].
-
- 8. Zip *the inside* of `js13kgames`. On Windows XP, mark all files, and click:
-    *Send To* / *Compressed (zipped) Folder* (produces less bytes than WinRar's
-    ZIP)
-
-
 Legal
 =====
 
