@@ -51,6 +51,8 @@ Development notes
     For similar reasons (possible subpixel positioning issues), the rotation is
     *not* done using CSS3 transformations.
 
+  * Version number schema: major.minor.bugfix
+
 
 js13kGames
 ==========

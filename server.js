@@ -25,7 +25,7 @@ var express = require('express'),
 
 app.configure(function () {
     app.set('port', process.env.PORT || 3000);
-    app.set('views', __dirname + '/views');
+    app.set('views', __dirname);
     app.set('view engine', 'jade');
     app.use(express.logger('dev'));
     app.use(express.bodyParser());

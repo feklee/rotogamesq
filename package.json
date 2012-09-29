@@ -1,13 +1,26 @@
 {
-    "name": "rotogamesq",
-    "description": "ROTOGAMEsq, a game inspired by bathroom tiles",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "start": "node app"
-    },
-    "dependencies": {
-        "express": "3.0.x",
-        "jade": "0.27.x"
+  "name": "rotogamesq",
+  "version": "0.1.0-6",
+  "subdomain": "rotogamesq",
+  "description": "ROTOGAMEsq, a game inspired by bathroom tiles",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "3.0.x",
+    "jade": "0.27.x"
+  },
+  "engines": {
+    "node": "0.8.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/feklee/rotogamesq"
+  },
+  "licenses": [
+    {
+      "type": "Apache License 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
+  ]
 }
