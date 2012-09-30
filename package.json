@@ -1,7 +1,10 @@
 {
   "name": "rotogamesq",
-  "version": "0.1.0-6",
+  "version": "0.1.0-8",
   "subdomain": "rotogamesq",
+  "domains": [
+    "sq.rotogame.com"
+  ],
   "description": "ROTOGAMEsq, a game inspired by bathroom tiles",
   "scripts": {
     "start": "node server.js"
