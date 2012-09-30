@@ -27,12 +27,16 @@ app.configure(function () {
     app.set('port', process.env.PORT || 3000);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
+
+    app.use(express.compress());
     app.use(express.logger('dev'));
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(app.router);
+    app.use(express.staticCache());
     app.use(express['static'](__dirname + '/public'));
-    app.use(express['static'](__dirname + '/client'));
+    app.use('/client', express['static'](__dirname + '/client'));
+    app.use('/boards', express['static'](__dirname + '/boards'));
 });
 
 app.configure('development', function () {
