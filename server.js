@@ -19,9 +19,10 @@
 'use strict';
 
 var express = require('express'),
-    http = require('http'),
+    app = express(),
+    server = require('http').createServer(app),
     path = require('path'),
-    app = express();
+    io = require('socket.io').listen(server);
 
 app.configure(function () {
     app.set('port', process.env.PORT || 3000);
@@ -47,7 +48,15 @@ app.get('/', function (req, res) {
     res.render('index');
 });
 
-http.createServer(app).listen(app.get('port'), function () {
-    console.log("Express server listening on port %d in %s mode",
+server.listen(app.get('port'), function () {
+    console.log('Express server listening on port %d in %s mode',
                 app.get('port'), app.settings.env);
+});
+
+// fimxe: just for testing
+io.sockets.on('connection', function (socket) {
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+        console.log(data);
+    });
 });
