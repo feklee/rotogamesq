@@ -23,8 +23,7 @@ html(lang="en")
     link(rel="stylesheet", href="/stylesheets/index.css")
     link(rel="shortcut icon", href="/images/favicon.gif")
 
-    script(data-host="http://localhost", src="/socket.io/socket.io.js",
-           id="socketIoScript")
+    script#socketIoScript(src="/socket.io/socket.io.js")
     script(data-main="client/game", src="/client/vendor/require.js")
 
     meta(name="HandheldFriendly", content="True")

@@ -22,7 +22,10 @@ define(['util'], function (util) {
     'use strict';
 
     function host() {
-        document.getElementById('socketIoScript').getAttribute('data-host');
+        var src = document.getElementById('socketIoScript').src,
+            matches = src.match(/https?:\/\/[a-zA-Z0-9-.]*/);
+
+        return matches.length >= 1 ? matches[0] : '';
     }
 
     function connect() {
