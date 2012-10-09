@@ -21,6 +21,7 @@
 var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
+//fixme    boards = require('server/boards'),
     path = require('path'),
     io = require('socket.io').listen(server);
 
@@ -56,9 +57,10 @@ io.configure('development', function () {
     io.set('log level', 1);
 });
 
-// fimxe: just for testing
 io.sockets.on('connection', function (socket) {
     socket.on('hiscore proposal', function (proposal) {
         console.log('hiscore proposal', proposal);
     });
+
+    // fixme: go through all boards, and 
 });

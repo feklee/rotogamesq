@@ -66,7 +66,7 @@ define([
     }
 
     function imgUrl(name, type) {
-        return resourceUrl(name, type + '.gif');
+        return resourceUrl(name, type + '.png');
     }
 
     function hiscoresUrl(name, type) {
