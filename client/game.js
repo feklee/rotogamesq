@@ -20,7 +20,7 @@
 
 define([
     'display', 'boards', 'title', 'rotations_navigator', 'hiscores_table',
-    'boards_navigator', 'util', 'socket_io'/* fixme: remove */, 'vendor/rAF'
+    'boards_navigator', 'util', 'vendor/rAF'
 ], function (
     display,
     boards,

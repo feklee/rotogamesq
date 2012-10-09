@@ -16,10 +16,12 @@
 
 /*jslint browser: true, maxerr: 50, maxlen: 79 */
 
-/*global define */
+/*global define, io */
 
-define(['util'], function (util) {
+define(function () {
     'use strict';
+
+    var socket;
 
     function host() {
         var src = document.getElementById('socketIoScript').src,
@@ -28,17 +30,25 @@ define(['util'], function (util) {
         return matches.length >= 1 ? matches[0] : '';
     }
 
-    function connect() {
-        var socket = io.connect(host());
+    function connect(onConnect) {
+        if (socket === undefined) {
+            socket = io.connect(host());
+        }
 
-        // fixme: just for testing
-        socket.on('news', function (data) {
-            console.log(data);
-            socket.emit('my other event', { my: 'data' });
-        });
+        if (socket.socket.connected) {
+            onConnect();
+        } else {
+            socket.on('connect', onConnect);
+        }
     }
 
-    util.whenDocumentIsReady(function () {
-        connect();
+    return Object.create(null, {
+        // Establishes connection if not yet done.
+        emit: {value: function () {
+            var emitArguments = arguments;
+            connect(function () {
+                socket.emit.apply(socket, emitArguments);
+            });
+        }}
     });
 });

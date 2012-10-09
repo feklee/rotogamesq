@@ -18,7 +18,7 @@
 
 /*global define */
 
-define(function () {
+define(['socket_io'], function (socketIo) {
     'use strict';
 
     var maxLength = 7,
@@ -87,12 +87,17 @@ define(function () {
 
             if (!proposalHasBeenInserted) {
                 rawHiscores.push(proposal);
+                proposalHasBeenInserted = true;
             }
         }
 
         keepHiscoresLengthInBounds(rawHiscores); // done at the end (in case
                                                  // duplicates have been
                                                  // removed)
+
+        if (proposalHasBeenInserted) {
+            socketIo.emit('hiscore proposal', proposal);
+        }
     }
 
     // Returns null, if raw hiscores cannot be retrieved from local storage.

@@ -18,7 +18,7 @@
 
 /*global define */
 
-define(['util', 'boards'], function (util, boards) {
+define(['util', 'boards', 'socket_io'], function (util, boards, socketIo) {
     'use strict';
 
     var board, nameInputFieldEl, submitButtonEl,

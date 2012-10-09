@@ -34,7 +34,6 @@ app.configure(function () {
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(app.router);
-    app.use(express.staticCache());
     app.use(express['static'](__dirname + '/public'));
     app.use('/client', express['static'](__dirname + '/client'));
     app.use('/boards', express['static'](__dirname + '/boards'));
@@ -53,10 +52,13 @@ server.listen(app.get('port'), function () {
                 app.get('port'), app.settings.env);
 });
 
+io.configure('development', function () {
+    io.set('log level', 1);
+});
+
 // fimxe: just for testing
 io.sockets.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-        console.log(data);
+    socket.on('hiscore proposal', function (proposal) {
+        console.log('hiscore proposal', proposal);
     });
 });

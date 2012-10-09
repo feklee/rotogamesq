@@ -21,7 +21,20 @@
 define(function () {
     'use strict';
 
-    var prototype = Object.create(null, {
+    var prototype;
+
+    function create(rectT, cw) {
+        return Object.create(prototype, {
+            rectT: {get: function () { return rectT; },
+                    enumerable: true},
+
+            // direction (true: clock wise)
+            cw: {get: function () { return cw; },
+                 enumerable: true}
+        });
+    }
+
+    prototype = Object.create(null, {
         isEqualTo: {value: function (rotation) {
             return (this.rectT.isEqualTo(rotation.rectT) &&
                     this.cw === rotation.cw);
@@ -46,25 +59,11 @@ define(function () {
         }},
 
         inverse: {get: function () {
-            var rectT = this.rectT, cw = !this.cw;
-
-            return Object.create(prototype, {
-                rectT: {get: function () { return rectT; }},
-
-                // direction (true: clock wise)
-                cw: {get: function () { return cw; }}
-            });
+            return create(this.rectT, !this.cw);
         }}
     });
 
     return Object.create(null, {
-        create: {value: function (rectT, cw) {
-            return Object.create(prototype, {
-                rectT: {get: function () { return rectT; }},
-
-                // direction (true: clock wise)
-                cw: {get: function () { return cw; }}
-            });
-        }}
+        create: {value: create}
     });
 });
