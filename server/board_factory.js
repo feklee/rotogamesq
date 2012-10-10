@@ -1,4 +1,4 @@
-// Functionality for handling a board.
+// Creates a board.
 
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
@@ -18,4 +18,25 @@
 
 'use strict';
 
-//fixme
+// Loads a board synchronously.
+exports.loadSync = function (name) {
+    return Object.create(null, {
+        name: {get: function () { return name; }},
+        emitHiscores: {value: function (socket) {
+            socket.emit('hiscores for ' + name, [
+                {
+                    name: 'Roger W.',
+                    nRotations: 8
+                },
+                {
+                    name: 'Felix',
+                    nRotations: 10
+                },
+                {
+                    name: 'Mario',
+                    nRotations: 10
+                }
+            ]);
+        }}
+    });
+};

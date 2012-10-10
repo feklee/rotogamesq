@@ -18,14 +18,15 @@
 
 /*global define */
 
-define(['util', 'boards', 'socket_io'], function (util, boards, socketIo) {
+define(['util', 'boards'], function (util, boards) {
     'use strict';
 
     var board, nameInputFieldEl, submitButtonEl,
         boardIsFinished,
         submitIsEnabled = false,
         needsToBeRendered = true,
-        layout = {width: 1, height: 1, left: 0, top: 0, portrait: false};
+        layout = {width: 1, height: 1, left: 0, top: 0, portrait: false},
+        hiscoresVersion = 0;
 
     function groupEl() {
         return document.getElementById('hiscoresTableGroup');
@@ -221,14 +222,13 @@ define(['util', 'boards', 'socket_io'], function (util, boards, socketIo) {
 
     return Object.create(null, {
         animStep: {value: function () {
-            if (boards.selected !== board) {
-                board = boards.selected;
-                boardIsFinished = board.isFinished;
-                needsToBeRendered = true;
-            } else if (board.isFinished !== boardIsFinished) {
-                boardIsFinished = board.isFinished;
-                needsToBeRendered = true;
-            }
+            needsToBeRendered = (boards.selected !== board ||
+                                 board.isFinished !== boardIsFinished ||
+                                 board.hiscores.version !== hiscoresVersion);
+
+            board = boards.selected;
+            boardIsFinished = board.isFinished;
+            hiscoresVersion = board.hiscores.version;
 
             if (needsToBeRendered) {
                 render();

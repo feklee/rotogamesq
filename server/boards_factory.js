@@ -1,4 +1,4 @@
-// Functionality for handling boards.
+// Loads boards.
 
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
@@ -19,3 +19,16 @@
 'use strict';
 
 //fixme
+
+var boardFactory = require('./board_factory'),
+    boardNames = require('fs').readdirSync('./boards');
+
+exports.load = function () {
+    var boards = [];
+
+    boardNames.forEach(function (boardName) {
+        boards.push(boardFactory.loadSync(boardName));
+    });
+
+    return boards;
+};

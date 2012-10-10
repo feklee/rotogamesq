@@ -21,7 +21,7 @@
 var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
-//fixme    boards = require('server/boards'),
+    boards = require('./server/boards_factory').load(),
     path = require('path'),
     io = require('socket.io').listen(server);
 
@@ -62,5 +62,7 @@ io.sockets.on('connection', function (socket) {
         console.log('hiscore proposal', proposal);
     });
 
-    // fixme: go through all boards, and 
+    boards.forEach(function (board) {
+        board.emitHiscores(socket);
+    });
 });

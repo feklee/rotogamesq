@@ -24,24 +24,6 @@ define(['socket_io'], function (socketIo) {
     var maxLength = 7,
         lastNameSet = ''; // last name edited (preset for new proposals)
 
-    function loadJson(url, onSuccess, onFailure) {
-        var req = new XMLHttpRequest();
-
-        req.onreadystatechange = function () {
-            if (req.readyState === 4) {
-                if (req.status === 200) {
-                    onSuccess(req.responseText);
-                } else {
-                    // no error message shown, as usually the browser informs
-                    // about failed GETs
-                    onFailure();
-                }
-            }
-        };
-        req.open("GET", url + '?' + Date.now(), true);
-        req.send();
-    }
-
     function proposalIsBetterOrEqual(proposal, hiscore) {
         return proposal !== null && proposal.nRotations <= hiscore.nRotations;
     }
@@ -58,8 +40,10 @@ define(['socket_io'], function (socketIo) {
     //
     //   * and if there are no duplicates (same name) with a lower number of
     //     rotations.
-    function insertProposal(rawHiscores, proposal) {
-        var i, hiscore, proposalHasBeenInserted = false;
+    function insertProposal(internal) {
+        var i, hiscore, proposalHasBeenInserted = false,
+            rawHiscores = internal.rawHiscores,
+            proposal = internal.proposal;
 
         if (proposal.name !== '') {
             if (rawHiscores.length === 0) {
@@ -96,31 +80,39 @@ define(['socket_io'], function (socketIo) {
                                                  // removed)
 
         if (proposalHasBeenInserted) {
+            internal.version += 1;
             socketIo.emit('hiscore proposal', proposal);
         }
     }
 
-    // Returns null, if raw hiscores cannot be retrieved from local storage.
-    function getFromLocalStorage(localStorageKey) {
-        var json = localStorage.getItem(localStorageKey);
+    function listenToUpdates(internal) {
+        var eventName = 'hiscores for ' + internal.boardName;
 
-        return json === null ? null : JSON.parse(json);
-    }
-
-    function saveInLocalStorage(localStorageKey, rawHiscores) {
-        localStorage.setItem(localStorageKey, JSON.stringify(rawHiscores));
+        socketIo.on(eventName, function (newRawHiscores) {
+            internal.rawHiscores = newRawHiscores;
+            internal.version += 1;
+        });
     }
 
     // `rawHiscores`: raw internal hiscores data
-    function create(rawHiscores, localStorageKey) {
-        var proposal = null; // new, proposed hiscore (editable)
+    function create(boardName) {
+        var internal = {
+            proposal: null, // new, proposed hiscore (editable)
+            version: 0, // incremented on every update
+            rawHiscores: [],
+            boardName: boardName
+        };
+
+        listenToUpdates(internal);
 
         return Object.create(null, {
             // Calls callback with two parameters: hiscore, index, and whether
             // the hiscore is editable (only appears once)
             forEach: {value: function (callback) {
                 var i, iOffs = 0, hiscore,
-                    maxI = rawHiscores.length,
+                    maxI = internal.rawHiscores.length,
+                    proposal = internal.proposal,
+                    rawHiscores = internal.rawHiscores,
                     proposalHasBeenShown = false;
 
                 for (i = 0; i < maxI; i += 1) {
@@ -145,7 +137,7 @@ define(['socket_io'], function (socketIo) {
             }},
 
             length: {get: function () {
-                return rawHiscores.length;
+                return internal.rawHiscores.length;
             }},
 
             maxNameLen: {get: function () {
@@ -153,24 +145,23 @@ define(['socket_io'], function (socketIo) {
             }},
 
             nameInProposal: {set: function (name) {
-                if (proposal !== null) {
+                if (internal.proposal !== null) {
                     name = name.substring(0, this.maxNameLen);
-                    proposal.name = name;
+                    internal.proposal.name = name;
                     lastNameSet = name;
                 }
             }},
 
             saveProposal: {value: function () {
-                if (proposal !== null) {
-                    insertProposal(rawHiscores, proposal);
-                    proposal = null;
-                    saveInLocalStorage(localStorageKey, rawHiscores);
+                if (internal.proposal !== null) {
+                    insertProposal(internal);
+                    internal.proposal = null;
                 }
             }},
 
             // proposes a new hiscore (name is to be entered by the player)
             propose: {value: function (rotations) {
-                proposal = {
+                internal.proposal = {
                     name: lastNameSet,
                     rotations: rotations.slice(),
                     nRotations: rotations.length
@@ -178,32 +169,16 @@ define(['socket_io'], function (socketIo) {
             }},
 
             rmProposal: {value: function () {
-                proposal = null;
+                internal.proposal = null;
+            }},
+
+            version: {get: function () {
+                return internal.version;
             }}
         });
     }
 
     return Object.create(null, {
-        // Tries to:
-        //
-        //  1. get hiscores from local storage, and if that fails
-        //
-        //  2. from JSON file.
-        load: {value: function (hiscoresUrl, localStorageKey, onLoaded) {
-            var rawHiscores = getFromLocalStorage(localStorageKey);
-
-            if (rawHiscores !== null) {
-                onLoaded(create(rawHiscores, localStorageKey));
-            } else {
-                // not in local storage => get initial hiscores from server
-                loadJson(hiscoresUrl, function (json) {
-                    onLoaded(create(JSON.parse(json), localStorageKey));
-                }, function () {
-                    // hiscores data couldn't be retrieved => init with empty
-                    // list
-                    onLoaded(create([]));
-                });
-            }
-        }}
+        create: {value: create}
     });
 });

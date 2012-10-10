@@ -27,8 +27,7 @@ define([
 
     function allResourcesAreLoaded(board) {
         return (board.tiles !== undefined &&
-                board.endTiles !== undefined &&
-                board.hiscores !== undefined);
+                board.endTiles !== undefined);
     }
 
     function onAllResourcesLoaded(board, onLoaded) {
@@ -54,23 +53,8 @@ define([
         }
     }
 
-    function onHiscoresLoaded(board, hiscores, onLoaded) {
-        Object.defineProperty(board, 'hiscores', {value: hiscores});
-        if (allResourcesAreLoaded(board)) {
-            onAllResourcesLoaded(board, onLoaded);
-        }
-    }
-
-    function resourceUrl(name, relativePath) {
-        return 'boards/' + name + '/' + relativePath;
-    }
-
     function imgUrl(name, type) {
-        return resourceUrl(name, type + '.png');
-    }
-
-    function hiscoresUrl(name, type) {
-        return resourceUrl(name, 'hiscores.json');
+        return 'boards/' + name + '/' + type + '.png';
     }
 
     function selectedTiles(tiles, x1T, y1T, x2T, y2T) {
@@ -141,6 +125,7 @@ define([
         rotateTiles(tiles, rotation.inverse);
     }
 
+    // Updates `internal.isFinished`.
     function updateIsFinished(internal, board, rotation) {
         if (board.tiles.colorsAreEqualTo(board.endTiles)) {
             if (!internal.isFinished) {
@@ -193,7 +178,8 @@ define([
                 futureRotations: [], // for redo
                 lastRotation: null,
                 isFinished: false // true when game is finished
-            };
+            },
+            hiscores = hiscoresFactory.create(name);
 
         board = Object.create(prototype, {
             rotate: {value: function (rotation) {
@@ -234,6 +220,10 @@ define([
 
             name: {get: function () {
                 return name;
+            }},
+
+            hiscores: {get: function () {
+                return hiscores;
             }}
         });
 
@@ -243,13 +233,6 @@ define([
         tilesFactory.load(imgUrl(name, 'end'), function (tiles) {
             onEndTilesLoaded(board, tiles, onLoaded);
         });
-        hiscoresFactory.load(
-            hiscoresUrl(name),
-            'rotogamejs.' + name + '.hiscores',
-            function (hiscores) {
-                onHiscoresLoaded(board, hiscores, onLoaded);
-            }
-        );
     }
 
     return Object.create(null, {

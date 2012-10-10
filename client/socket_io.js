@@ -30,15 +30,19 @@ define(function () {
         return matches.length >= 1 ? matches[0] : '';
     }
 
-    function connect(onConnect) {
+    function on() {
         if (socket === undefined) {
             socket = io.connect(host());
         }
 
-        if (socket.socket.connected) {
+        socket.on.apply(socket, arguments);
+    }
+
+    function connect(onConnect) {
+        if (socket && socket.socket.connected) {
             onConnect();
         } else {
-            socket.on('connect', onConnect);
+            on('connect', onConnect);
         }
     }
 
@@ -49,6 +53,8 @@ define(function () {
             connect(function () {
                 socket.emit.apply(socket, emitArguments);
             });
-        }}
+        }},
+
+        on: {value: on}
     });
 });
