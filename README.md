@@ -14,7 +14,13 @@ Hiscores are kept in the browser's local storage.
 Installation
 ============
 
-Serve `index.html` with UTF-8 encoding.
+ 1. Optionally set environment variables:
+ 
+      * `REDIS_HOST` (default: `127.0.0.1`)
+      
+      * `REDIS_PORT` (default: `6379`)
+
+ 2. Run: `node server.js`
 
 
 User interface
@@ -53,6 +59,11 @@ Development notes
 
   * Version number schema: major.minor.bugfix
 
+  * Numeric assumptions made in various parts of the code (hard coded):
+  
+      - Maximum number of rotations: 99
+
+      - Maximum number of hiscores per board: 7
 
 Legal
 =====

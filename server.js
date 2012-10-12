@@ -21,7 +21,7 @@
 var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
-    boards = require('./server/boards_factory').load(),
+    boards = require('./server/boards'),
     path = require('path'),
     io = require('socket.io').listen(server);
 
@@ -58,11 +58,6 @@ io.configure('development', function () {
 });
 
 io.sockets.on('connection', function (socket) {
-    socket.on('hiscore proposal', function (proposal) {
-        console.log('hiscore proposal', proposal);
-    });
-
-    boards.forEach(function (board) {
-        board.emitHiscores(socket);
-    });
+    boards.emitHiscores(socket);
+    boards.listen(socket);
 });

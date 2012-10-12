@@ -1,4 +1,4 @@
-// Creates a board.
+// Loads boards.
 
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
@@ -18,23 +18,29 @@
 
 'use strict';
 
-var hiscoresFactory = require('./hiscores_factory');
+var boards = [],
+    boardFactory = require('./board_factory'),
+    boardNames = require('fs').readdirSync('./boards'),
+    emitHiscores;
 
-// Loads a board synchronously.
-var loadSync = function (name) {
-    var hiscores = hiscoresFactory.create(name);
+console.log(boardFactory); //fixme
 
-    return Object.create(null, {
-        name: {get: function () {
-            return name;
-        }},
-
-        listen: {value: hiscores.listen},
-
-        emitHiscores: {value: hiscores.emit}
-    });
-};
-
-module.exports = Object.create(null, {
-    loadSync: {value: loadSync}
+boardNames.forEach(function (boardName) {
+    boards.push(boardFactory.loadSync(boardName));
 });
+
+Object.defineProperties(boards, {
+    emitHiscores: {value: function (socket) {
+        this.forEach(function (board) {
+            board.emitHiscores(socket);
+        });
+    }},
+
+    listen: {value: function (socket) {
+        this.forEach(function (board) {
+            board.listen(socket);
+        });
+    }}
+});
+
+module.exports = boards;

@@ -222,7 +222,8 @@ define(['util', 'boards'], function (util, boards) {
 
     return Object.create(null, {
         animStep: {value: function () {
-            needsToBeRendered = (boards.selected !== board ||
+            needsToBeRendered = (needsToBeRendered ||
+                                 boards.selected !== board ||
                                  board.isFinished !== boardIsFinished ||
                                  board.hiscores.version !== hiscoresVersion);
 

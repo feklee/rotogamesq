@@ -1,4 +1,4 @@
-// Loads boards.
+// Client for communicating with Redis.
 
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
@@ -18,17 +18,12 @@
 
 'use strict';
 
-//fixme
+var port = process.env.REDIS_PORT || 6379,
+    host = process.env.REDIS_HOST || '127.0.0.1',
+    redisClient = require('redis').createClient(port, host);
 
-var boardFactory = require('./board_factory'),
-    boardNames = require('fs').readdirSync('./boards');
+redisClient.on('error', function (err) {
+    console.log('Redis client error ' + err);
+});
 
-exports.load = function () {
-    var boards = [];
-
-    boardNames.forEach(function (boardName) {
-        boards.push(boardFactory.loadSync(boardName));
-    });
-
-    return boards;
-};
+module.exports = redisClient;
