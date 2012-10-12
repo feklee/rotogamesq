@@ -43,13 +43,13 @@ define(['socket_io'], function (socketIo) {
     function insertProposal(internal) {
         // fixme: perhaps remove, and/or show spinner until update
 
-//fixme:            internal.version += 1;
-
         var i, hiscore, proposalHasBeenInserted = false,
             rawHiscores = internal.rawHiscores,
             proposal = internal.proposal;
 
         socketIo.emit('hiscore for ' + internal.boardName, proposal);
+
+        return; // fixme remove, and also below
 
         if (proposal.name !== '') {
             if (rawHiscores.length === 0) {
