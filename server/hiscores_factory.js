@@ -111,13 +111,11 @@ insertHiscore = function (hiscore, boardName) {
 };
 
 listen = function (socket, boardName) {
-    console.error('fixme1');
     socket.on('hiscore for ' + boardName, function (hiscore) {
-        console.warn('fixme2');
-
         if (hiscoreIsValid(hiscore)) {
             insertHiscore(hiscore, boardName);
             emit.call(this, socket, boardName);
+            emit.call(this, socket.broadcast, boardName);
         }
     });
 };
@@ -133,16 +131,13 @@ emit = function (socket, boardName) {
         }
 
         namesWithRedisScore.forEach(function (nameWithScore) {
-            console.warn('fixme0_' + boardName, nameWithScore); //fixme
-            if (nameWithScore) { // fixme: perhaps remove this `if`
-                var name = nameWithScore[0],
-                    score = nameWithScore[1],
-                    nRotations = nRotationsFromRedisScore(score);
-                hiscores.push({
-                    name: name,
-                    nRotations: nRotations
-                });
-            }
+            var name = nameWithScore[0],
+                score = nameWithScore[1],
+                nRotations = nRotationsFromRedisScore(score);
+            hiscores.push({
+                name: name,
+                nRotations: nRotations
+            });
         });
 
         socket.emit('hiscores for ' + boardName, hiscores);

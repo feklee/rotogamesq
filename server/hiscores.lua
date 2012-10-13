@@ -15,7 +15,7 @@
 -- License for the specific language governing permissions and limitations
 -- under the License.
 
-local names = redis.call('zrange', KEYS[1], 0, 7)
+local names = redis.call('zrange', KEYS[1], 0, 6)
 
 local namesWithScore = {}
 for i,name in ipairs(names) do
@@ -23,20 +23,4 @@ for i,name in ipairs(names) do
    table.insert(namesWithScore, {name, score})
 end
 
-print('--')
-print(KEYS[1])
-for i,nameWithScore in ipairs(namesWithScore) do
-   print(nameWithScore[1]) -- fixme
-end
-
 return namesWithScore
-
--- for i=1,10 do
--- fixme for i,name in ipairs(names) do
--- fixme   local score = redis.call('zscore', KEYS[1], 'werw')
--- table.insert(namesWithScore, {'werw2', 5})
--- fixme   local score = redis.call('zscore', KEYS[1], tostring(name))
--- fixme   table.insert(namesWithScore, {tostring(name), score})
--- end
-
--- return {{'werw3', 5}, {'werw3', 5}, {'werw3', 5}} // fixme
