@@ -23,7 +23,6 @@ var redis = require('redis'),
     fs = require('fs'),
     insertHiscoreScript = fs.readFileSync(__dirname + '/insert_hiscore.lua',
                                           'utf8'),
-    hiscoresScript = fs.readFileSync(__dirname + '/hiscores.lua', 'utf8'),
     create,
     load,
     listen,
@@ -122,33 +121,36 @@ listen = function (socket, boardName) {
 
 // Emits hiscores for the specified board, via Socket.IO.
 emit = function (socket, boardName) {
-    var onEvalDone = function (err, namesWithRedisScore) {
-        var hiscores = [];
+    var onZrangeDone = function (err, namesAndScores) {
+        var hiscores = [], i, name, score, nRotations;
+
+        console.log(namesAndScores); //fixme
 
         if (err) {
             console.log(err);
             return;
         }
 
-        namesWithRedisScore.forEach(function (nameWithScore) {
-            var name = nameWithScore[0],
-                score = nameWithScore[1],
-                nRotations = nRotationsFromRedisScore(score);
+        for (i = 0; i < namesAndScores.length; i += 2) {
+            name = namesAndScores[i];
+            score = parseFloat(namesAndScores[i + 1]);
+            nRotations = nRotationsFromRedisScore(score);
             hiscores.push({
                 name: name,
                 nRotations: nRotations
             });
-        });
+        }
 
         socket.emit('hiscores for ' + boardName, hiscores);
     };
 
     /*jslint evil: true */
-    redisClient['eval'](
-        hiscoresScript,
-        1,
+    redisClient.zrange(
         boardName.toString(), // in case board name is numeric
-        onEvalDone
+        0,
+        6,
+        'WITHSCORES',
+        onZrangeDone
     );
     /*jslint evil: false */
 };

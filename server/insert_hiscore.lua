@@ -21,3 +21,4 @@ local score = ARGV[1]
 local name = ARGV[2]
 
 redis.call('zadd', KEYS[1], score, name)
+-- fixme: implement trim
