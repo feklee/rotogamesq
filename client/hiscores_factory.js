@@ -28,10 +28,6 @@ define(['socket_io'], function (socketIo) {
         return proposal !== null && proposal.nRotations <= hiscore.nRotations;
     }
 
-    function keepHiscoresLengthInBounds(rawHiscores) {
-        rawHiscores.length = Math.min(rawHiscores.length, maxLength);
-    }
-
     // Inserts proposal into hiscore:
     //
     //   * if it has sufficiently small number of rotations,
@@ -51,39 +47,33 @@ define(['socket_io'], function (socketIo) {
 
         return; // fixme remove, and also below
 
-        if (proposal.name !== '') {
-            if (rawHiscores.length === 0) {
-                // hiscores empty => just insert
-                rawHiscores.push(proposal);
-                return;
+        if (rawHiscores.length === 0) {
+            // hiscores empty => just insert
+            rawHiscores.push(proposal);
+            return;
+        }
+
+        for (i = 0; i < rawHiscores.length; i += 1) {
+            hiscore = rawHiscores[i];
+
+            if (proposal.name === hiscore.name &&
+                proposal.nRotations >= hiscore.nRotations) {
+                return; // duplicate with lower/same number of rotations
             }
 
-            for (i = 0; i < rawHiscores.length; i += 1) {
-                hiscore = rawHiscores[i];
-
-                if (proposal.name === hiscore.name &&
-                        proposal.nRotations >= hiscore.nRotations) {
-                    return; // duplicate with lower/same number of rotations
-                }
-
-                if (proposal.nRotations <= hiscore.nRotations &&
-                        !proposalHasBeenInserted) {
-                    rawHiscores.splice(i, 0, proposal);
-                    proposalHasBeenInserted = true;
-                } else if (proposal.name === hiscore.name) {
-                    rawHiscores.splice(i, 1); // duplicate that is not better
-                }
-            }
-
-            if (!proposalHasBeenInserted) {
-                rawHiscores.push(proposal);
+            if (proposal.nRotations <= hiscore.nRotations &&
+                !proposalHasBeenInserted) {
+                rawHiscores.splice(i, 0, proposal);
                 proposalHasBeenInserted = true;
+            } else if (proposal.name === hiscore.name) {
+                rawHiscores.splice(i, 1); // duplicate that is not better
             }
         }
 
-        keepHiscoresLengthInBounds(rawHiscores); // done at the end (in case
-                                                 // duplicates have been
-                                                 // removed)
+        if (!proposalHasBeenInserted) {
+            rawHiscores.push(proposal);
+            proposalHasBeenInserted = true;
+        }
     }
 
     function listenToUpdates(internal) {
@@ -111,7 +101,7 @@ define(['socket_io'], function (socketIo) {
             // the hiscore is editable (only appears once)
             forEach: {value: function (callback) {
                 var i, iOffs = 0, hiscore,
-                    maxI = internal.rawHiscores.length,
+                    maxI = Math.min(internal.rawHiscores.length, maxLength),
                     proposal = internal.proposal,
                     rawHiscores = internal.rawHiscores,
                     proposalHasBeenShown = false;

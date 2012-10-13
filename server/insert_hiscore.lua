@@ -17,4 +17,7 @@
 -- License for the specific language governing permissions and limitations
 -- under the License.
 
-return redis.call('zadd', KEYS[1], ARGV[1], ARGV[2])
+local score = ARGV[1]
+local name = ARGV[2]
+
+redis.call('zadd', KEYS[1], score, name)

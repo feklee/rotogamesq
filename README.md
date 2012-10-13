@@ -1,24 +1,30 @@
 Introduction
 ============
 
-ROTOGAMEsq is a variant of [Roto Game][1] with *squared tiles*: The [author][6]
+ROTOGAMEsq is a variant of [Roto Game][1] with *squared tiles*: The [author][4]
 has moved, and in his new home the bathroom tiles are different. ;-)
 
-ROTOGAMEsq has been written from scratch for the [js13kGames][2] challenge
-2012. It is based on ECMAScript 5 and HTML5. The version that has been
-submitted to the challenge is tagged (GIT): `js13kgames`
-
-Hiscores are kept in the browser's local storage.
+Play: [sq.rotogame.com][2]
 
 
-Installation
-============
+History
+=======
+
+ROTOGAMEsq has originally been written from scratch for the 2012
+[js13kGames][3] challenge. The version that has been submitted to the challenge
+is tagged (GIT): `js13kgames`
+
+
+How to run
+==========
 
  1. Optionally set environment variables:
  
       * `REDIS_HOST` (default: `127.0.0.1`)
       
       * `REDIS_PORT` (default: `6379`)
+      
+      * `NODE_ENV`: `development` (default) or `production`
 
  2. Run: `node server.js`
 
@@ -32,6 +38,16 @@ User interface
 
   * Undo/redo is accessible by standard keyboard shortcuts: Ctrl-Z / Command-Z,
     Ctrl-Y / Shift-Command-Y
+
+
+Hiscores
+========
+
+  * The hiscores for each board are stored in a Redis database.
+  
+  * On the server, every hiscore entry is tested for plausibility (do the
+    rotations really solve a board). This prevents cheating by forging client
+    server communication.
 
 
 Development notes
@@ -64,11 +80,13 @@ Development notes
       - Maximum number of rotations: 99
 
       - Maximum number of hiscores per board: 7
+      
+      - Maximum number of characters in name in hiscores: 8
 
 Legal
 =====
 
-Copyright 2012 [Felix E. Klee][6]
+Copyright 2012 [Felix E. Klee][4]
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
@@ -82,9 +100,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 
 
-[1]: http://code.google.com/p/rotogame/
-[2]: http://js13kgames.com/
-[3]: http://closure-compiler.appspot.com/home
-[4]: http://kangax.github.com/html-minifier/
-[5]: http://www.cssoptimiser.com
-[6]: mailto:felix.klee@inka.de
+[1]: http://code.google.com/p/rotogame
+[2]: http://sq.rotogame.com
+[3]: http://js13kgames.com
+[4]: mailto:felix.klee@inka.de
