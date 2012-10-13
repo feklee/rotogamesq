@@ -84,29 +84,15 @@ insertHiscore = function (hiscore, boardName) {
         boardName.toString(), // in case board name is e.g. 1337
         score,
         hiscore.name.toString(),
-        function (err, res) {
-            // fixme
-            console.dir(err);
-            console.dir(res);
+        JSON.stringify(hiscore.rotations),
+        function (err) {
+            if (err) {
+                console.log(err);
+                // just continue
+            }
         }
     );
     /*jslint evil: false */
-
-    // fixme: trim
-
-    // fixme: perhaps use sorted sets, with composed score:
-    //   http://en.wikipedia.org/wiki/Binary64
-    // fixme: perhaps use as keys in hash:
-    //   score (2digits) + name
-    //   This avoids overwriting a hash, e.g. with one where
-    //   the score is lower. Only problem: Duplicates (same
-    //   name with different scores, but perhaps avoid that
-    //   by using the name only in the sorted set). Or: just
-    //   filter when reading out.
-    // fixme: Perhaps trim to 7×7
-    //
-    // Perhaps update in transaction, and keep data in sorted list
-    // only.
 };
 
 listen = function (socket, boardName) {
@@ -123,8 +109,6 @@ listen = function (socket, boardName) {
 emit = function (socket, boardName) {
     var onZrangeDone = function (err, namesAndScores) {
         var hiscores = [], i, name, score, nRotations;
-
-        console.log(namesAndScores); //fixme
 
         if (err) {
             console.log(err);
@@ -144,7 +128,6 @@ emit = function (socket, boardName) {
         socket.emit('hiscores for ' + boardName, hiscores);
     };
 
-    /*jslint evil: true */
     redisClient.zrange(
         boardName.toString(), // in case board name is numeric
         0,
@@ -152,7 +135,6 @@ emit = function (socket, boardName) {
         'WITHSCORES',
         onZrangeDone
     );
-    /*jslint evil: false */
 };
 
 create = function (boardName) {

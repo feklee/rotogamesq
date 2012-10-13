@@ -17,8 +17,20 @@
 -- License for the specific language governing permissions and limitations
 -- under the License.
 
+local zkey = KEYS[1]
+local hkey = zkey .. "-hash"
 local score = ARGV[1]
 local name = ARGV[2]
+local rotationsJson = ARGV[3]
 
-redis.call('zadd', KEYS[1], score, name)
--- fixme: implement trim
+-- fixme: only insert if it's better!
+
+redis.call('zadd', zkey, score, name)
+redis.call('hset', hkey, name, rotationsJson)
+
+-- Limits size of elements to max. seven elements:
+local namesToDel = redis.call('zrange', zkey, 7, -1)
+for i,nameToDel in ipairs(namesToDel) do
+   redis.call('hdel', hkey, nameToDel)
+end
+redis.call('zremrangebyrank', zkey, 7, -1)
