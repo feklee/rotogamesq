@@ -34,7 +34,7 @@ var requirejs = require('requirejs'),
         wrap: true,
         useStrict: true,
         fileExclusionRegExp: /^\.|^server$|\.md$|^require\.js$/,
-        cssImportIgnore: 'reset.css' // not important
+        optimizeCss: 'standard'
     };
 
 module.exports = function (onBuildCreated) {
