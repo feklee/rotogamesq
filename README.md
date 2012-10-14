@@ -49,6 +49,9 @@ Hiscores
     rotations really solve a board). This prevents cheating by forging client
     server communication.
 
+  * With every hiscore entry, rotations are stored, which makes it possible to
+    manually investigate some of the more astonishing solutions.
+
 
 Development notes
 =================

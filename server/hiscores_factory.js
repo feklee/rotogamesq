@@ -88,7 +88,7 @@ insertHiscore = function (hiscore, boardName) {
         function (err) {
             if (err) {
                 console.log(err);
-                // just continue
+                // no further consequences
             }
         }
     );
