@@ -1,0 +1,219 @@
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+@font-face {
+  font-family: 'Droid Sans';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Droid Sans'), local('DroidSans'),
+       url(/fonts/DroidSans.woff) format('woff'),
+       url(/fonts/DroidSans.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Droid Sans';
+  font-style: normal;
+  font-weight: bold;
+  src: local('Droid Sans Bold'), local('DroidSans-Bold'),
+       url(/fonts/DroidSans-Bold_subset.woff) format('woff'),
+       url(/fonts/DroidSans-Bold_subset.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Allan';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Allan'), local('Allan-Regular'),
+       url(/fonts/Allan-Regular_subset.woff) format('woff'),
+       url(/fonts/Allan-Regular_subset.ttf) format('truetype');
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+@-moz-keyframes spin {
+  0% { -moz-transform: rotate(0deg); }
+  100% { -moz-transform: rotate(360deg); }
+}
+@-ms-keyframes spin {
+  0% { -ms-transform: rotate(0deg); }
+  100% { -ms-transform: rotate(360deg); }
+}
+@-o-keyframes spin {
+  0% { -o-transform: rotate(0deg); }
+  100% { -o-transform: rotate(360deg); }
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+* {
+    cursor: default;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+html, body, #loadScreen {
+    width: 100%;
+    height: 100%;
+}
+html {
+    background: black;
+    overflow: hidden;
+}
+body {
+    font-family: 'Droid Sans', sans-serif;
+    color: white;
+    background: black;
+    position: relative;
+}
+.button {
+    cursor: pointer;
+}
+.button.disabled {
+    color: #777;
+    cursor: default;
+}
+#title, #display, #boardsNavigator, #rotationsNavigator,
+#hiscoresTableGroup, #hiscoresTableGroup>table,
+#loadScreen, #tilesCanvas, #arrowCanvas, #rotAnimCanvas, #rubberBandCanvas {
+    position: absolute;
+}
+#loadScreen {
+    background: black;
+}
+#loadScreen>div {
+    position: relative;
+    width: 6%;
+    padding-bottom: 6%;
+}
+#spinner {
+    position: absolute;
+    top: 25%;
+    bottom: 25%;
+    left: 43%;
+    right: 43%;
+    background: white;
+    -webkit-animation-name: spin;
+    -moz-animation-name: spin;
+    -ms-animation-name: spin;
+    -o-animation-name: spin;
+    animation-name: spin;
+    
+    -webkit-animation-duration: 0.4s;
+    -moz-animation-duration: 0.4s;
+    -ms-animation-duration: 0.4s;
+    -o-animation-duration: 0.4s;
+    animation-duration: 0.4s;
+    
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    -ms-animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+  
+    -webkit-animation-timing-function: linear;
+    -moz-animation-timing-function: linear;
+    -ms-animation-timing-function: linear;
+    -o-animation-timing-function: linear;
+    animation-timing-function: linear;
+}
+#title {
+    font-weight: bold;
+}
+#title em {
+    font-family: 'Allan', cursive;
+    font-weight: normal;
+}
+#rotationsNavigator {
+    font-weight: bold;
+}
+#hiscoresTableGroup {
+    overflow: hidden;
+}
+#hiscoresTableGroup>table td {
+    white-space: nowrap;
+    overflow: hidden;
+}
+#hiscoresTableGroup>table td:first-child {
+    text-align: left;
+    width: 85%;
+    text-overflow: ellipsis;
+}
+#hiscoresTableGroup>table td:last-child {
+    text-align: right;
+    width: 15%;
+}
+#hiscoresTableGroup>table tr.input {
+    border-bottom: 0.2ex solid white;
+}
+#hiscoresTableGroup>table td input {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: white;
+    cursor: text;
+    font-family: inherit;
+    font-size: inherit;
+    width: 100%;
+    -webkit-touch-callout: default;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+}
+#hiscoresTableGroup>table td input:focus {
+    outline-width: 0;
+}
+#hiscoresTableGroup>table td span {
+    font-weight: bold;
+}
+#boardsNavigator {
+    position: absolute;
+    overflow: hidden;
+}
+#boardsNavigator>* {
+    cursor: pointer;
+    position: absolute;
+}

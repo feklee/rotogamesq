@@ -14,7 +14,9 @@
     "jade": "0.27.x",
     "socket.io": "0.9.x",
     "redis": "0.8.x",
-    "hiredis": "0.1.x"
+    "hiredis": "0.1.x",
+    "amdefine": "0.0.x",
+    "requirejs": "2.1.x"
   },
   "engines": {
     "node": "0.8.x"

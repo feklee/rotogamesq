@@ -26,7 +26,7 @@ How to run
       
       * `NODE_ENV`: `development` (default) or `production`
 
- 2. Run: `node server.js`
+ 2. Run: `node app.js`
 
 
 User interface
@@ -77,6 +77,8 @@ Development notes
     *not* done using CSS3 transformations.
 
   * Version number schema: major.minor.bugfix
+  
+  * Format for comments: Mardown
 
   * Numeric assumptions made in various parts of the code (hard coded):
   
