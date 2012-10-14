@@ -1,7 +1,6 @@
 
 stylesheets/index.css
 ----------------
-stylesheets/reset.css
 stylesheets/index.css
 
 stylesheets/reset.css

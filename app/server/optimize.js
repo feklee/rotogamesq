@@ -32,7 +32,9 @@ var requirejs = require('requirejs'),
         ],
         removeCombined: true,
         wrap: true,
-// fixme        cssImportIgnore: []
+        useStrict: true,
+        fileExclusionRegExp: /^\.|^server$|\.md$|^require\.js$/,
+        cssImportIgnore: 'reset.css' // not important
     };
 
 module.exports = function (onBuildCreated) {
