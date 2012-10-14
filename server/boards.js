@@ -23,8 +23,6 @@ var boards = [],
     boardNames = require('fs').readdirSync('./boards'),
     emitHiscores;
 
-console.log(boardFactory); //fixme
-
 boardNames.forEach(function (boardName) {
     boards.push(boardFactory.loadSync(boardName));
 });

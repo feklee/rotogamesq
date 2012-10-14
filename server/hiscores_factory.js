@@ -56,7 +56,7 @@ redisScore = function (nRotations) {
 
     if (fraction < 0) {
         // as of 2012, this should not happen any time soon...
-        console.log('Error: overflow');
+        console.error('Score overflow');
         return false;
     } else {
         return nRotations + fraction;
@@ -87,7 +87,7 @@ insertHiscore = function (hiscore, boardName) {
         JSON.stringify(hiscore.rotations),
         function (err) {
             if (err) {
-                console.log(err);
+                console.error(err);
                 // no further consequences
             }
         }
@@ -111,7 +111,7 @@ emit = function (socket, boardName) {
         var hiscores = [], i, name, score, nRotations;
 
         if (err) {
-            console.log(err);
+            console.error(err);
             return;
         }
 

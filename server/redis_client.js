@@ -23,7 +23,7 @@ var port = process.env.REDIS_PORT || 6379,
     redisClient = require('redis').createClient(port, host);
 
 redisClient.on('error', function (err) {
-    console.log('Redis client error ' + err);
+    console.error(err);
 });
 
 module.exports = redisClient;
