@@ -14,9 +14,13 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-/*jslint browser: true, maxerr: 50, maxlen: 79 */
+/*jslint node: true, maxerr: 50, maxlen: 79 */
 
 /*global define */
+
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+}
 
 define(function () {
     'use strict';

@@ -20,8 +20,8 @@
 
 define([
     'boards', 'rubber_band_canvas', 'rot_anim_canvas', 'arrow_canvas',
-    'display_c_sys', 'display_canvas_factory', 'rotation_factory',
-    'rect_t_factory'
+    'display_c_sys', 'display_canvas_factory', '../common/rotation_factory',
+    '../common/rect_t_factory'
 ], function (boards, rubberBandCanvas, rotAnimCanvas, arrowCanvas,
              displayCSys, displayCanvasFactory, rotationFactory,
              rectTFactory) {

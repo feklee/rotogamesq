@@ -14,22 +14,96 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-/*jslint browser: true, maxerr: 50, maxlen: 79 */
+/*jslint node: true, maxerr: 50, maxlen: 79 */
 
 /*global define */
+
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+}
 
 define(function () {
     'use strict';
 
-    var prototype;
+    var prototype, rotate, rotateInverse, rotateWithRotator, selectedTiles,
+        rotator90CW, rotator90CCW, rotator180, rgb, createFromCtx,
+        createFromImgData, areEqual;
+
+    selectedTiles = function (x1T, y1T, x2T, y2T) {
+        var sTiles, sTilesColumn, xT, yT;
+
+        sTiles = [];
+        for (xT = x1T; xT <= x2T; xT += 1) {
+            sTilesColumn = [];
+            for (yT = y1T; yT <= y2T; yT += 1) {
+                sTilesColumn.push(this[xT][yT]);
+            }
+            sTiles.push(sTilesColumn);
+        }
+
+        return sTiles;
+    };
+
+    rotator90CW = function (sTiles, xT, yT, widthT, heightT) {
+        return sTiles[yT][widthT - xT];
+    };
+
+    rotator90CCW = function (sTiles, xT, yT, widthT, heightT) {
+        return sTiles[heightT - yT][xT];
+    };
+
+    rotator180 = function (sTiles, xT, yT, widthT, heightT) {
+        return sTiles[widthT - xT][heightT - yT];
+    };
+
+    rotateWithRotator = function (rectT, rotator) {
+        var xT, yT,
+            x1T = rectT[0][0], y1T = rectT[0][1],
+            x2T = rectT[1][0], y2T = rectT[1][1],
+            widthT = x2T - x1T,
+            heightT = y2T - y1T,
+            sTiles = selectedTiles.call(this, x1T, y1T, x2T, y2T);
+
+        for (xT = x1T; xT <= x2T; xT += 1) {
+            for (yT = y1T; yT <= y2T; yT += 1) {
+                this[xT][yT] = rotator(sTiles,
+                                       xT - x1T, yT - y1T,
+                                       widthT, heightT);
+            }
+        }
+    };
+
+    // Rotates the tiles in the specified rectangle in the specified direction:
+    // clockwise if `cw` is true
+    //
+    // The rectangle is defined by its top left and its bottom right corner, in
+    // that order.
+    rotate = function (rotation) {
+        var rectT = rotation.rectT, cw = rotation.cw;
+
+        if (rectT.isSquare) {
+            if (cw) {
+                rotateWithRotator.call(this, rectT, rotator90CW);
+            } else {
+                rotateWithRotator.call(this, rectT, rotator90CCW);
+            }
+        } else {
+            rotateWithRotator.call(this, rectT, rotator180);
+        }
+    };
+
+    // Applies the inverse of the specified rotation.
+    rotateInverse = function (rotation) {
+        rotate.call(this, rotation.inverse);
+    };
 
     // Returns the specified triple as RGB string.
-    function rgb(imgData, offs) {
+    rgb = function (imgData, offs) {
         return ('rgb(' +
                 imgData[offs] + ',' +
                 imgData[offs + 1] + ',' +
                 imgData[offs + 2] + ')');
-    }
+    };
 
     // Creates tiles (each identified by a color specifier), describing the
     // layout of a board. The data is read from the specified graphics
@@ -42,7 +116,7 @@ define(function () {
     // Tile colors are stored in objects and not directly as value of a tile.
     // This makes it possible to differentiate between tiles that have the same
     // color (when comparing them using e.g. `===`).
-    function createFromCtx(ctx, posT, sideLenT) {
+    createFromCtx = function (ctx, posT, sideLenT) {
         var tiles, tilesColumn, xT, yT, triple, offs,
             imgData = ctx.getImageData(posT[0], posT[1],
                                        sideLenT, sideLenT).data,
@@ -61,9 +135,31 @@ define(function () {
         }
 
         return tiles;
-    }
+    };
 
-    function areEqual(tiles1, tiles2, isEqual) {
+    // Creates tiles from image data, as created with png.js for Node.js:
+    //
+    // <https://github.com/devongovett/png.js/>
+    createFromImgData = function (imgData, imgWidth, posT, sideLenT) {
+        var tiles, tilesColumn, xT, yT, triple, offs,
+            tileId = 0;
+
+        tiles = Object.create(prototype);
+        for (xT = posT[0]; xT < posT[0] + sideLenT; xT += 1) {
+            tilesColumn = [];
+            for (yT = posT[1]; yT < posT[1] + sideLenT; yT += 1) {
+                offs = 4 * (yT * imgWidth + xT);
+                tilesColumn.push({
+                    color: rgb(imgData, offs)
+                });
+            }
+            tiles.push(tilesColumn);
+        }
+
+        return tiles;
+    };
+
+    areEqual = function (tiles1, tiles2, isEqual) {
         var xT, yT, tiles2Column, tiles1Column;
 
         if (tiles2.widthT !== tiles1.widthT ||
@@ -82,7 +178,7 @@ define(function () {
         }
 
         return true;
-    }
+    };
 
     prototype = Object.create([], {
         areEqualTo: {value: function (tiles) {
@@ -114,10 +210,15 @@ define(function () {
             });
 
             return newTiles;
-        }}
+        }},
+
+        rotate: {value: rotate},
+
+        rotateInverse: {value: rotateInverse}
     });
 
     return Object.create(null, {
-        createFromCtx: {value: createFromCtx}
+        createFromCtx: {value: createFromCtx},
+        createFromImgData: {value: createFromImgData}
     });
 });

@@ -20,6 +20,7 @@
 
 var redis = require('redis'),
     redisClient = require('./redis_client'),
+    boards = require('./boards'),
     fs = require('fs'),
     insertHiscoreScript = fs.readFileSync(__dirname + '/insert_hiscore.lua',
                                           'utf8'),
@@ -37,11 +38,19 @@ var redis = require('redis'),
 // server.
 //
 // Also verifies that the name is non-empty.
-hiscoreIsValid = function (hiscore) {
+hiscoreIsValid = function (hiscore, boardName) {
+    var board = boards.boardWithName(boardName),
+        tiles = board.startTiles.copy(),
+        rotations = hiscore.rotations;
+
+//fixme    tiles.applyRotations(hiscore.rotations); // fixme: should not crash if rotations are crap
+
     // fixme: implement check that rotations can be done
 
-    return (hiscore.nRotations === hiscore.rotations.length &&
-            hiscore.name !== '');
+    return (board && rotations && rotations.isArray() &&
+            hiscore.nRotations === hiscore.rotations.length &&
+            hiscore.name !== '' &&
+            board.isSolvedBy(rotations));
 };
 
 // Score for use with Redis sorted list. This score is assembled from the
@@ -81,7 +90,7 @@ insertHiscore = function (hiscore, boardName) {
     redisClient['eval'](
         insertHiscoreScript,
         1,
-        boardName.toString(), // in case board name is e.g. 1337
+        boardName,
         score,
         hiscore.name.toString(),
         JSON.stringify(hiscore.rotations),
@@ -97,7 +106,7 @@ insertHiscore = function (hiscore, boardName) {
 
 listen = function (socket, boardName) {
     socket.on('hiscore for ' + boardName, function (hiscore) {
-        if (hiscoreIsValid(hiscore)) {
+        if (hiscoreIsValid(hiscore, boardName)) {
             insertHiscore(hiscore, boardName);
             emit.call(this, socket, boardName);
             emit.call(this, socket.broadcast, boardName);
@@ -129,7 +138,7 @@ emit = function (socket, boardName) {
     };
 
     redisClient.zrange(
-        boardName.toString(), // in case board name is numeric
+        boardName,
         0,
         6,
         'WITHSCORES',

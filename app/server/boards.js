@@ -20,19 +20,29 @@
 
 var boards = [],
     boardFactory = require('./board_factory'),
+    boardsSprites = require('./boards_sprites'),
     config = require('../common/config'),
     emitHiscores;
 
 function createBoards() {
     config.boards.forEach(function (boardConfig) {
-        boards.push(boardFactory.create(boardConfig.name));
+        var sideLenT = boardConfig.sideLenT,
+            startTiles = boardsSprites.tiles(boardConfig.startPosT,
+                                             sideLenT),
+            endTiles = boardsSprites.tiles(boardConfig.endPosT,
+                                           sideLenT);
+
+        boards.push(boardFactory.create(boardConfig.name,
+                                        startTiles, endTiles));
     });
 }
 
 boards = Object.create([], {
     load: {value: function (onLoaded) {
-        createBoards();
-        onLoaded();
+        boardsSprites.load(function () {
+            createBoards();
+            onLoaded();
+        });
     }},
 
     emitHiscores: {value: function (socket) {

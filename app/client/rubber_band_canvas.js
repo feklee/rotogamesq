@@ -19,7 +19,8 @@
 /*global define */
 
 define([
-    'util', 'rect_t_factory', 'display_c_sys', 'display_canvas_factory'
+    'util', '../common/rect_t_factory', 'display_c_sys',
+    'display_canvas_factory'
 ], function (util, rectTFactory, displayCSys, displayCanvasFactory) {
     'use strict';
 

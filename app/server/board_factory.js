@@ -18,16 +18,67 @@
 
 'use strict';
 
-var hiscoresFactory = require('./hiscores_factory'), create;
+var hiscoresFactory = require('./hiscores_factory'),
+    rotationFactory = require('../common/rotation_factory'),
+    rectTFactory = require('../common/rect_t_factory'),
+    create,
+    isSolvedBy,
+    rotationFromData;
+
+rotationFromData = function (rotationData) {
+    var rectTData;
+
+    if (!rotationData || !rotationData.rectT ||
+            rotationData.hasOwnProperty('cw')) {
+        return false;
+    }
+
+    rectTData = rotationData.rectT;
+    // fixme: check if rectT is correct (positions are valid, perhaps with
+    // extra function)
+
+    return true; // fixme: implement rotation
+};
+
+// Returns true, iff the specified rotations are a valid array of rotations,
+// and if they transform the start tiles into the end tiles.
+//
+// Note that rotations data at best (i.e. if not broken) is an array of data
+// describing rotations, but is not an array of rotation objects.
+isSolvedBy = function (rotationsData) {
+    var i, rotation, rectT, cw, tiles = this.startTiles.copy();
+
+    if (rotationsData.isArray()) {
+        for (i = 0; i < rotationsData.length; i += 1) {
+            rotation = rotationFromData(rotationsData[i]);
+            if (rotation === false) {
+                return false; // invalid rotation
+            }
+            tiles.rotate(rotation);
+        }
+    } else {
+        return false;
+    }
+};
 
 // Loads a board synchronously.
-create = function (name) {
+create = function (name, startTiles, endTiles) {
     var hiscores = hiscoresFactory.create(name);
 
     return Object.create(null, {
         name: {get: function () {
             return name;
         }},
+
+        startTiles: {get: function () {
+            return startTiles;
+        }},
+
+        endTiles: {get: function () {
+            return endTiles;
+        }},
+
+        isSolvedBy: {value: isSolvedBy},
 
         listen: {value: hiscores.listen},
 
