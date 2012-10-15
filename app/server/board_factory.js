@@ -18,10 +18,10 @@
 
 'use strict';
 
-var hiscoresFactory = require('./hiscores_factory');
+var hiscoresFactory = require('./hiscores_factory'), create;
 
 // Loads a board synchronously.
-var loadSync = function (name) {
+create = function (name) {
     var hiscores = hiscoresFactory.create(name);
 
     return Object.create(null, {
@@ -36,5 +36,5 @@ var loadSync = function (name) {
 };
 
 module.exports = Object.create(null, {
-    loadSync: {value: loadSync}
+    create: {value: create}
 });

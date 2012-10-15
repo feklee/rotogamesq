@@ -20,14 +20,21 @@
 
 var boards = [],
     boardFactory = require('./board_factory'),
-    boardNames = require('fs').readdirSync('./boards'),
+    config = require('../common/config'),
     emitHiscores;
 
-boardNames.forEach(function (boardName) {
-    boards.push(boardFactory.loadSync(boardName));
-});
+function createBoards() {
+    config.boards.forEach(function (boardConfig) {
+        boards.push(boardFactory.create(boardConfig.name));
+    });
+}
 
-Object.defineProperties(boards, {
+boards = Object.create([], {
+    load: {value: function (onLoaded) {
+        createBoards();
+        onLoaded();
+    }},
+
     emitHiscores: {value: function (socket) {
         this.forEach(function (board) {
             board.emitHiscores(socket);

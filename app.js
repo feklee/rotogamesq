@@ -24,7 +24,8 @@ var express = require('express'),
     boards = require('./app/server/boards'),
     path = require('path'),
     io = require('socket.io').listen(server),
-    startServer;
+    startServer,
+    loadBoardsAndStartServer;
 
 startServer = function () {
     server.listen(app.get('port'), function () {
@@ -38,6 +39,10 @@ startServer = function () {
     });
 };
 
+loadBoardsAndStartServer = function () {
+    boards.load(startServer);
+};
+
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -48,7 +53,6 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express['static'](__dirname + '/public'));
-app.use('/boards', express['static'](__dirname + '/boards'));
 
 app.get('/', function (req, res) {
     res.render('index', {env: app.get('env')});
@@ -59,8 +63,8 @@ io.set('log level', 1);
 if (app.get('env') === 'development') {
     app.use('/app', express['static'](__dirname + '/app'));
     app.use(express.errorHandler());
-    startServer();
+    loadBoardsAndStartServer();
 } else {
     app.use('/app.build', express['static'](__dirname + '/app.build'));
-    require('./app/server/optimize')(startServer);
+    require('./app/server/optimize')(loadBoardsAndStartServer);
 }

@@ -15,18 +15,24 @@ ROTOGAMEsq has originally been written from scratch for the 2012
 is tagged (GIT): `js13kgames`
 
 
-How to run
-==========
+How to start development environment
+====================================
 
- 1. Optionally set environment variables:
+ 1. Set environment variables:
  
-      * `REDIS_HOST` (default: `127.0.0.1`)
+      * `REDIS_HOST` (optional, default: `127.0.0.1`)
       
-      * `REDIS_PORT` (default: `6379`)
-      
-      * `NODE_ENV`: `development` (default) or `production`
+      * `REDIS_PORT` (optional, default: `6379`)
 
- 2. Run: `node app.js`
+      * `NODE_ENV`: `development`
+
+ 2. Run directly:
+ 
+        node app.js
+
+    Or with [nodemon][5] (on Windows specifiying `-L` may be necessary):
+
+        nodemon --watch app.js --watch app app.js
 
 
 User interface
@@ -53,24 +59,40 @@ Hiscores
     manually investigate some of the more astonishing solutions.
 
 
-Development notes
+Coordinates
+===========
+
+Variable name postfixes of coordinates and dimensions denote units:
+  
+  * `T`: multiples of tiles (*tile coordinates*)
+      
+  * `P`: percentage
+
+  * *no postfix:* pixels
+
+
+Hard coded values
 =================
 
-  * Variable name postfixes of coordinates and dimensions denote units:
-  
-      - `T`: multiples of tiles (*tile coordinates*)
-      
-      - `P`: percentage
+In various places the following values are assumed:
 
-      - *no postfix:* pixels
+  * Maximum number of rotations: 99
+
+  * Maximum number of hiscores per board: 7
+      
+  * Maximum number of characters in name in hiscores: 8
+
+
+Development notes
+=================
 
   * `Object.freeze` is not used due to Android 2.3's native browser not
     supporting it.
   
   * Tiles are rendered to `canvas`. This may look cumbersome: Can't tiles be
-    rendered simply as `div` tags? They can. However, in major browser `div`
-    tags cannot be positioned with sub pixel accuracy (as of September 2012).
-    In these browsers, positions are rounded to pixels and the result is
+    rendered simply as squared `div` tags? They can. However, in major browser
+    `div` tags cannot be positioned with sub pixel accuracy (as of September
+    2012). In these browsers, positions are rounded to pixels and the result is
     irregular spacing, e.g.: one spacing 2px, another one 3px
     
     For similar reasons (possible subpixel positioning issues), the rotation is
@@ -80,13 +102,6 @@ Development notes
   
   * Format for comments: Mardown
 
-  * Numeric assumptions made in various parts of the code (hard coded):
-  
-      - Maximum number of rotations: 99
-
-      - Maximum number of hiscores per board: 7
-      
-      - Maximum number of characters in name in hiscores: 8
 
 Legal
 =====
@@ -109,3 +124,4 @@ specific language governing permissions and limitations under the License.
 [2]: http://sq.rotogame.com
 [3]: http://js13kgames.com
 [4]: mailto:felix.klee@inka.de
+[5]: https://github.com/remy/nodemon

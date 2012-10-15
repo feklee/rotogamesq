@@ -31,16 +31,21 @@ define(function () {
                 imgData[offs + 2] + ')');
     }
 
-    // Reads the color values of the image into a two dimensional array of hex
+    // Creates tiles (each identified by a color specifier), describing the
+    // layout of a board. The data is read from the specified graphics
+    // context at the given position (upper left corner) and with the given
+    // side length.
+    //
+    // Reads color values of the image into a two dimensional array of hex
     // values. Ignores the alpha channel.
     //
     // Tile colors are stored in objects and not directly as value of a tile.
     // This makes it possible to differentiate between tiles that have the same
     // color (when comparing them using e.g. `===`).
-    function tilesFromCtx(ctx, width, height) {
+    function createFromCtx(ctx, posT, sideLenT) {
         var tiles, tilesColumn, xT, yT, triple, offs,
-            sideLenT = Math.min(width, height), // forces square dimensions
-            imgData = ctx.getImageData(0, 0, sideLenT, sideLenT).data,
+            imgData = ctx.getImageData(posT[0], posT[1],
+                                       sideLenT, sideLenT).data,
             tileId = 0;
 
         tiles = Object.create(prototype);
@@ -113,21 +118,6 @@ define(function () {
     });
 
     return Object.create(null, {
-        // Loads tiles (each identified by a color specifier), describing the
-        // layout of a board. The data is read from the specified graphics
-        // file.
-        load: {value: function (imgUrl, onLoaded) {
-            var img = new Image();
-
-            img.onload = function () {
-                var tmpCanvas = document.createElement('canvas'),
-                    ctx = tmpCanvas.getContext('2d');
-                tmpCanvas.width = img.width;
-                tmpCanvas.height = img.height;
-                ctx.drawImage(img, 0, 0);
-                onLoaded(tilesFromCtx(ctx, img.width, img.height));
-            };
-            img.src = imgUrl;
-        }}
+        createFromCtx: {value: createFromCtx}
     });
 });

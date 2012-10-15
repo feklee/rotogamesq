@@ -18,35 +18,36 @@
 
 /*global define */
 
-define(['board_factory'], function (boardFactory) {
+define([
+    'boards_sprites', 'board_factory', '../common/config'
+], function (
+    boardsSprites,
+    boardFactory,
+    config
+) {
     'use strict';
 
     var selectedI = 0,
-        object,
-        boardNames = ['13', 'smiley', 'invaders', 'house', 'rgbcmy'];
+        object;
 
-    function allBoardsAreLoaded() {
-        var i;
+    function createBoards() {
+        config.boards.forEach(function (boardConfig) {
+            var sideLenT = boardConfig.sideLenT,
+                startTiles = boardsSprites.tiles(boardConfig.startPosT,
+                                                 sideLenT),
+                endTiles = boardsSprites.tiles(boardConfig.endPosT,
+                                               sideLenT);
 
-        for (i = 0; i < boardNames.length; i += 1) {
-            if (object[i] === undefined) {
-                return false;
-            }
-        }
-
-        return true;
+            object.push(boardFactory.create(boardConfig.name,
+                                            startTiles, endTiles));
+        });
     }
 
     object = Object.create([], {
         load: {value: function (onLoaded) {
-            this.length = boardNames.length;
-            boardNames.forEach(function (boardName, i) {
-                boardFactory.load(boardName, function (board) {
-                    object[i] = board;
-                    if (allBoardsAreLoaded()) {
-                        onLoaded();
-                    }
-                });
+            boardsSprites.load(function () {
+                createBoards();
+                onLoaded();
             });
         }},
 

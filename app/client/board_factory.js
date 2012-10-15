@@ -1,4 +1,4 @@
-// Creates boards (by loading from URLs).
+// Creates boards.
 
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
@@ -18,44 +18,10 @@
 
 /*global define */
 
-define([
-    'tiles_factory', 'hiscores_factory'
-], function (tilesFactory, hiscoresFactory) {
+define(['hiscores_factory'], function (hiscoresFactory) {
     'use strict';
 
     var prototype;
-
-    function allResourcesAreLoaded(board) {
-        return (board.tiles !== undefined &&
-                board.endTiles !== undefined);
-    }
-
-    function onAllResourcesLoaded(board, onLoaded) {
-        Object.defineProperty(board, 'sideLenT', {value: board.tiles.length});
-        onLoaded(board);
-    }
-
-    // Start tiles form the *mutable* start layout of blocks, i.e. the current
-    // state of the board.
-    function onStartTilesLoaded(board, tiles, onLoaded) {
-        Object.defineProperty(board, 'tiles', {value: tiles});
-        if (allResourcesAreLoaded(board)) {
-            onAllResourcesLoaded(board, onLoaded);
-        }
-    }
-
-    // Start tiles form the *immutable* start layout of blocks, the destination
-    // state of the board.
-    function onEndTilesLoaded(board, tiles, onLoaded) {
-        Object.defineProperty(board, 'endTiles', {value: tiles});
-        if (allResourcesAreLoaded(board)) {
-            onAllResourcesLoaded(board, onLoaded);
-        }
-    }
-
-    function imgUrl(name, type) {
-        return 'boards/' + name + '/' + type + '.png';
-    }
 
     function selectedTiles(tiles, x1T, y1T, x2T, y2T) {
         var sTiles, sTilesColumn, xT, yT;
@@ -170,10 +136,8 @@ define([
         }}
     });
 
-    // Loads the board, and calls `onLoaded(board)` when done.
-    function load(name, onLoaded) {
-        var board,
-            internal = {
+    function create(name, tiles, endTiles) {
+        var internal = {
                 rotations: [], // for undo, for counting, ...
                 futureRotations: [], // for redo
                 lastRotation: null,
@@ -181,9 +145,21 @@ define([
             },
             hiscores = hiscoresFactory.create(name);
 
-        board = Object.create(prototype, {
+        return Object.create(prototype, {
             rotate: {value: function (rotation) {
                 prototype.rotate.call(this, internal, rotation);
+            }},
+
+            tiles: {get: function () {
+                return tiles;
+            }},
+
+            endTiles: {get: function () {
+                return endTiles;
+            }},
+
+            sideLenT: {get: function () {
+                return tiles.length;
             }},
 
             nRotations: {get: function () {
@@ -226,16 +202,9 @@ define([
                 return hiscores;
             }}
         });
-
-        tilesFactory.load(imgUrl(name, 'start'), function (tiles) {
-            onStartTilesLoaded(board, tiles, onLoaded);
-        });
-        tilesFactory.load(imgUrl(name, 'end'), function (tiles) {
-            onEndTilesLoaded(board, tiles, onLoaded);
-        });
     }
 
     return Object.create(null, {
-        'load': {value: load}
+        create: {value: create}
     });
 });
