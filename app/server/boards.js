@@ -18,13 +18,19 @@
 
 'use strict';
 
-var boards = [],
-    boardFactory = require('./board_factory'),
+var boardFactory = require('./board_factory'),
     boardsSprites = require('./boards_sprites'),
     config = require('../common/config'),
-    emitHiscores;
+    createBoards,
+    emitHiscores,
+    boards;
 
-function createBoards() {
+createBoards = function () {
+    console.error('fixmeboards3b:');
+    console.error(boards); // fixme
+    console.error(boards.load); // fixme
+    console.error('fixmeboards3bend');
+
     config.boards.forEach(function (boardConfig) {
         var sideLenT = boardConfig.sideLenT,
             startTiles = boardsSprites.tiles(boardConfig.startPosT,
@@ -35,12 +41,17 @@ function createBoards() {
         boards.push(boardFactory.create(boardConfig.name,
                                         startTiles, endTiles));
     });
-}
+
+    console.error('fixmeboards9b:');
+    console.error(boards); // fixme
+    console.error(boards.load); // fixme
+    console.error('fixmeboards9bend');
+};
 
 boards = Object.create([], {
     load: {value: function (onLoaded) {
         boardsSprites.load(function () {
-            createBoards();
+            createBoards.call(boards);
             onLoaded();
         });
     }},

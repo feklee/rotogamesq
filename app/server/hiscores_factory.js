@@ -20,7 +20,6 @@
 
 var redis = require('redis'),
     redisClient = require('./redis_client'),
-    boards = require('./boards'),
     fs = require('fs'),
     insertHiscoreScript = fs.readFileSync(__dirname + '/insert_hiscore.lua',
                                           'utf8'),
@@ -38,19 +37,15 @@ var redis = require('redis'),
 // server.
 //
 // Also verifies that the name is non-empty.
-hiscoreIsValid = function (hiscore, boardName) {
-    var board = boards.boardWithName(boardName),
-        tiles = board.startTiles.copy(),
-        rotations = hiscore.rotations;
+hiscoreIsValid = function (hiscore, board) {
+    var rotations = hiscore.rotations,
+        nRotations = hiscore.nRotations,
+        name = hiscore.name,
+        nameIsValid = (name && typeof name === 'string' && name !== ''),
+        rotationsAreValid = (board && board.isSolvedBy(rotations) &&
+                             nRotations === rotations.length);
 
-//fixme    tiles.applyRotations(hiscore.rotations); // fixme: should not crash if rotations are crap
-
-    // fixme: implement check that rotations can be done
-
-    return (board && rotations && rotations.isArray() &&
-            hiscore.nRotations === hiscore.rotations.length &&
-            hiscore.name !== '' &&
-            board.isSolvedBy(rotations));
+    return nameIsValid && rotationsAreValid;
 };
 
 // Score for use with Redis sorted list. This score is assembled from the
@@ -79,7 +74,7 @@ nRotationsFromRedisScore = function (redisScore) {
 
 // Insert the hiscore into the hiscores for the specified board, if it is good
 // enough. Fails silently on error.
-insertHiscore = function (hiscore, boardName) {
+insertHiscore = function (hiscore, board) {
     var score = redisScore(hiscore.nRotations);
 
     if (score === false) {
@@ -87,35 +82,39 @@ insertHiscore = function (hiscore, boardName) {
     }
 
     /*jslint evil: true */
-    redisClient['eval'](
-        insertHiscoreScript,
-        1,
-        boardName,
-        score,
-        hiscore.name.toString(),
-        JSON.stringify(hiscore.rotations),
-        function (err) {
-            if (err) {
-                console.error(err);
-                // no further consequences
+    try {
+        redisClient['eval'](
+            insertHiscoreScript,
+            1,
+            board.name,
+            score,
+            hiscore.name.toString(),
+            JSON.stringify(hiscore.rotations),
+            function (err) {
+                if (err) {
+                    console.error(err);
+                    // no further consequences
+                }
             }
-        }
-    );
+        );
+    } catch (err) { // just in case some bad data is not handled correctly
+        return;
+    }
     /*jslint evil: false */
 };
 
-listen = function (socket, boardName) {
-    socket.on('hiscore for ' + boardName, function (hiscore) {
-        if (hiscoreIsValid(hiscore, boardName)) {
-            insertHiscore(hiscore, boardName);
-            emit.call(this, socket, boardName);
-            emit.call(this, socket.broadcast, boardName);
+listen = function (socket, board) {
+    socket.on('hiscore for ' + board.name, function (hiscore) {
+        if (hiscoreIsValid(hiscore, board)) {
+            insertHiscore(hiscore, board);
+            emit.call(this, socket, board);
+            emit.call(this, socket.broadcast, board);
         }
     });
 };
 
 // Emits hiscores for the specified board, via Socket.IO.
-emit = function (socket, boardName) {
+emit = function (socket, board) {
     var onZrangeDone = function (err, namesAndScores) {
         var hiscores = [], i, name, score, nRotations;
 
@@ -134,11 +133,11 @@ emit = function (socket, boardName) {
             });
         }
 
-        socket.emit('hiscores for ' + boardName, hiscores);
+        socket.emit('hiscores for ' + board.name, hiscores);
     };
 
     redisClient.zrange(
-        boardName,
+        board.name,
         0,
         6,
         'WITHSCORES',
@@ -146,14 +145,14 @@ emit = function (socket, boardName) {
     );
 };
 
-create = function (boardName) {
+create = function () {
     return Object.create(null, {
-        listen: {value: function (socket) {
-            listen.call(this, socket, boardName);
+        listen: {value: function (socket, board) {
+            listen.call(this, socket, board);
         }},
 
-        emit: {value: function (socket) {
-            emit.call(this, socket, boardName);
+        emit: {value: function (socket, board) {
+            emit.call(this, socket, board);
         }}
     });
 };

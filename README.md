@@ -32,7 +32,7 @@ How to start development environment
 
     Or with [nodemon][5] (on Windows specifiying `-L` may be necessary):
 
-        nodemon --watch app.js --watch app app.js
+        nodemon --watch . app.js
 
 
 User interface

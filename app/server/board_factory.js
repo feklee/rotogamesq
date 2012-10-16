@@ -23,47 +23,92 @@ var hiscoresFactory = require('./hiscores_factory'),
     rectTFactory = require('../common/rect_t_factory'),
     create,
     isSolvedBy,
+    isValidPosT,
+    rectTFromData,
     rotationFromData;
 
-rotationFromData = function (rotationData) {
-    var rectTData;
+isValidPosT = function (posT) {
+    return (Array.isArray(posT) &&
+            posT.length === 2 &&
+            typeof posT[0] === 'number' &&
+            typeof posT[1] === 'number');
+};
 
-    if (!rotationData || !rotationData.rectT ||
-            rotationData.hasOwnProperty('cw')) {
+// Returns false on invalid data.
+rectTFromData = function (rectTData) {
+    var tlPosT, brPosT;
+
+    // Don't check for `Array.isArray`: May/Will fail for valid rectT object
+    if (!rectTData.length || rectTData.length !== 2) {
         return false;
     }
 
-    rectTData = rotationData.rectT;
-    // fixme: check if rectT is correct (positions are valid, perhaps with
-    // extra function)
+    tlPosT = rectTData[0];
+    brPosT = rectTData[1];
 
-    return true; // fixme: implement rotation
+    if (!isValidPosT(tlPosT) || !isValidPosT(brPosT)) {
+        return false;
+    }
+
+    return rectTFactory.create(tlPosT, brPosT);
+};
+
+// Returns false on invalid data.
+rotationFromData = function (rotationData) {
+    var rectT;
+
+    if (!rotationData ||
+            !rotationData.rectT ||
+            typeof rotationData.cw !== 'boolean') {
+        return false;
+    }
+
+    rectT = rectTFromData(rotationData.rectT);
+    if (!rectT) {
+        return false;
+    }
+
+    console.log('fixme4b');
+    return rotationFactory(rectT, rotationData.cw);
 };
 
 // Returns true, iff the specified rotations are a valid array of rotations,
 // and if they transform the start tiles into the end tiles.
 //
 // Note that rotations data at best (i.e. if not broken) is an array of data
-// describing rotations, but is not an array of rotation objects.
+// describing rotations; it is not an array of rotation objects.
 isSolvedBy = function (rotationsData) {
     var i, rotation, rectT, cw, tiles = this.startTiles.copy();
 
-    if (rotationsData.isArray()) {
-        for (i = 0; i < rotationsData.length; i += 1) {
-            rotation = rotationFromData(rotationsData[i]);
-            if (rotation === false) {
-                return false; // invalid rotation
+    try {
+        if (Array.isArray(rotationsData)) {
+            console.log('fixme0');
+            for (i = 0; i < rotationsData.length; i += 1) {
+                console.log('fixme4');
+                rotation = rotationFromData(rotationsData[i]);
+                console.log('fixme5');
+                if (rotation === false) {
+                    console.log('fixme1');
+                    return false; // invalid rotation
+                }
+                console.log('fixme6');
+                tiles.rotate(rotation);
             }
-            tiles.rotate(rotation);
+
+            console.log('fixme2');
+            return tiles.areEqualTo(this.endTiles);
+        } else {
+            console.log('fixme3');
+            return false;
         }
-    } else {
+    } catch (err) { // just in case some bad data is not handled correctly
         return false;
     }
 };
 
 // Loads a board synchronously.
 create = function (name, startTiles, endTiles) {
-    var hiscores = hiscoresFactory.create(name);
+    var hiscores = hiscoresFactory.create();
 
     return Object.create(null, {
         name: {get: function () {
@@ -80,9 +125,13 @@ create = function (name, startTiles, endTiles) {
 
         isSolvedBy: {value: isSolvedBy},
 
-        listen: {value: hiscores.listen},
+        listen: {value: function (socket) {
+            hiscores.listen(socket, this);
+        }},
 
-        emitHiscores: {value: hiscores.emit}
+        emitHiscores: {value: function (socket) {
+            hiscores.emit(socket, this);
+        }}
     });
 };
 
