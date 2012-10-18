@@ -21,115 +21,100 @@
 define(['socket_io'], function (socketIo) {
     'use strict';
 
-    var proposalIsBetterOrEqual, insertProposal, listenToUpdates, create,
+    var isBetterOrEqual, saveProposal, listenToUpdates, create,
         maxLength = 7,
         lastNameSet = ''; // last name edited (preset for new proposals)
 
-    proposalIsBetterOrEqual = function (proposal, hiscore) {
-        return proposal !== null && proposal.nRotations <= hiscore.nRotations;
+    isBetterOrEqual = function (hiscore1, hiscore2) {
+        return (hiscore1 !== undefined &&
+                (hiscore2 === undefined ||
+                 hiscore1.nRotations <= hiscore2.nRotations));
     };
 
-    // Inserts proposal into hiscore:
-    //
-    //   * if it has sufficiently small number of rotations,
-    //
-    //   * and if name is not empty,
-    //
-    //   * and if there are no duplicates (same name) with a lower number of
-    //     rotations.
-    insertProposal = function (internal) {
-        // fixme: perhaps remove, and/or show spinner until update
-
-        var i, hiscore, proposalHasBeenInserted = false,
-            rawHiscores = internal.rawHiscores,
-            proposal = internal.proposal;
-
-        socketIo.emit('hiscore for ' + internal.boardName, proposal);
-
-        return; // fixme remove, and also below
-
-        if (rawHiscores.length === 0) {
-            // hiscores empty => just insert
-            rawHiscores.push(proposal);
-            return;
-        }
-
-        for (i = 0; i < rawHiscores.length; i += 1) {
-            hiscore = rawHiscores[i];
-
-            if (proposal.name === hiscore.name &&
-                proposal.nRotations >= hiscore.nRotations) {
-                return; // duplicate with lower/same number of rotations
-            }
-
-            if (proposal.nRotations <= hiscore.nRotations &&
-                !proposalHasBeenInserted) {
-                rawHiscores.splice(i, 0, proposal);
-                proposalHasBeenInserted = true;
-            } else if (proposal.name === hiscore.name) {
-                rawHiscores.splice(i, 1); // duplicate that is not better
-            }
-        }
-
-        if (!proposalHasBeenInserted) {
-            rawHiscores.push(proposal);
-            proposalHasBeenInserted = true;
+    saveProposal = function (internal) {
+        if (internal.proposal !== undefined) {
+            internal.unsavedHiscores.push(internal.proposal);
+            // fixme: sort proposal, simply by score (no date available anyhow)
+            socketIo.emit('hiscore for ' + internal.boardName,
+                          internal.proposal);
+            internal.proposal = undefined;
         }
     };
 
     listenToUpdates = function (internal) {
         var eventName = 'hiscores for ' + internal.boardName;
 
-        socketIo.on(eventName, function (newRawHiscores) {
-            internal.rawHiscores = newRawHiscores;
+        socketIo.on(eventName, function (newSavedHiscores) {
+            internal.savedHiscores = newSavedHiscores;
             internal.version += 1;
         });
     };
 
-    // `rawHiscores`: raw internal hiscores data
     create = function (boardName) {
         var internal = {
-            proposal: null, // new, proposed hiscore (editable)
+            proposal: undefined, // new, proposed hiscore (editable)
             version: 0, // incremented on every update
-            rawHiscores: [],
+            savedHiscores: [],
+            unsavedHiscores: [], // new hiscores, not yet on the server
             boardName: boardName
         };
 
         listenToUpdates(internal);
 
         return Object.create(null, {
-            // Calls callback with two parameters: hiscore, index, and whether
-            // the hiscore is editable (only appears once)
+            // Calls callback with three parameters: hiscore, index, and
+            // status. Status is one of:
+            //
+            //   * 'saved'
+            //
+            //   * 'unsaved'
+            //
+            //   * 'editable' (appears no more than once)
+            //
+            // Priorities if equal number of rotations from new to old:
+            //
+            // editable -> unsaved -> editable
             forEach: {value: function (callback) {
-                var i, iOffs = 0, hiscore,
-                    maxI = Math.min(internal.rawHiscores.length, maxLength),
+                var i, savedI = 0, unsavedI = 0,
+                    savedHiscore, unsavedHiscore,
+                    savedHiscores = internal.savedHiscores,
+                    unsavedHiscores = internal.unsavedHiscores,
+                    maxSavedI = savedHiscores.length,
+                    maxUnsavedI = unsavedHiscores.length,
                     proposal = internal.proposal,
-                    rawHiscores = internal.rawHiscores,
                     proposalHasBeenShown = false;
 
-                for (i = 0; i < maxI; i += 1) {
-                    hiscore = rawHiscores[i + iOffs];
-                    if (proposalIsBetterOrEqual(proposal, hiscore) &&
-                            !proposalHasBeenShown) {
-                        callback(proposal, i, true);
-                        iOffs = -1; // repeat current hiscore in next run
-                        maxI = Math.min(maxI + 1, maxLength);
+                // fixme: avoid display of duplicates
+
+                for (i = 0; i < maxLength; i += 1) {
+                    savedHiscore = savedHiscores[savedI];
+                    unsavedHiscore = unsavedHiscores[unsavedI];
+                    if (!proposalHasBeenShown &&
+                            isBetterOrEqual(proposal, unsavedHiscore) &&
+                            isBetterOrEqual(proposal, savedHiscore)) {
+                        callback(proposal, i, 'editable');
                         proposalHasBeenShown = true;
-                    } else {
-                        callback(hiscore, i, false);
+                    } else if (isBetterOrEqual(unsavedHiscore, savedHiscore)) {
+                        callback(unsavedHiscore, i, 'unsaved');
+                        unsavedI += 1;
+                    } else if (savedHiscore !== undefined) {
+                        callback(savedHiscore, i, 'saved');
+                        savedI += 1;
                     }
                 }
 
-                if (i < maxLength && proposal !== null &&
-                        !proposalHasBeenShown) {
-                    // there is still space, and proposal hasn't been shown
-                    callback(proposal, i, true);
-                    return;
-                }
+                // fixme: More saved hiscores cause unsaved to disappear.
+                // Investigate!
             }},
 
             length: {get: function () {
-                return internal.rawHiscores.length;
+                return (internal.savedHiscores.length +
+                        internal.unsavedHiscores.length +
+                        (internal.proposal !== undefined ? 1 : 0));
+            }},
+
+            hasProposal: {get: function () {
+                return internal.proposal !== undefined;
             }},
 
             maxNameLen: {get: function () {
@@ -137,7 +122,7 @@ define(['socket_io'], function (socketIo) {
             }},
 
             nameInProposal: {set: function (name) {
-                if (internal.proposal !== null) {
+                if (internal.proposal !== undefined) {
                     name = name.substring(0, this.maxNameLen);
                     internal.proposal.name = name;
                     lastNameSet = name;
@@ -145,10 +130,7 @@ define(['socket_io'], function (socketIo) {
             }},
 
             saveProposal: {value: function () {
-                if (internal.proposal !== null) {
-                    insertProposal(internal);
-                    internal.proposal = null;
-                }
+                saveProposal.call(this, internal);
             }},
 
             // proposes a new hiscore (name is to be entered by the player)
@@ -161,7 +143,7 @@ define(['socket_io'], function (socketIo) {
             }},
 
             rmProposal: {value: function () {
-                internal.proposal = null;
+                internal.proposal = undefined;
             }},
 
             version: {get: function () {

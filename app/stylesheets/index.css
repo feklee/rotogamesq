@@ -201,6 +201,10 @@ body {
     font-weight: bold;
 }
 
+#hiscoresTableGroup>table tr.unsaved td:last-child {
+    background: red; /* fixme */
+}
+
 #boardsNavigator {
     position: absolute;
     overflow: hidden;

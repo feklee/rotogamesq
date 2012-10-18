@@ -21,7 +21,8 @@
 define(['util', 'boards'], function (util, boards) {
     'use strict';
 
-    var groupEl, tableEl, contTableEl, newTdEl, newTrEl, onNameInputFieldBlur,
+    var groupEl, tableEl, contTableEl, newTdEl,
+        newTrEl, newUnsavedTrEl, onNameInputFieldBlur,
         onSubmit, updateSubmitButtonClasses, updateAbilityToSubmit,
         onKeyUpInNameInputField, newNameInputTdEl, newSubmitButtonTdEl,
         newInputTrEl, renderRows, render,
@@ -58,6 +59,13 @@ define(['util', 'boards'], function (util, boards) {
         el.appendChild(newTdEl(hiscore.name));
         el.appendChild(newTdEl(hiscore.nRotations));
 
+        return el;
+    };
+
+    // for unsaved hiscores entries
+    newUnsavedTrEl = function (hiscore) {
+        var el = newTrEl(hiscore);
+        el.className = 'unsaved';
         return el;
     };
 
@@ -168,8 +176,8 @@ define(['util', 'boards'], function (util, boards) {
         util.clear(el);
         util.clear(elc);
 
-        board.hiscores.forEach(function (hiscore, i, isEditable) {
-            if (isEditable) {
+        board.hiscores.forEach(function (hiscore, i, status) {
+            if (status === 'editable') {
                 if (iToContinue >= 4) {
                     iToContinue -= 1; // editable row needs more vertical space
                                       // => continue earlier
@@ -180,11 +188,17 @@ define(['util', 'boards'], function (util, boards) {
                 currentEl = elc;
             }
 
-            if (isEditable) {
+            switch (status) {
+            case 'editable':
                 currentEl.appendChild(newInputTrEl(hiscore));
                 nameInputFieldEl.focus();
-            } else {
+                break;
+            case 'unsaved':
+                currentEl.appendChild(newUnsavedTrEl(hiscore));
+                break;
+            default: // 'saved'
                 currentEl.appendChild(newTrEl(hiscore));
+                break;
             }
         });
     };
