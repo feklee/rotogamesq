@@ -1,7 +1,5 @@
 // Title.
 
-// fixme: perhaps remove
-
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -23,14 +21,15 @@
 define(function () {
     'use strict';
 
-    var needsToBeRendered = true,
+    var style, render,
+        needsToBeRendered = true,
         layout = {width: 1, height: 1, portrait: false};
 
-    function style() {
+    style = function () {
         return document.getElementById('title').style;
-    }
+    };
 
-    function render() {
+    render = function () {
         var s = style();
 
         s.lineHeight = s.height = layout.height + 'px';
@@ -46,7 +45,7 @@ define(function () {
             s.textAlign = 'center';
             s.width = layout.width + 'px';
         }
-    }
+    };
 
     return Object.create(null, {
         animStep: {value: function () {

@@ -22,29 +22,30 @@
 define(['boards', 'util'], function (boards, util) {
     'use strict';
 
-    var nRotations, board,
+    var style, buttonEl, onUndoClick, onRedoClick, onKeyUp, setupButton,
+        renderButton, renderUndoButton, renderRedoButton, render,
+        nRotations, board,
         needsToBeRendered = true,
         layout = {width: 1, height: 1, left: 0, top: 0};
 
-
-    function style() {
+    style = function () {
         return document.getElementById('rotationsNavigator').style;
-    }
+    };
 
-    function buttonEl(type) {
+    buttonEl = function (type) {
         return document.querySelector('#rotationsNavigator>.' + type +
                                       '.button');
-    }
+    };
 
-    function onUndoClick() {
+    onUndoClick = function () {
         board.undo();
-    }
+    };
 
-    function onRedoClick() {
+    onRedoClick = function () {
         board.redo();
-    }
+    };
 
-    function onKeyUp(e) {
+    onKeyUp = function (e) {
         if (e.ctrlKey) {
             // Ctrl pressed (e.g. on Windows)
             switch (e.keyCode) {
@@ -63,13 +64,13 @@ define(['boards', 'util'], function (boards, util) {
                 board.undo();
             }
         }
-    }
+    };
 
-    function setupButton(type, onClick) {
+    setupButton = function (type, onClick) {
         buttonEl(type).addEventListener('click', onClick);
-    }
+    };
 
-    function renderButton(type, isDisabled) {
+    renderButton = function (type, isDisabled) {
         // `classList` is not used as it isn't supported by Android 2.3 browser
 
         var className = type + ' button';
@@ -79,17 +80,17 @@ define(['boards', 'util'], function (boards, util) {
         }
 
         buttonEl(type).className = className;
-    }
+    };
 
-    function renderUndoButton() {
+    renderUndoButton = function () {
         renderButton('undo', !board.undoIsPossible);
-    }
+    };
 
-    function renderRedoButton() {
+    renderRedoButton = function () {
         renderButton('redo', !board.redoIsPossible);
-    }
+    };
 
-    function render() {
+    render = function () {
         var s = style();
 
         s.width = layout.width + 'px';
@@ -113,7 +114,7 @@ define(['boards', 'util'], function (boards, util) {
         document.getElementById('nRotations').textContent = nRotations;
         renderUndoButton();
         renderRedoButton();
-    }
+    };
 
     util.whenDocumentIsReady(function () {
         setupButton('undo', onUndoClick);

@@ -28,9 +28,10 @@ define([
     'use strict';
 
     var selectedI = 0,
-        object;
+        object,
+        createBoards;
 
-    function createBoards() {
+    createBoards = function () {
         config.boards.forEach(function (boardConfig) {
             var sideLenT = boardConfig.sideLenT,
                 startTiles = boardsSprites.tiles(boardConfig.startPosT,
@@ -41,7 +42,7 @@ define([
             object.push(boardFactory.create(boardConfig.name,
                                             startTiles, endTiles));
         });
-    }
+    };
 
     object = Object.create([], {
         load: {value: function (onLoaded) {

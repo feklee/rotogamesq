@@ -25,10 +25,10 @@ if (typeof define !== 'function') {
 define(function () {
     'use strict';
 
-    var prototype;
+    var prototype, create;
 
     // Returns false if `rectT` is false or `cw` is not boolean.
-    function create(rectT, cw) {
+    create = function (rectT, cw) {
         if (!rectT || typeof cw !== 'boolean') {
             return false;
         }
@@ -41,7 +41,7 @@ define(function () {
             cw: {get: function () { return cw; },
                  enumerable: true}
         });
-    }
+    };
 
     prototype = Object.create(null, {
         isEqualTo: {value: function (rotation) {

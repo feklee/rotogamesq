@@ -21,30 +21,31 @@
 define(function () {
     'use strict';
 
-    var socket;
+    var host, on, connect,
+        socket;
 
-    function host() {
+    host = function () {
         var src = document.getElementById('socketIoScript').src,
             matches = src.match(/https?:\/\/[a-zA-Z0-9-.]*/);
 
         return matches.length >= 1 ? matches[0] : '';
-    }
+    };
 
-    function on() {
+    on = function () {
         if (socket === undefined) {
             socket = io.connect(host());
         }
 
         socket.on.apply(socket, arguments);
-    }
+    };
 
-    function connect(onConnect) {
+    connect = function (onConnect) {
         if (socket && socket.socket.connected) {
             onConnect();
         } else {
             on('connect', onConnect);
         }
-    }
+    };
 
     return Object.create(null, {
         // Establishes connection if not yet done.

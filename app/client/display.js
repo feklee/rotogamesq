@@ -25,21 +25,22 @@ define([
              displayCSys) {
     'use strict';
 
-    var isVisible = false,
+    var style, render,
+        isVisible = false,
         needsToBeRendered = true,
         layout = {width: 1, height: 1, left: 0, top: 0};
 
-    function style() {
+    style = function () {
         return document.getElementById('display').style;
-    }
+    };
 
-    function render() {
+    render = function () {
         var s = style();
 
         s.width = layout.sideLen + 'px';
         s.height = layout.sideLen + 'px';
         s.top = layout.top + 'px';
-    }
+    };
 
     return Object.create(null, {
         animStep: {value: function () {

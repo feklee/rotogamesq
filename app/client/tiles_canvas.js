@@ -27,7 +27,12 @@ define([
              rectTFactory) {
     'use strict';
 
-    var sideLen, tiles, board,
+    var updateRotation, tilesNeedUpdate, animIsRunningNeedsUpdate,
+        boardNeedsUpdate, onRubberBandDragStart, onRubberBandDrag,
+        updateRubberBandCanvasVisibility, onRubberBandDragEnd,
+        tileIsSelected, renderTile, render, startRotationAnim,
+        updateTiles, triggerInitRotAnim,
+        sideLen, tiles, board,
         needsToBeRendered = true,
         selectedRectT, // when dragged: currently selected rectangle
         draggedToTheRight, // when dragged: current drag direction
@@ -35,33 +40,33 @@ define([
         rotation,
         initRotAnimHasToBeTriggered = true;
 
-    function updateRotation() {
+    updateRotation = function () {
         if (selectedRectT === undefined) {
             rotation = undefined;
         } else {
             rotation = rotationFactory.create(selectedRectT,
                                               draggedToTheRight);
         }
-    }
+    };
 
-    function tilesNeedUpdate() {
+    tilesNeedUpdate = function () {
         return tiles === undefined || !board.tiles.areEqualTo(tiles);
-    }
+    };
 
-    function animIsRunningNeedsUpdate() {
+    animIsRunningNeedsUpdate = function () {
         return (animIsRunning === undefined ||
                 animIsRunning !== rotAnimCanvas.animIsRunning);
-    }
+    };
 
-    function boardNeedsUpdate() {
+    boardNeedsUpdate = function () {
         return board === undefined || board !== boards.selected;
-    }
+    };
 
-    function onRubberBandDragStart() {
+    onRubberBandDragStart = function () {
         arrowCanvas.show();
-    }
+    };
 
-    function onRubberBandDrag(newSelectedRectT, newDraggedToTheRight) {
+    onRubberBandDrag = function (newSelectedRectT, newDraggedToTheRight) {
         if (selectedRectT === undefined ||
                 !newSelectedRectT.isEqualTo(selectedRectT) ||
                 newDraggedToTheRight !== draggedToTheRight) {
@@ -71,18 +76,18 @@ define([
             updateRotation();
             arrowCanvas.rotation = rotation;
         }
-    }
+    };
 
-    function updateRubberBandCanvasVisibility() {
+    updateRubberBandCanvasVisibility = function () {
         var board = boards.selected;
         if (board.isFinished || !board.rotationIsPossible) {
             rubberBandCanvas.hide();
         } else {
             rubberBandCanvas.show(); // necessary e.g. after undoing finished
         }
-    }
+    };
 
-    function onRubberBandDragEnd() {
+    onRubberBandDragEnd = function () {
         if (rotation !== undefined && rotation.makesSense &&
                 !boards.selected.isFinished) {
             boards.selected.rotate(rotation);
@@ -96,18 +101,18 @@ define([
         updateRotation();
 
         needsToBeRendered = true;
-    }
+    };
 
-    function tileIsSelected(posT) {
+    tileIsSelected = function (posT) {
         return (rubberBandCanvas.isBeingDragged &&
                 selectedRectT !== undefined &&
                 posT[0] >= selectedRectT[0][0] &&
                 posT[0] <= selectedRectT[1][0] &&
                 posT[1] >= selectedRectT[0][1] &&
                 posT[1] <= selectedRectT[1][1]);
-    }
+    };
 
-    function renderTile(ctx, posT) {
+    renderTile = function (ctx, posT) {
         var pos = displayCSys.posFromPosT(posT),
             color = tiles[posT[0]][posT[1]].color,
             showSelection = rubberBandCanvas.isBeingDragged,
@@ -125,9 +130,9 @@ define([
         ctx.fillStyle = color;
         ctx.fillRect(pos[0], pos[1],
                      tileSideLen + lenAdd, tileSideLen + lenAdd);
-    }
+    };
 
-    function render() {
+    render = function () {
         var xT, yT,
             sideLenT = board.sideLenT,
             el = document.getElementById('tilesCanvas'),
@@ -150,16 +155,16 @@ define([
         if (renderAsFinished) {
             displayCSys.enableSpacing();
         }
-    }
+    };
 
-    function startRotationAnim() {
+    startRotationAnim = function () {
         var lastRotation = board.lastRotation;
         if (lastRotation !== null) {
             rotAnimCanvas.startAnim(lastRotation);
         }
-    }
+    };
 
-    function updateTiles(boardHasChanged) {
+    updateTiles = function (boardHasChanged) {
         tiles = board.tiles.copy();
 
         if (!boardHasChanged) {
@@ -169,17 +174,17 @@ define([
         updateRubberBandCanvasVisibility();
 
         arrowCanvas.hide(); // necessary e.g. after undoing finished
-    }
+    };
 
     // Triggers a rotation animation that is shown when the canvas is first
     // displayed. This rotation serves as a hint concerning how the game works.
-    function triggerInitRotAnim() {
+    triggerInitRotAnim = function () {
         var initRotation = rotationFactory.create(
             rectTFactory.create([0, 0], [tiles.widthT - 1, tiles.heightT - 1]),
             true
         );
         rotAnimCanvas.startAnim(initRotation);
-    }
+    };
 
     rubberBandCanvas.onDragStart = onRubberBandDragStart;
     rubberBandCanvas.onDrag = onRubberBandDrag;

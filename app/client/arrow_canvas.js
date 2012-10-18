@@ -26,9 +26,13 @@ define([
     var sideLen,
         needsToBeRendered = false,
         rotation,
-        object;
+        object,
+        renderArc,
+        renderTriangle,
+        renderArrow,
+        render;
 
-    function renderArc(ctx, x, y, u, angleDeg) {
+    renderArc = function (ctx, x, y, u, angleDeg) {
         var startAngle = 0,
             endAngle = (angleDeg === 90 || angleDeg === -90 ?
                         Math.PI / 2 : Math.PI);
@@ -44,9 +48,9 @@ define([
         ctx.beginPath();
         ctx.arc(x + 10 * u, y + 10 * u, 1.5 * u, startAngle, endAngle);
         ctx.stroke();
-    }
+    };
 
-    function renderTriangle(ctx, x, y, u, angleDeg) {
+    renderTriangle = function (ctx, x, y, u, angleDeg) {
         var s;
 
         ctx.beginPath();
@@ -64,9 +68,9 @@ define([
         }
         ctx.fill();
         ctx.closePath();
-    }
+    };
 
-    function renderArrow(ctx, posT, angleDeg) {
+    renderArrow = function (ctx, posT, angleDeg) {
         var pos = displayCSys.posFromPosT(posT),
             x = pos[0],
             y = pos[1],
@@ -76,9 +80,9 @@ define([
         ctx.lineWidth = u;
         renderArc(ctx, x, y, u, angleDeg);
         renderTriangle(ctx, x, y, u, angleDeg);
-    }
+    };
 
-    function render(el) {
+    render = function (el) {
         var ctx = el.getContext('2d');
 
         el.height = el.width = sideLen; // also clears canvas
@@ -86,7 +90,7 @@ define([
         if (rotation !== undefined && rotation.makesSense) {
             renderArrow(ctx, rotation.rectT[1], rotation.angleDeg);
         }
-    }
+    };
 
     object = Object.create(displayCanvasFactory.create(), {
         animStep: {value: function () {

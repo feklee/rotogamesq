@@ -21,12 +21,13 @@
 define(['boards'], function (boards) {
     'use strict';
 
-    var sideLen, board,
+    var updateDimensions,
+        sideLen, board,
         tileSideLen = 0,
         spacing = 0,
         spacingIsDisabled = false;
 
-    function updateDimensions() {
+    updateDimensions = function () {
         var sideLenT;
 
         if (board !== undefined) {
@@ -34,7 +35,7 @@ define(['boards'], function (boards) {
             spacing = spacingIsDisabled ? 0 : 0.05 * sideLen / sideLenT;
             tileSideLen = (sideLen - spacing * (sideLenT + 1)) / sideLenT;
         }
-    }
+    };
 
     return Object.create(null, {
         sideLen: {set: function (x) {

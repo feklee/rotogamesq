@@ -21,12 +21,13 @@
 define(['socket_io'], function (socketIo) {
     'use strict';
 
-    var maxLength = 7,
+    var proposalIsBetterOrEqual, insertProposal, listenToUpdates, create,
+        maxLength = 7,
         lastNameSet = ''; // last name edited (preset for new proposals)
 
-    function proposalIsBetterOrEqual(proposal, hiscore) {
+    proposalIsBetterOrEqual = function (proposal, hiscore) {
         return proposal !== null && proposal.nRotations <= hiscore.nRotations;
-    }
+    };
 
     // Inserts proposal into hiscore:
     //
@@ -36,7 +37,7 @@ define(['socket_io'], function (socketIo) {
     //
     //   * and if there are no duplicates (same name) with a lower number of
     //     rotations.
-    function insertProposal(internal) {
+    insertProposal = function (internal) {
         // fixme: perhaps remove, and/or show spinner until update
 
         var i, hiscore, proposalHasBeenInserted = false,
@@ -74,19 +75,19 @@ define(['socket_io'], function (socketIo) {
             rawHiscores.push(proposal);
             proposalHasBeenInserted = true;
         }
-    }
+    };
 
-    function listenToUpdates(internal) {
+    listenToUpdates = function (internal) {
         var eventName = 'hiscores for ' + internal.boardName;
 
         socketIo.on(eventName, function (newRawHiscores) {
             internal.rawHiscores = newRawHiscores;
             internal.version += 1;
         });
-    }
+    };
 
     // `rawHiscores`: raw internal hiscores data
-    function create(boardName) {
+    create = function (boardName) {
         var internal = {
             proposal: null, // new, proposed hiscore (editable)
             version: 0, // incremented on every update
@@ -167,7 +168,7 @@ define(['socket_io'], function (socketIo) {
                 return internal.version;
             }}
         });
-    }
+    };
 
     return Object.create(null, {
         create: {value: create}

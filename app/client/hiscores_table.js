@@ -21,48 +21,52 @@
 define(['util', 'boards'], function (util, boards) {
     'use strict';
 
-    var board, nameInputFieldEl, submitButtonEl,
+    var groupEl, tableEl, contTableEl, newTdEl, newTrEl, onNameInputFieldBlur,
+        onSubmit, updateSubmitButtonClasses, updateAbilityToSubmit,
+        onKeyUpInNameInputField, newNameInputTdEl, newSubmitButtonTdEl,
+        newInputTrEl, renderRows, render,
+        board, nameInputFieldEl, submitButtonEl,
         boardIsFinished,
         submitIsEnabled = false,
         needsToBeRendered = true,
         layout = {width: 1, height: 1, left: 0, top: 0, portrait: false},
         hiscoresVersion = 0;
 
-    function groupEl() {
+    groupEl = function () {
         return document.getElementById('hiscoresTableGroup');
-    }
+    };
 
-    function tableEl() {
+    tableEl = function () {
         return document.querySelector('#hiscoresTableGroup>table');
-    }
+    };
 
-    function contTableEl() {
+    contTableEl = function () {
         return document.querySelector('#hiscoresTableGroup>table.cont');
-    }
+    };
 
-    function newTdEl(text) {
+    newTdEl = function (text) {
         var el = document.createElement('td');
 
         el.appendChild(document.createTextNode(text));
 
         return el;
-    }
+    };
 
-    function newTrEl(hiscore) {
+    newTrEl = function (hiscore) {
         var el = document.createElement('tr');
 
         el.appendChild(newTdEl(hiscore.name));
         el.appendChild(newTdEl(hiscore.nRotations));
 
         return el;
-    }
+    };
 
     // updates name in new hiscore entry, but does *not* save it yet
-    function onNameInputFieldBlur() {
+    onNameInputFieldBlur = function () {
         board.hiscores.nameInProposal = nameInputFieldEl.value;
-    }
+    };
 
-    function onSubmit() {
+    onSubmit = function () {
         if (submitIsEnabled) {
             board.hiscores.nameInProposal = nameInputFieldEl.value;
 
@@ -72,32 +76,32 @@ define(['util', 'boards'], function (util, boards) {
 
             needsToBeRendered = true;
         }
-    }
+    };
 
-    function updateSubmitButtonClasses() {
+    updateSubmitButtonClasses = function () {
         var className;
 
         if (submitButtonEl !== undefined) {
             className = 'submit button' + (submitIsEnabled ? '' : ' disabled');
             submitButtonEl.className = className;
         }
-    }
+    };
 
     // Updates: no name => submit does not work, and submit button is disabled
-    function updateAbilityToSubmit() {
+    updateAbilityToSubmit = function () {
         submitIsEnabled = nameInputFieldEl.value !== '';
         updateSubmitButtonClasses();
-    }
+    };
 
-    function onKeyUpInNameInputField(e) {
+    onKeyUpInNameInputField = function (e) {
         updateAbilityToSubmit();
         if (e.keyCode === 13) { // enter key
             onSubmit();
         }
-    }
+    };
 
     // Caches the input field element.
-    function newNameInputTdEl(name) {
+    newNameInputTdEl = function (name) {
         var el = document.createElement('td');
 
         if (nameInputFieldEl === undefined) {
@@ -120,10 +124,10 @@ define(['util', 'boards'], function (util, boards) {
         updateAbilityToSubmit(); // depends on `name`
 
         return el;
-    }
+    };
 
     // Caches the submit button element.
-    function newSubmitButtonTdEl() {
+    newSubmitButtonTdEl = function () {
         var el = document.createElement('td');
 
         if (submitButtonEl === undefined) {
@@ -138,9 +142,9 @@ define(['util', 'boards'], function (util, boards) {
         el.appendChild(submitButtonEl);
 
         return el;
-    }
+    };
 
-    function newInputTrEl(hiscore) {
+    newInputTrEl = function (hiscore) {
         var el = document.createElement('tr');
 
         el.className = 'input';
@@ -153,9 +157,9 @@ define(['util', 'boards'], function (util, boards) {
         });
 
         return el;
-    }
+    };
 
-    function renderRows() {
+    renderRows = function () {
         var el = tableEl(),
             elc = contTableEl(),
             currentEl = el,
@@ -183,9 +187,9 @@ define(['util', 'boards'], function (util, boards) {
                 currentEl.appendChild(newTrEl(hiscore));
             }
         });
-    }
+    };
 
-    function render() {
+    render = function () {
         var s = groupEl().style,
             ts = tableEl().style,
             cts = contTableEl().style,
@@ -218,7 +222,7 @@ define(['util', 'boards'], function (util, boards) {
         cts.fontSize = ts.fontSize = (0.85 * lineHeight) + 'px';
 
         renderRows();
-    }
+    };
 
     return Object.create(null, {
         animStep: {value: function () {

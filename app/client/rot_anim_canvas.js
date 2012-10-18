@@ -23,7 +23,8 @@ define([
 ], function (boards, displayCSys, displayCanvasFactory) {
     'use strict';
 
-    var sideLen,
+    var renderTile, render, passedTime, rotationIsFinished, updateAngle,
+        sideLen,
         tiles, // tiles, in position *after* rotation
         animIsRunning,
         rectT, // tiles inside of this rectangle are rotated
@@ -33,7 +34,7 @@ define([
         direction, // rotation direction (-1, or +1)
         board;
 
-    function renderTile(ctx, posT, rotCenter) {
+    renderTile = function (ctx, posT, rotCenter) {
         var pos = displayCSys.posFromPosT(posT),
             color = tiles[posT[0]][posT[1]].color,
             tileSideLen = displayCSys.tileSideLen;
@@ -41,9 +42,9 @@ define([
         ctx.fillStyle = color;
         ctx.fillRect(pos[0] - rotCenter[0], pos[1] - rotCenter[1],
                      tileSideLen, tileSideLen);
-    }
+    };
 
-    function render(el) {
+    render = function (el) {
         var xT, yT,
             ctx = el.getContext('2d'),
             xMinT = rectT[0][0],
@@ -67,17 +68,17 @@ define([
         }
 
         ctx.restore();
-    }
+    };
 
-    function passedTime() {
+    passedTime = function () {
         return Date.now() - startTime;
-    }
+    };
 
-    function rotationIsFinished() {
+    rotationIsFinished = function () {
         return direction < 0 ? angle <= 0 : angle >= 0;
-    }
+    };
 
-    function updateAngle() {
+    updateAngle = function () {
         var speed = 0.004; // rad / ms
 
         angle = startAngle + direction * speed * passedTime();
@@ -85,7 +86,7 @@ define([
         if (rotationIsFinished()) {
             angle = 0; // avoids rotation beyond 0 (would look ugly)
         }
-    }
+    };
 
     return Object.create(displayCanvasFactory.create(), {
         animStep: {value: function () {

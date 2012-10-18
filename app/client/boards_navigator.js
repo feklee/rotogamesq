@@ -1,4 +1,4 @@
-// Widget for selecting the current board.
+ // Widget for selecting the current board.
 
 // There are two ways to select a board:
 
@@ -29,7 +29,16 @@ define([
 ], function (boards, boardThumbFactory, util) {
     'use strict';
 
-    var nSideThumbs = 2,  // thumbnails displayed to the left/right side of the
+    var style, cycledBoardI, thumbSideLen, thumbX, thumbIFromThumbX,
+        updateThumbsCoordinates, boardI, updateThumbs,
+        startAnim, stopAnim, onThumbSelected, newThumb, createThumbs,
+        thumbsAnimationSteps, appendElements, thumbsHaveBeenCreated,
+        render, animPassedTime, animIsFinished, updateThumbI,
+        onDragStart, onDrag, onDragEnd,
+        onMouseDown, onTouchStart, onMouseMove,
+        onTouchMove, onMouseUp, onTouchEnd,
+
+        nSideThumbs = 2,  // thumbnails displayed to the left/right side of the
                           // currently selected one (needs to be large enough
                           // if e.g. the left-most thumb is the current)
                           //
@@ -69,32 +78,32 @@ define([
 
         layout = {width: 1, height: 1, left: 0, top: 0};
 
-    function style() {
+    style = function () {
         return document.getElementById('boardsNavigator').style;
-    }
+    };
 
     // Returns a board index that is within bounds, by cycling if `i` is too
     // small or too large.
-    function cycledBoardI(i) {
+    cycledBoardI = function (i) {
         return ((i % boards.length) + boards.length) % boards.length;
-    }
+    };
 
-    function thumbSideLen(thumbI) {
+    thumbSideLen = function (thumbI) {
         return layout.height / (1 + 0.5 * Math.abs(thumbI - thumbIInCenter));
-    }
+    };
 
     // position of thumb with index `thumbI`
-    function thumbX(thumbI) {
+    thumbX = function (thumbI) {
         return ((thumbI - thumbIInCenter) * (layout.width / 3) +
                 layout.width / 2);
-    }
+    };
 
     // inverse of `thumbX`
-    function thumbIFromThumbX(thumbX) {
+    thumbIFromThumbX = function (thumbX) {
         return 3 * thumbX / layout.width - 3 / 2 + thumbIInCenter;
-    }
+    };
 
-    function updateThumbsCoordinates() {
+    updateThumbsCoordinates = function () {
         var thumbI, thumb;
 
         thumbs.forEach(function (thumb, i) {
@@ -104,17 +113,17 @@ define([
             thumb.x = thumbX(thumbI);
             thumb.y = layout.height / 2;
         });
-    }
+    };
 
     // The index of the board (in `boards`) that corresponds to `thumbI`.
-    function boardI(thumbI) {
+    boardI = function (thumbI) {
         return cycledBoardI(middleBoardI + thumbI);
-    }
+    };
 
     // Updates the thumbnail images (reassigns board indexes) so that
     // `thumbIInCenter` is as close as possible to 0. This is necessary so that
     // there will be no missing thumbs at one side of the widget.
-    function updateThumbs() {
+    updateThumbs = function () {
         var delta = Math.round(thumbIInCenter);
 
         if (delta !== 0) {
@@ -134,29 +143,29 @@ define([
                 thumb.boardI = boardI(thumbI);
             });
         }
-    }
+    };
 
     // Note: The index of the selected thumb will become 0, after the thumbs
     // have been rearrange (see: `updateThumbs`). So animation of the thumb
     // index is always towards 0.
-    function startAnim(selectedThumbI) {
+    startAnim = function (selectedThumbI) {
         animStartThumbIInCenter = thumbIInCenter;
         animEndThumbIInCenter = selectedThumbI;
         animDirection = (animEndThumbIInCenter > animStartThumbIInCenter ?
                          1 : -1);
         animStartTime = Date.now();
         animIsRunning = true;
-    }
+    };
 
-    function stopAnim() {
+    stopAnim = function () {
         animIsRunning = false;
-    }
+    };
 
-    function onThumbSelected(selectedThumbI) {
+    onThumbSelected = function (selectedThumbI) {
         startAnim(selectedThumbI);
-    }
+    };
 
-    function newThumb(thumbI) {
+    newThumb = function (thumbI) {
         return boardThumbFactory.create(
             boardI(thumbI),
             function (selectedBoardI) {
@@ -166,9 +175,9 @@ define([
                 }
             }
         );
-    }
+    };
 
-    function createThumbs() {
+    createThumbs = function () {
         var thumbI;
 
         thumbs.length = 0;
@@ -177,25 +186,25 @@ define([
         }
 
         updateThumbsCoordinates();
-    }
+    };
 
-    function thumbsAnimationSteps() {
+    thumbsAnimationSteps = function () {
         thumbs.forEach(function (thumb) {
             thumb.animStep();
         });
-    }
+    };
 
-    function appendElements(el) {
+    appendElements = function (el) {
         thumbs.forEach(function (thumb) {
             el.appendChild(thumb.element);
         });
-    }
+    };
 
-    function thumbsHaveBeenCreated() {
+    thumbsHaveBeenCreated = function () {
         return thumbs.length > 0;
-    }
+    };
 
-    function render() {
+    render = function () {
         var s = style();
 
         s.height = layout.height + 'px';
@@ -215,20 +224,20 @@ define([
             appendElements(document.getElementById('boardsNavigator'));
             elementsNeedToBeAppended = false;
         }
-    }
+    };
 
-    function animPassedTime() {
+    animPassedTime = function () {
         return Date.now() - animStartTime;
-    }
+    };
 
-    function animIsFinished() {
+    animIsFinished = function () {
         return ((animDirection > 0 &&
                  thumbIInCenter >= animEndThumbIInCenter) ||
                 (animDirection < 0 &&
                  thumbIInCenter <= animEndThumbIInCenter));
-    }
+    };
 
-    function updateThumbI() {
+    updateThumbI = function () {
         var speed = 0.005;
 
         thumbIInCenter = (animStartThumbIInCenter +
@@ -242,9 +251,9 @@ define([
 
         updateThumbs();
         updateThumbsCoordinates();
-    }
+    };
 
-    function onDragStart(cursorX) {
+    onDragStart = function (cursorX) {
         var elPagePos =
                 util.viewportPos(document.getElementById('boardsNavigator')),
             thumbXAtCursor = cursorX - elPagePos[0];
@@ -256,9 +265,9 @@ define([
         dragStartThumbIInCenter = thumbIInCenter;
 
         hasBeenClicked = true; // may change later
-    }
+    };
 
-    function onDrag(cursorX) {
+    onDrag = function (cursorX) {
         var deltaX = cursorX - dragStartCursorX,
             thumbXAtCursor = dragStartThumbXAtCursor + deltaX,
             deltaI = (thumbIFromThumbX(dragStartThumbXAtCursor) -
@@ -274,34 +283,34 @@ define([
         updateThumbsCoordinates();
 
         boards.selectedI = boardI(0);
-    }
+    };
 
-    function onDragEnd() {
+    onDragEnd = function () {
         startAnim(0);
 
         isBeingDragged = false;
-    }
+    };
 
-    function onMouseDown(e) {
+    onMouseDown = function (e) {
         onDragStart(e.pageX);
-    }
+    };
 
-    function onTouchStart(e) {
+    onTouchStart = function (e) {
         var touches;
 
         touches = e.changedTouches;
         if (touches.length > 0) {
             onDragStart(touches[0].pageX);
         }
-    }
+    };
 
-    function onMouseMove(e) {
+    onMouseMove = function (e) {
         if (isBeingDragged) {
             onDrag(e.pageX);
         }
-    }
+    };
 
-    function onTouchMove(e) {
+    onTouchMove = function (e) {
         var touches = e.changedTouches;
 
         if (isBeingDragged) {
@@ -309,22 +318,22 @@ define([
                 onDrag(touches[0].pageX);
             }
         }
-    }
+    };
 
-    function onMouseUp() {
+    onMouseUp = function () {
         if (isBeingDragged) {
             onDragEnd();
         }
-    }
+    };
 
-    function onTouchEnd(e) {
+    onTouchEnd = function (e) {
         var touches = e.changedTouches;
 
         e.preventDefault();
         if (isBeingDragged) {
             onDragEnd();
         }
-    }
+    };
 
     util.whenDocumentIsReady(function () {
         var el = document.getElementById('boardsNavigator');

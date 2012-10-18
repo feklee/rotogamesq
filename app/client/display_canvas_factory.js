@@ -22,8 +22,10 @@
 define(function () {
     'use strict';
 
+    var updateVisibility, show, hide;
+
     // Returns true, iff visibility has been updated.
-    function updateVisibility(internal, el) {
+    updateVisibility = function (internal, el) {
         if (internal.isVisible) {
             el.style.display = 'block';
             internal.needsToBeRendered = true;
@@ -31,21 +33,21 @@ define(function () {
             el.style.display = 'none';
         }
         internal.visibilityNeedsToBeUpdated = false;
-    }
+    };
 
-    function show(internal) {
+    show = function (internal) {
         if (!internal.isVisible) {
             internal.isVisible = true;
             internal.visibilityNeedsToBeUpdated = true;
         }
-    }
+    };
 
-    function hide(internal) {
+    hide = function (internal) {
         if (internal.isVisible) {
             internal.isVisible = false;
             internal.visibilityNeedsToBeUpdated = true;
         }
-    }
+    };
 
     return Object.create(null, {
         create: {value: function () {

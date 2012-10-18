@@ -107,6 +107,8 @@ listen = function (socket, board) {
             insertHiscore(hiscore, board);
             emit.call(this, socket, board);
             emit.call(this, socket.broadcast, board);
+        } else {
+            console.log('Invalid hiscore received');
         }
     });
 };

@@ -21,10 +21,10 @@
 define(['hiscores_factory'], function (hiscoresFactory) {
     'use strict';
 
-    var prototype;
+    var prototype, updateIsFinished, create;
 
     // Updates `internal.isFinished`.
-    function updateIsFinished(internal, board, rotation) {
+    updateIsFinished = function (internal, board, rotation) {
         if (board.tiles.colorsAreEqualTo(board.endTiles)) {
             if (!internal.isFinished) {
                 internal.isFinished = true;
@@ -34,7 +34,7 @@ define(['hiscores_factory'], function (hiscoresFactory) {
             internal.isFinished = false;
             board.hiscores.rmProposal();
         }
-    }
+    };
 
     prototype = Object.create(null, {
         rotate: {value: function (internal, rotation) {
@@ -66,7 +66,7 @@ define(['hiscores_factory'], function (hiscoresFactory) {
         }}
     });
 
-    function create(name, tiles, endTiles) {
+    create = function (name, tiles, endTiles) {
         var internal = {
                 rotations: [], // for undo, for counting, ...
                 futureRotations: [], // for redo
@@ -132,7 +132,7 @@ define(['hiscores_factory'], function (hiscoresFactory) {
                 return hiscores;
             }}
         });
-    }
+    };
 
     return Object.create(null, {
         create: {value: create}

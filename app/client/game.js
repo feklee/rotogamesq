@@ -32,13 +32,16 @@ define([
 ) {
     'use strict';
 
-    var loaded = false,
+    var updateComponentsLandscapeLayout, updateLandscapeLayout,
+        updateComponentsPortraitLayout, updatePortraitLayout,
+        updateLayout, animStep, onResize, hideLoadScreen, onLoaded,
+        loaded = false,
         goldenRatio = 1.61803398875,
         width, // px
         height; // px
 
     // Updates GUI components for landscape layout.
-    function updateComponentsLandscapeLayout(width, height) {
+    updateComponentsLandscapeLayout = function (width, height) {
         // panel = panel with all the elements on the right of the board
         var panelWidth = width - height,
             panelLeft = height,
@@ -77,12 +80,12 @@ define([
             left: panelInsideLeft,
             top: Math.round(0.28 * height)
         };
-    }
+    };
 
     // Gives the game lanscape layout. The game is sized so that it takes up
     // the space of a golden ratio rectangle that takes up maximum space in the
     // browser window.
-    function updateLandscapeLayout(viewportWidth, viewportHeight) {
+    updateLandscapeLayout = function (viewportWidth, viewportHeight) {
         var viewportRatio = viewportWidth / viewportHeight,
             s = document.body.style;
 
@@ -101,10 +104,10 @@ define([
         if (loaded) {
             updateComponentsLandscapeLayout(width, height);
         }
-    }
+    };
 
     // Updates components for portrait layout.
-    function updateComponentsPortraitLayout(width, height) {
+    updateComponentsPortraitLayout = function (width, height) {
         var remainingHeight = height - width, // height without board display 
             componentHeight,
             componentTop,
@@ -147,12 +150,12 @@ define([
             top: componentTop,
             horizontalMargin: horizontalMargin
         };
-    }
+    };
 
     // Gives the game portrait layout. The game is sized so that it takes up
     // maximum space in the browser window. It's aspect ratio is set in limits:
     // between 3:4 and reciprocal golden ratio.
-    function updatePortraitLayout(viewportWidth, viewportHeight) {
+    updatePortraitLayout = function (viewportWidth, viewportHeight) {
         var viewportRatio = viewportWidth / viewportHeight,
             s = document.body.style;
 
@@ -175,9 +178,9 @@ define([
         if (loaded) {
             updateComponentsPortraitLayout(width, height);
         }
-    }
+    };
 
-    function updateLayout() {
+    updateLayout = function () {
         var viewportWidth = window.innerWidth,
             viewportHeight = window.innerHeight;
 
@@ -186,9 +189,9 @@ define([
         } else {
             updatePortraitLayout(viewportWidth, viewportHeight);
         }
-    }
+    };
 
-    function animStep() {
+    animStep = function () {
         display.animStep();
         title.animStep();
         boardsNavigator.animStep();
@@ -196,17 +199,17 @@ define([
         hiscoresTable.animStep();
 
         window.requestAnimationFrame(animStep);
-    }
+    };
 
-    function onResize() {
+    onResize = function () {
         updateLayout();
-    }
+    };
 
-    function hideLoadScreen() {
+    hideLoadScreen = function () {
         document.getElementById('loadScreen').style.display = 'none';
-    }
+    };
 
-    function onLoaded() {
+    onLoaded = function () {
         loaded = true;
 
         hideLoadScreen();
@@ -221,7 +224,7 @@ define([
 
         animStep(); // Refreshes display right away (to avoid flicker), then
                     // continues with animation
-    }
+    };
 
     util.whenDocumentIsReady(function () {
         boards.load(onLoaded);

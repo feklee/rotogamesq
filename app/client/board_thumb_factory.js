@@ -22,13 +22,15 @@
 define(['boards'], function (boards) {
     'use strict';
 
-    function posFromPosT(posT, sideLen, sideLenT) {
+    var posFromPosT, renderTile, renderCanvas, render;
+
+    posFromPosT = function (posT, sideLen, sideLenT) {
         return posT.map(function (coordT) {
             return coordT * sideLen / sideLenT;
         });
-    }
+    };
 
-    function renderTile(ctx, board, posT, maxSideLenCeil) {
+    renderTile = function (ctx, board, posT, maxSideLenCeil) {
         var sideLenT = board.sideLenT,
             tiles = board.endTiles,
             pos = posFromPosT(posT, maxSideLenCeil, sideLenT),
@@ -38,14 +40,14 @@ define(['boards'], function (boards) {
 
         ctx.fillStyle = color;
         ctx.fillRect(pos[0], pos[1], tileSideLen, tileSideLen);
-    }
+    };
 
     // The canvas is only rendered when needed. One reason, aside from low
     // resource consumption, is that with the canvas being rendered repeatedly
     // in a quick succession, sometimes on the iPad with IOS 5.1.1, the canvas
     // drawing on the canvas has no effect after increasing its size - it stays
     // empty. The new code minimizes situations like that.
-    function renderCanvas(el, board, maxSideLenCeil) {
+    renderCanvas = function (el, board, maxSideLenCeil) {
         var xT, yT,
             sideLenT = board.sideLenT,
             ctx = el.getContext('2d');
@@ -55,7 +57,7 @@ define(['boards'], function (boards) {
                 renderTile(ctx, board, [xT, yT], maxSideLenCeil);
             }
         }
-    }
+    };
 
     // Renders the board to canvas, and/or just repositions and scales down the
     // canvas with CSS.
@@ -65,8 +67,8 @@ define(['boards'], function (boards) {
     // tag, then it is smoothed/blurred, and there is no way to turn off that
     // behavior. In particular, there is no equivalent to Firefox 14.0's
     // `-moz-crisp-edges`.
-    function render(el, board, sideLen, maxSideLenCeil, x, y,
-                    canvasNeedsToBeRendered) {
+    render = function (el, board, sideLen, maxSideLenCeil, x, y,
+                       canvasNeedsToBeRendered) {
         var s = el.style;
 
         s.width = s.height = sideLen + 'px';
@@ -77,7 +79,7 @@ define(['boards'], function (boards) {
             el.width = el.height = maxSideLenCeil;
             renderCanvas(el, board, maxSideLenCeil);
         }
-    }
+    };
 
     return Object.create(null, {
         create: {value: function (boardI, onThumbSelected) {

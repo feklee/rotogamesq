@@ -24,7 +24,11 @@ define([
 ], function (util, rectTFactory, displayCSys, displayCanvasFactory) {
     'use strict';
 
-    var sideLen, // side length of canvas
+    var width, height, render, tlPos, brPos, updateSelectedRectT,
+        updateDraggedToTheRight, updateCanvasPagePos, onDragStart,
+        onDrag, onDragEnd, onMouseDown, onTouchStart, onMouseMove,
+        onTouchMove, onMouseUp, onTouchEnd,
+        sideLen, // side length of canvas
         canvasPagePos, // position of canvas on page
         pos1 = [0, 0], // 1st corner of rectangle
         pos2 = [0, 0], // 2nd corner of rectangle
@@ -38,16 +42,16 @@ define([
         onDragEnd2;
 
     // may be negative
-    function width() {
+    width = function () {
         return pos2[0] - pos1[0];
-    }
+    };
 
     // may be negative
-    function height() {
+    height = function () {
         return pos2[1] - pos1[1];
-    }
+    };
 
-    function render(el) {
+    render = function (el) {
         var ctx = el.getContext('2d');
 
         el.height = el.width = sideLen; // also clears canvas
@@ -57,17 +61,17 @@ define([
         ctx.lineWidth = lineWidth;
         ctx.lineJoin = 'round';
         ctx.strokeRect(pos1[0], pos1[1], width(), height());
-    }
+    };
 
     // top left corner
-    function tlPos() {
+    tlPos = function () {
         return [Math.min(pos1[0], pos2[0]), Math.min(pos1[1], pos2[1])];
-    }
+    };
 
     // bottom right corner
-    function brPos() {
+    brPos = function () {
         return [Math.max(pos1[0], pos2[0]), Math.max(pos1[1], pos2[1])];
-    }
+    };
 
     // Updates the selected rectangle, which is represented by an array:
     //
@@ -77,7 +81,7 @@ define([
     //
     // A tile is selected, if it is inside or if it is touched by the rubber
     // band. Spacing is *not* part of tiles!
-    function updateSelectedRectT() {
+    updateSelectedRectT = function () {
         var tlPos2 = displayCSys.incIfInSpacing(tlPos()),
             brPos2 = displayCSys.decIfInSpacing(brPos()),
             tlPosT = displayCSys.posTInBounds(
@@ -88,20 +92,20 @@ define([
             );
 
         selectedRectT = rectTFactory.create(tlPosT, brPosT);
-    }
+    };
 
-    function updateDraggedToTheRight() {
+    updateDraggedToTheRight = function () {
         draggedToTheRight = pos2[0] > pos1[0];
-    }
+    };
 
     // Needed for calculating position when dragging.
-    function updateCanvasPagePos() {
+    updateCanvasPagePos = function () {
         canvasPagePos =
             util.viewportPos(document.getElementById('rubberBandCanvas'));
-    }
+    };
 
     // assumes that canvas is at position 0, 0 in the document
-    function onDragStart(pos) {
+    onDragStart = function (pos) {
         updateCanvasPagePos();
         pos2 = pos1 = [pos[0] - canvasPagePos[0], pos[1] - canvasPagePos[1]];
         updateSelectedRectT();
@@ -111,9 +115,9 @@ define([
         if (onDragStart2 !== undefined) {
             onDragStart2();
         }
-    }
+    };
 
-    function onDrag(pos) {
+    onDrag = function (pos) {
         pos2 = [pos[0] - canvasPagePos[0], pos[1] - canvasPagePos[1]];
         updateSelectedRectT();
         updateDraggedToTheRight();
@@ -121,9 +125,9 @@ define([
         if (onDrag2 !== undefined) {
             onDrag2(selectedRectT, draggedToTheRight);
         }
-    }
+    };
 
-    function onDragEnd() {
+    onDragEnd = function () {
         isBeingDragged = false;
         needsToBeRendered = true;
         pos1 = pos2 = [0, 0]; // reset
@@ -132,13 +136,13 @@ define([
         if (onDragEnd2 !== undefined) {
             onDragEnd2();
         }
-    }
+    };
 
-    function onMouseDown(e) {
+    onMouseDown = function (e) {
         onDragStart([e.pageX, e.pageY]);
-    }
+    };
 
-    function onTouchStart(e) {
+    onTouchStart = function (e) {
         var touches;
 
         e.preventDefault();
@@ -146,15 +150,15 @@ define([
         if (touches.length > 0) {
             onDragStart([touches[0].pageX, touches[0].pageY]);
         }
-    }
+    };
 
-    function onMouseMove(e) {
+    onMouseMove = function (e) {
         if (isBeingDragged) {
             onDrag([e.pageX, e.pageY]);
         }
-    }
+    };
 
-    function onTouchMove(e) {
+    onTouchMove = function (e) {
         var touches = e.changedTouches;
 
         e.preventDefault();
@@ -163,22 +167,22 @@ define([
                 onDrag([touches[0].pageX, touches[0].pageY]);
             }
         }
-    }
+    };
 
-    function onMouseUp(e) {
+    onMouseUp = function (e) {
         if (isBeingDragged) {
             onDragEnd();
         }
-    }
+    };
 
-    function onTouchEnd(e) {
+    onTouchEnd = function (e) {
         var touches = e.changedTouches;
 
         e.preventDefault();
         if (isBeingDragged) {
             onDragEnd();
         }
-    }
+    };
 
     util.whenDocumentIsReady(function () {
         var el = document.getElementById('rubberBandCanvas');
