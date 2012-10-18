@@ -26,11 +26,6 @@ var boardFactory = require('./board_factory'),
     boards;
 
 createBoards = function () {
-    console.error('fixmeboards3b:');
-    console.error(boards); // fixme
-    console.error(boards.load); // fixme
-    console.error('fixmeboards3bend');
-
     config.boards.forEach(function (boardConfig) {
         var sideLenT = boardConfig.sideLenT,
             startTiles = boardsSprites.tiles(boardConfig.startPosT,
@@ -41,11 +36,6 @@ createBoards = function () {
         boards.push(boardFactory.create(boardConfig.name,
                                         startTiles, endTiles));
     });
-
-    console.error('fixmeboards9b:');
-    console.error(boards); // fixme
-    console.error(boards.load); // fixme
-    console.error('fixmeboards9bend');
 };
 
 boards = Object.create([], {

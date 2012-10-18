@@ -81,9 +81,8 @@ insertHiscore = function (hiscore, board) {
         return;
     }
 
-    /*jslint evil: true */
     try {
-        redisClient['eval'](
+        redisClient.EVAL(
             insertHiscoreScript,
             1,
             board.name,
@@ -100,7 +99,6 @@ insertHiscore = function (hiscore, board) {
     } catch (err) { // just in case some bad data is not handled correctly
         return;
     }
-    /*jslint evil: false */
 };
 
 listen = function (socket, board) {
@@ -136,7 +134,7 @@ emit = function (socket, board) {
         socket.emit('hiscores for ' + board.name, hiscores);
     };
 
-    redisClient.zrange(
+    redisClient.ZRANGE(
         board.name,
         0,
         6,

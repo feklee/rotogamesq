@@ -27,7 +27,12 @@ define(function () {
 
     var prototype;
 
+    // Returns false if `rectT` is false or `cw` is not boolean.
     function create(rectT, cw) {
+        if (!rectT || typeof cw !== 'boolean') {
+            return false;
+        }
+
         return Object.create(prototype, {
             rectT: {get: function () { return rectT; },
                     enumerable: true},

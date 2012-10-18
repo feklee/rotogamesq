@@ -27,49 +27,17 @@ var hiscoresFactory = require('./hiscores_factory'),
     rectTFromData,
     rotationFromData;
 
-isValidPosT = function (posT) {
-    return (Array.isArray(posT) &&
-            posT.length === 2 &&
-            typeof posT[0] === 'number' &&
-            typeof posT[1] === 'number');
-};
-
-// Returns false on invalid data.
-rectTFromData = function (rectTData) {
-    var tlPosT, brPosT;
-
-    // Don't check for `Array.isArray`: May/Will fail for valid rectT object
-    if (!rectTData.length || rectTData.length !== 2) {
-        return false;
-    }
-
-    tlPosT = rectTData[0];
-    brPosT = rectTData[1];
-
-    if (!isValidPosT(tlPosT) || !isValidPosT(brPosT)) {
-        return false;
-    }
-
-    return rectTFactory.create(tlPosT, brPosT);
-};
-
 // Returns false on invalid data.
 rotationFromData = function (rotationData) {
-    var rectT;
+    var rectTData = rotationData.rectT, rectT;
 
-    if (!rotationData ||
-            !rotationData.rectT ||
-            typeof rotationData.cw !== 'boolean') {
+    if (!rotationData || !rectTData) {
         return false;
     }
 
-    rectT = rectTFromData(rotationData.rectT);
-    if (!rectT) {
-        return false;
-    }
+    rectT = rectTFactory.create(rectTData[0], rectTData[1]);
 
-    console.log('fixme4b');
-    return rotationFactory(rectT, rotationData.cw);
+    return rotationFactory.create(rectT, rotationData.cw);
 };
 
 // Returns true, iff the specified rotations are a valid array of rotations,
@@ -82,23 +50,16 @@ isSolvedBy = function (rotationsData) {
 
     try {
         if (Array.isArray(rotationsData)) {
-            console.log('fixme0');
             for (i = 0; i < rotationsData.length; i += 1) {
-                console.log('fixme4');
                 rotation = rotationFromData(rotationsData[i]);
-                console.log('fixme5');
                 if (rotation === false) {
-                    console.log('fixme1');
                     return false; // invalid rotation
                 }
-                console.log('fixme6');
                 tiles.rotate(rotation);
             }
 
-            console.log('fixme2');
-            return tiles.areEqualTo(this.endTiles);
+            return tiles.colorsAreEqualTo(this.endTiles);
         } else {
-            console.log('fixme3');
             return false;
         }
     } catch (err) { // just in case some bad data is not handled correctly

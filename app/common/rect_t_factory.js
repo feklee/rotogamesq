@@ -25,7 +25,14 @@ if (typeof define !== 'function') {
 define(function () {
     'use strict';
 
-    var prototype, areSamePosT;
+    var prototype, areSamePosT, isValidPosT;
+
+    isValidPosT = function (posT) {
+        return (Array.isArray(posT) &&
+                posT.length === 2 &&
+                typeof posT[0] === 'number' &&
+                typeof posT[1] === 'number');
+    };
 
     areSamePosT = function (pos1T, pos2T) {
         return pos1T[0] === pos2T[0] && pos1T[1] === pos2T[1];
@@ -57,10 +64,16 @@ define(function () {
     });
 
     return Object.create(null, {
-        // Creates rectangle from top-left and bottom-right corners.
+        // Creates rectangle from top-left and bottom-right corners. If data is
+        // invalid, then returns false.
         create: {value: function (tlPosT, brPosT) {
-            var newRectT = Object.create(prototype);
+            var newRectT;
 
+            if (!isValidPosT(tlPosT) || !isValidPosT(brPosT)) {
+                return false;
+            }
+
+            newRectT = Object.create(prototype);
             newRectT.push(tlPosT);
             newRectT.push(brPosT);
 
