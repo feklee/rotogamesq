@@ -105,14 +105,16 @@ body {
     padding-bottom: 6%;
 }
 
-#spinner {
+#loadScreen>div>div.spinner {
     position: absolute;
     top: 25%;
     bottom: 25%;
     left: 43%;
     right: 43%;
     background: white;
+}
 
+.spinner {
     -webkit-animation-name: spin;
     -moz-animation-name: spin;
     -ms-animation-name: spin;
@@ -201,10 +203,12 @@ body {
     font-weight: bold;
 }
 
-#hiscoresTableGroup>table tr.unsaved td:last-child {
-    /* fixme below: Perhaps insert content instead */
+#hiscoresTableGroup>table tr.unsaved td:last-child>span {
+    display: inline-block;
+    background: white;
+    vertical-align: middle;
 
-    -webkit-animation-name: spin;
+/*fixme    -webkit-animation-name: spin;
     -moz-animation-name: spin;
     -ms-animation-name: spin;
     -o-animation-name: spin;
@@ -226,7 +230,7 @@ body {
     -moz-animation-timing-function: linear;
     -ms-animation-timing-function: linear;
     -o-animation-timing-function: linear;
-    animation-timing-function: linear;
+    animation-timing-function: linear;*/
 }
 
 #boardsNavigator {

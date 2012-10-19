@@ -63,8 +63,23 @@ define(['util', 'boards'], function (util, boards) {
     };
 
     // for unsaved hiscores entries
-    newUnsavedTrEl = function (hiscore) {
-        var el = newTrEl(hiscore);
+    newUnsavedTrEl = function (hiscore, lineHeight) {
+        var el = document.createElement('tr'),
+
+            // spinner shown instead of # rotations:
+            spinnerTdEl = newTdEl(''),
+            spinnerEl = document.createElement('span'),
+            s = spinnerEl.style;
+
+        spinnerTdEl.appendChild(spinnerEl);
+        s.width = (0.1 * lineHeight) + 'px';
+        s.height = 0.6 * lineHeight + 'px';
+        s.margin = '0 ' + (0.25 * lineHeight) + 'px';
+        spinnerEl.className = 'spinner';
+
+        el.appendChild(newTdEl(hiscore.name));
+        el.appendChild(spinnerTdEl);
+
         el.className = 'unsaved';
         return el;
     };
@@ -167,7 +182,7 @@ define(['util', 'boards'], function (util, boards) {
         return el;
     };
 
-    renderRows = function () {
+    renderRows = function (lineHeight) {
         var el = tableEl(),
             elc = contTableEl(),
             currentEl = el,
@@ -194,7 +209,7 @@ define(['util', 'boards'], function (util, boards) {
                 nameInputFieldEl.focus();
                 break;
             case 'unsaved':
-                currentEl.appendChild(newUnsavedTrEl(hiscore));
+                currentEl.appendChild(newUnsavedTrEl(hiscore, lineHeight));
                 break;
             default: // 'saved'
                 currentEl.appendChild(newTrEl(hiscore));
@@ -235,7 +250,7 @@ define(['util', 'boards'], function (util, boards) {
         cts.lineHeight = ts.lineHeight = lineHeight + 'px';
         cts.fontSize = ts.fontSize = (0.85 * lineHeight) + 'px';
 
-        renderRows();
+        renderRows(lineHeight);
     };
 
     return Object.create(null, {
