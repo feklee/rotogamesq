@@ -2,12 +2,20 @@
     "name": "ROTOGAMEsq",
     "description": "Puzzle game, inspired by squared bathroom tiles",
     "icons": {
-        "128": "/images/icon_128.png"
+        "16": "/images/icon_16.png",
+        "30": "/images/icon_30.png",
+        "32": "/images/icon_32.png",
+        "48": "/images/icon_48.png",
+        "54": "/images/icon_54.png",
+        "60": "/images/icon_60.png",
+        "64": "/images/icon_64.png",
+        "108": "/images/icon_108.png",
+        "128": "/images/icon_128.png",
+        "256": "/images/icon_256.png"
     },
     "developer": {
         "name": "Felix E. Klee",
         "url": "https://github.com/feklee"
     },
-    "default_locale": "en",
-    "fullscreen": "true"
+    "default_locale": "en"
 }
