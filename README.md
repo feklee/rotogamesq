@@ -35,6 +35,17 @@ How to start development environment
         nodemon --watch . app.js
 
 
+How to add a board
+==================
+
+ 1. Add the tiles for the start and end to: `public/images/boards_sprites.png`
+
+ 2. Add the description to: `app/common/config.js`
+
+    Limit board names to eight alphanumeric characters, even though they are
+    flexible: Any string that goes as a Redis key should work.
+
+
 User interface
 ==============
 
