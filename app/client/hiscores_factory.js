@@ -22,7 +22,6 @@ define(['socket_io'], function (socketIo) {
     'use strict';
 
     var isBetterOrEqual, saveProposal, listenToUpdates, create,
-        maxLength = 7,
         lastNameSet = ''; // last name edited (preset for new proposals)
 
     isBetterOrEqual = function (hiscore1, hiscore2) {
@@ -32,12 +31,23 @@ define(['socket_io'], function (socketIo) {
     };
 
     saveProposal = function (internal) {
+        var comparer = function (a, b) {
+            return a.nRotations - b.nRotations;
+        };
+
         if (internal.proposal !== undefined) {
             internal.unsavedHiscores.push(internal.proposal);
-            // fixme: sort proposal, simply by score (no date available anyhow)
+
+            // Unsaved hiscores are simply sorted by score, i.e. not also by
+            // time (which isn't available anyhow):
+            internal.unsavedHiscores.sort(comparer);
+
             socketIo.emit('hiscore for ' + internal.boardName,
                           internal.proposal);
-            internal.proposal = undefined;
+
+            internal.proposal = undefined; // now open for new proposal (e.g.
+                                           // after pressing undo and continue
+                                           // playing to get better)
         }
     };
 
@@ -72,45 +82,59 @@ define(['socket_io'], function (socketIo) {
             //   * 'editable' (appears no more than once)
             //
             // Priorities if equal number of rotations from new to old:
-            //
             // editable -> unsaved -> editable
+            //
+            // Returns every name only once, with best score. The editable name
+            // is viewed as different from all other names, as it's yet unknown
+            // what the user will enter.
             forEach: {value: function (callback) {
-                var i, savedI = 0, unsavedI = 0,
+                var i = 0, savedI = 0, unsavedI = 0, hiscore, status,
                     savedHiscore, unsavedHiscore,
                     savedHiscores = internal.savedHiscores,
                     unsavedHiscores = internal.unsavedHiscores,
                     maxSavedI = savedHiscores.length,
                     maxUnsavedI = unsavedHiscores.length,
                     proposal = internal.proposal,
-                    proposalHasBeenShown = false;
+                    proposalHasBeenShown = false,
+                    usedNames = [];
 
-                // fixme: avoid display of duplicates
-
-                for (i = 0; i < maxLength; i += 1) {
+                while (i < 7) {
                     savedHiscore = savedHiscores[savedI];
                     unsavedHiscore = unsavedHiscores[unsavedI];
                     if (!proposalHasBeenShown &&
                             isBetterOrEqual(proposal, unsavedHiscore) &&
                             isBetterOrEqual(proposal, savedHiscore)) {
-                        callback(proposal, i, 'editable');
+                        hiscore = proposal;
+                        status = 'editable';
                         proposalHasBeenShown = true;
                     } else if (isBetterOrEqual(unsavedHiscore, savedHiscore)) {
-                        callback(unsavedHiscore, i, 'unsaved');
+                        hiscore = unsavedHiscore;
+                        status = 'unsaved';
                         unsavedI += 1;
                     } else if (savedHiscore !== undefined) {
-                        callback(savedHiscore, i, 'saved');
+                        hiscore = savedHiscore;
+                        status = 'saved';
                         savedI += 1;
+                    } else {
+                        break; // no more hiscores
                     }
-                }
 
-                // fixme: More saved hiscores cause unsaved to disappear.
-                // Investigate!
+                    if (status === 'editable') {
+                        callback(hiscore, i, status);
+                        i += 1;
+                    } else if (usedNames.indexOf(hiscore.name) < 0) {
+                        callback(hiscore, i, status);
+                        usedNames.push(hiscore.name);
+                        i += 1;
+                    } // else: duplicate name
+                }
             }},
 
             length: {get: function () {
-                return (internal.savedHiscores.length +
-                        internal.unsavedHiscores.length +
-                        (internal.proposal !== undefined ? 1 : 0));
+                return Math.min((internal.savedHiscores.length +
+                                 internal.unsavedHiscores.length +
+                                 (internal.proposal !== undefined ? 1 : 0)),
+                                7);
             }},
 
             hasProposal: {get: function () {

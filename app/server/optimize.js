@@ -25,9 +25,9 @@ var requirejs = require('requirejs'),
         dir: 'app.build',
         modules: [
             {
-                name: 'game',
+                name: 'main',
                 include: ['vendor/almond'],
-                insertRequire: ['game']
+                insertRequire: ['main']
             }
         ],
         removeCombined: true,

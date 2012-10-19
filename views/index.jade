@@ -25,10 +25,10 @@ html(lang="en")
 
     if env == 'development'
       link(rel="stylesheet", href="/app/stylesheets/index.css")
-      script(data-main="/app/client/game", src="/app/client/vendor/require.js")
+      script(data-main="/app/client/main", src="/app/client/vendor/require.js")
     else
       link(rel="stylesheet", href="/app.build/stylesheets/index.css")
-      script(src="/app.build/client/game.js")
+      script(src="/app.build/client/main.js")
 
     meta(name="HandheldFriendly", content="True")
 

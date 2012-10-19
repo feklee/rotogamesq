@@ -202,7 +202,31 @@ body {
 }
 
 #hiscoresTableGroup>table tr.unsaved td:last-child {
-    background: red; /* fixme */
+    /* fixme below: Perhaps insert content instead */
+
+    -webkit-animation-name: spin;
+    -moz-animation-name: spin;
+    -ms-animation-name: spin;
+    -o-animation-name: spin;
+    animation-name: spin;
+    
+    -webkit-animation-duration: 0.4s;
+    -moz-animation-duration: 0.4s;
+    -ms-animation-duration: 0.4s;
+    -o-animation-duration: 0.4s;
+    animation-duration: 0.4s;
+    
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    -ms-animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+  
+    -webkit-animation-timing-function: linear;
+    -moz-animation-timing-function: linear;
+    -ms-animation-timing-function: linear;
+    -o-animation-timing-function: linear;
+    animation-timing-function: linear;
 }
 
 #boardsNavigator {
