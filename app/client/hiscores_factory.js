@@ -22,6 +22,7 @@ define(['socket_io'], function (socketIo) {
     'use strict';
 
     var isBetterOrEqual, saveProposal, listenToUpdates, create,
+        updateUnsavedHiscores,
         lastNameSet = ''; // last name edited (preset for new proposals)
 
     isBetterOrEqual = function (hiscore1, hiscore2) {
@@ -51,11 +52,31 @@ define(['socket_io'], function (socketIo) {
         }
     };
 
+    // Updates list of unsaved hiscores, removing entries where the name is
+    // also in the list of saved hiscores and with an equal or better score.
+    updateUnsavedHiscores = function (internal) {
+        internal.savedHiscores.forEach(function (savedHiscore) {
+            var unsavedHiscores = internal.unsavedHiscores, i = 0,
+                unsavedHiscore;
+
+            while (i < unsavedHiscores.length) {
+                unsavedHiscore = unsavedHiscores[i];
+                if (savedHiscore.name === unsavedHiscore.name &&
+                        savedHiscore.nRotations <= unsavedHiscore.nRotations) {
+                    unsavedHiscores.splice(i, 1);
+                } else {
+                    i += 1;
+                }
+            }
+        });
+    };
+
     listenToUpdates = function (internal) {
         var eventName = 'hiscores for ' + internal.boardName;
 
         socketIo.on(eventName, function (newSavedHiscores) {
             internal.savedHiscores = newSavedHiscores;
+            updateUnsavedHiscores(internal);
             internal.version += 1;
         });
     };

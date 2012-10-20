@@ -106,8 +106,6 @@ listen = function (socket, board) {
         if (hiscoreIsValid(hiscore, board)) {
             insertHiscore(hiscore, board);
 
-            return; // fixme: to test display of unsaved entries in hiscores
-                    // table
             emit.call(this, socket, board);
             emit.call(this, socket.broadcast, board);
         } else {
