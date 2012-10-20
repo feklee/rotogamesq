@@ -21,14 +21,11 @@
 define(function () {
     'use strict';
 
-    var host, on, connect,
-        socket;
+    var host, on, connect, socket;
 
     host = function () {
-        var src = document.getElementById('socketIoScript').src,
-            matches = src.match(/https?:\/\/[a-zA-Z0-9-.]*/);
-
-        return matches.length >= 1 ? matches[0] : '';
+        var l = window.location;
+        return l.protocol + '//' + l.hostname + ':' + l.port;
     };
 
     on = function () {

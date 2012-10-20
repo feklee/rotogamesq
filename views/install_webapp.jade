@@ -19,23 +19,12 @@ html(lang="en")
 
     title Open Web App Installer
 
+    script(src="/javascripts/install_webapp.js")
+
   body
     p
       | Page for installation of ROTOGAMEsq as 
       a(href="https://developer.mozilla.org/en-US/docs/Apps") Open Web App
       | , primarily for testing.
-
-    script
-      var request;
-      if (navigator && navigator.mozApps && navigator.mozApps.install) {
-        request = navigator.mozApps.install('manifest.webapp');
-        request.onsuccess = function() {
-          window.alert('Installation succeeded!');
-        }
-        request.onerror = function() {
-          window.alert('Installation failed: ' + this.error.name);
-        }
-        window.alert('Installing...');
-      } else {
-        window.alert('`navigator.mozApps.install` not defined.');
-      }
+    p
+      button#installButton Install
