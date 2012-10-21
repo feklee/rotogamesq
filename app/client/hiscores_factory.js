@@ -110,6 +110,7 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
         socketIo.on(eventName, function (newSavedHiscores) {
             internal.savedHiscores = newSavedHiscores;
             updateUnsavedHiscores(internal);
+            updateLocalStorage(internal);
             internal.version += 1;
         });
     };
