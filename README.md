@@ -94,8 +94,19 @@ In various places the following values are assumed:
   * Maximum number of characters in name in hiscores: 8
 
 
-Development notes
-=================
+Releasing a new version
+=======================
+
+  * Version number schema: major.minor.bugfix
+
+  * Add tag in GIT.
+
+  * Update `manifest.cache` with files needed in production and with new
+    version.
+
+
+Hacking notes
+=============
 
   * `Object.freeze` is not used due to Android 2.3's native browser not
     supporting it.
@@ -108,8 +119,6 @@ Development notes
     
     For similar reasons (possible subpixel positioning issues), the rotation is
     *not* done using CSS3 transformations.
-
-  * Version number schema: major.minor.bugfix
   
   * Format for comments: Mardown
 
