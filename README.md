@@ -102,7 +102,8 @@ Releasing a new version
   * Add tag in GIT.
 
   * Update `manifest.cache` with files needed in production and with new
-    version.
+    version. Optionally append `-0`, `-1`, … to the version to force a
+    reload.
 
 
 Hacking notes

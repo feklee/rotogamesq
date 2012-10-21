@@ -1,6 +1,7 @@
 CACHE MANIFEST
-# ROTOGAMEsq v0.0.0
+# ROTOGAMEsq v0.0.0-7
 
+CACHE:
 app.build/stylesheets/index.css
 app.build/client/main.js
 images/boards_sprites.png
@@ -12,3 +13,6 @@ fonts/DroidSans-Bold_subset.woff
 fonts/DroidSans.ttf
 fonts/DroidSans.woff
 socket.io/socket.io.js
+
+NETWORK:
+*
