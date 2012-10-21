@@ -121,7 +121,7 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
             savedHiscores: [],
             unsavedHiscores: [], // new hiscores, not yet on the server
             boardName: boardName,
-            localStorageKey: 'hiscores.' + boardName
+            localStorageKey: boardName + '.hiscores'
         };
 
         updateFromLocalStorage(internal);
