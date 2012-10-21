@@ -62,6 +62,10 @@ app.get('/install_webapp', function (req, res) {
     res.render('install_webapp');
 });
 
+app.get('/manifest.appcache', function (req, res) {
+    res.sendfile('views/' + app.get('env') + '.appcache');
+});
+
 io.set('log level', 1);
 
 if (app.get('env') === 'development') {

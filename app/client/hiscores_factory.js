@@ -18,11 +18,13 @@
 
 /*global define */
 
-define(['socket_io'], function (socketIo) {
+define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
     'use strict';
 
     var isBetterOrEqual, saveProposal, listenToUpdates, create,
         updateUnsavedHiscores,
+        updateFromLocalStorage, updateLocalStorage,
+        sendUnsavedToServer,
         lastNameSet = ''; // last name edited (preset for new proposals)
 
     isBetterOrEqual = function (hiscore1, hiscore2) {
@@ -31,6 +33,36 @@ define(['socket_io'], function (socketIo) {
                  hiscore1.nRotations <= hiscore2.nRotations));
     };
 
+    updateFromLocalStorage = function (internal) {
+        var data = localStorage.get(internal.localStorageKey);
+        if (data && data.unsaved && data.saved) {
+            internal.unsavedHiscores = data.unsaved;
+            internal.savedHiscores = data.saved;
+        } // else: no valid data available
+    };
+
+    // Atomically stores saved and unsaved hiscores.
+    updateLocalStorage = function (internal) {
+        localStorage.set(internal.localStorageKey, {
+            unsaved: internal.unsavedHiscores,
+            saved: internal.savedHiscores
+        });
+    };
+
+    // via Socket.IO (will automatically retry on broken connection)
+    sendUnsavedToServer = function (internal) {
+        internal.unsavedHiscores.forEach(function (unsavedHiscore) {
+            socketIo.emit('hiscore for ' + internal.boardName, unsavedHiscore);
+        });
+    };
+
+    // Triggers saving of new hiscores entry:
+    //
+    //   * Puts in list of unsaved hiscores.
+    //
+    //   * Updates hiscores in localStorage.
+    //
+    //   * Sends unsaved hiscores to server (Socket.IO), for saving.
     saveProposal = function (internal) {
         var comparer = function (a, b) {
             return a.nRotations - b.nRotations;
@@ -43,8 +75,9 @@ define(['socket_io'], function (socketIo) {
             // time (which isn't available anyhow):
             internal.unsavedHiscores.sort(comparer);
 
-            socketIo.emit('hiscore for ' + internal.boardName,
-                          internal.proposal);
+            updateLocalStorage(internal);
+
+            sendUnsavedToServer(internal);
 
             internal.proposal = undefined; // now open for new proposal (e.g.
                                            // after pressing undo and continue
@@ -87,8 +120,13 @@ define(['socket_io'], function (socketIo) {
             version: 0, // incremented on every update
             savedHiscores: [],
             unsavedHiscores: [], // new hiscores, not yet on the server
-            boardName: boardName
+            boardName: boardName,
+            localStorageKey: 'hiscores.' + boardName
         };
+
+        updateFromLocalStorage(internal);
+        sendUnsavedToServer(internal); // in case when the app was closed, and
+                                       // data hadn't been sent to server
 
         listenToUpdates(internal);
 

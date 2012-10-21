@@ -69,6 +69,22 @@ Hiscores
   * With every hiscore entry, rotations are stored, which makes it possible to
     manually investigate some of the more astonishing solutions.
 
+  * [localStorage][6] is used for offline capability:
+
+    - On client load (communication via [Socket.IO][7], automatically repeated
+      until connection is available):
+
+      . hiscores retrieved from LocalStorage,
+
+      . updated hiscores requested from the server,
+
+      . unsaved hiscores sent to the server.
+
+    - On new hiscores on server: new saved hiscores broadcasted to all clients
+
+    - On new hiscore entry on client: unsaved hiscores sent to server
+
+
 
 Coordinates
 ===========
@@ -102,8 +118,7 @@ Releasing a new version
   * Add tag in GIT.
 
   * Update `manifest.cache` with files needed in production and with new
-    version. Optionally append `-0`, `-1`, … to the version to force a
-    reload.
+    version. Optionally append `-0`, `-1`, … to the version to force a reload.
 
 
 Hacking notes
@@ -146,3 +161,5 @@ specific language governing permissions and limitations under the License.
 [3]: http://js13kgames.com
 [4]: mailto:felix.klee@inka.de
 [5]: https://github.com/remy/nodemon
+[6]: http://www.w3.org/TR/webstorage/#the-localstorage-attribute
+[7]: http://socket.io/
