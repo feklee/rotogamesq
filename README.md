@@ -74,11 +74,11 @@ Hiscores
     - On client load (communication via [Socket.IO][7], automatically repeated
       until connection is available):
 
-      . hiscores retrieved from LocalStorage,
+      . hiscores are retrieved from localStorage,
 
-      . updated hiscores requested from the server,
+      . updated hiscores are requested from the server,
 
-      . unsaved hiscores sent to the server.
+      . unsaved hiscores are sent to server.
 
     - On new hiscores on server: new saved hiscores broadcasted to all clients
 
@@ -117,8 +117,9 @@ Releasing a new version
 
   * Add tag in GIT.
 
-  * Update `manifest.cache` with files needed in production and with new
-    version. Optionally append `-0`, `-1`, … to the version to force a reload.
+  * Update `views/production.appcache` ([application cache][8] manifest) with
+    files needed in production and with new version. Optionally append `-0`,
+    `-1`, … to the version to force a reload.
 
 
 Hacking notes
@@ -163,3 +164,4 @@ specific language governing permissions and limitations under the License.
 [5]: https://github.com/remy/nodemon
 [6]: http://www.w3.org/TR/webstorage/#the-localstorage-attribute
 [7]: http://socket.io/
+[8]: http://www.whatwg.org/specs/web-apps/current-work/multipage/offline.html#appcache
