@@ -72,7 +72,14 @@ if (app.get('env') === 'development') {
     app.use('/app', express['static'](__dirname + '/app'));
     app.use(express.errorHandler());
     loadBoardsAndStartServer();
-} else {
+} else { // production
+    // advised production settings from Socket.IO wiki (as of Oct. 2012):
+    io.enable('browser client minification');
+    io.enable('browser client etag');
+    io.enable('browser client gzip');
+    io.set('transports', ['websocket', 'flashsocket', 'htmlfile',
+                          'xhr-polling', 'jsonp-polling']);
+
     app.use('/app.build', express['static'](__dirname + '/app.build'));
     require('./app/server/optimize')(loadBoardsAndStartServer);
 }
