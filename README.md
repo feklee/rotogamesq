@@ -123,6 +123,8 @@ Releasing a new version
     files needed in production and with new version. Optionally append `-0`,
     `-1`, … to the version to force a reload.
 
+  * Update `version` in: `package.json`
+
 
 Hacking notes
 =============
