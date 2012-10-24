@@ -21,8 +21,10 @@ How to start development environment
  1. Set environment variables:
  
       * `REDIS_HOST` (optional, default: `127.0.0.1`)
-      
+
       * `REDIS_PORT` (optional, default: `6379`)
+
+      * `REDIS_PASSWORD` (optional)
 
       * `NODE_ENV`: `development`
 
