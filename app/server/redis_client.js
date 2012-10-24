@@ -20,10 +20,15 @@
 
 var port = process.env.REDIS_PORT || 6379,
     host = process.env.REDIS_HOST || '127.0.0.1',
+    password = process.env.REDIS_PASSWORD,
     redisClient = require('redis').createClient(port, host);
 
+if (password) {
+    redisClient.auth(password);
+}
+
 redisClient.on('error', function (err) {
-    console.error(err);
+    console.error('Redis client:', err);
 });
 
 module.exports = redisClient;

@@ -31,6 +31,7 @@ define(function () {
     on = function () {
         if (socket === undefined) {
             socket = io.connect(host());
+            socket.emit('fixme', 'directly past connect'); // fixme
         }
 
         socket.on.apply(socket, arguments);
@@ -50,6 +51,7 @@ define(function () {
             var emitArguments = arguments;
             connect(function () {
                 socket.emit.apply(socket, emitArguments);
+                socket.emit('fixme', 'from connect callback'); // fixme
             });
         }},
 

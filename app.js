@@ -34,6 +34,11 @@ startServer = function () {
     });
 
     io.sockets.on('connection', function (socket) {
+        // fixme: for understanding Socket.IO
+        socket.on('event', function (data) { // fixme
+            console.log('received event:', data);
+        });
+
         boards.emitHiscores(socket);
         boards.listen(socket);
     });
@@ -74,7 +79,7 @@ if (app.get('env') === 'development') {
     loadBoardsAndStartServer();
 } else { // production
     // advised production settings from Socket.IO wiki (as of Oct. 2012):
-    io.enable('browser client minification');
+    io.enable('browser client minificati kon');
     io.enable('browser client etag');
     io.enable('browser client gzip');
     io.set('transports', ['websocket', 'flashsocket', 'htmlfile',
