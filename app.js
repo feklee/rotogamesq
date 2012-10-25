@@ -63,8 +63,8 @@ app.get('/', function (req, res) {
     res.render('index', {env: app.get('env')});
 });
 
-app.get('/install_webapp', function (req, res) {
-    res.render('install_webapp');
+app.get('/install-webapp', function (req, res) {
+    res.render('install-webapp');
 });
 
 app.get('/manifest.appcache', function (req, res) {
