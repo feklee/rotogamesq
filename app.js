@@ -22,7 +22,8 @@ var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
     boards = require('./app/server/boards'),
-    path = require('path'),
+    routes = require('./routes/create')(app.get('env'),
+                                        require('./package.json').version),
     io = require('socket.io').listen(server),
     startServer,
     loadBoardsAndStartServer;
@@ -59,17 +60,9 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express['static'](__dirname + '/public'));
 
-app.get('/', function (req, res) {
-    res.render('index', {env: app.get('env')});
-});
-
-app.get('/install-webapp', function (req, res) {
-    res.render('install-webapp');
-});
-
-app.get('/manifest.appcache', function (req, res) {
-    res.sendfile('views/' + app.get('env') + '.appcache');
-});
+app.get('/', routes.index);
+app.get('/install-webapp', routes.installWebapp);
+app.get('/manifest.appcache', routes.manifestAppcache);
 
 io.set('log level', 1);
 

@@ -1,6 +1,3 @@
-CACHE MANIFEST
-# ROTOGAMEsq v0.1.0
-
 CACHE:
 app.build/stylesheets/index.css
 app.build/client/main.js

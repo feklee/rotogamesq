@@ -119,10 +119,6 @@ Releasing a new version
 
   * Add tag in GIT.
 
-  * Update `views/production.appcache` ([application cache][8] manifest) with
-    files needed in production and with new version. Optionally append `-0`,
-    `-1`, … to the version to force a reload.
-
   * Update `version` in: `package.json`
 
 
