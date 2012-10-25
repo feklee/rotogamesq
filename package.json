@@ -1,11 +1,11 @@
 {
   "name": "rotogamesq",
-  "version": "0.1.0-13",
+  "version": "0.1.0-14",
   "subdomain": "rotogamesq",
   "domains": [
     "sq.rotogame.com"
   ],
-  "description": "Drag'n'rotate! ROTOGAMEsq was inspired by bathroom tiles.",
+  "description": "ROTOGAMEsq, a puzzle game inspired by squared bathroom tiles",
   "scripts": {
     "start": "node app.js"
   },
