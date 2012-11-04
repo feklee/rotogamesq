@@ -18,21 +18,21 @@ is tagged (GIT): `js13kgames`
 How to start development environment
 ====================================
 
- 1. Install latest dependencies:
+1.  Bring dependencies up to date:
  
         npm update
 
- 2. Set environment variables:
+2.  Set environment variables:
  
-      * `REDIS_HOST` (optional, default: `127.0.0.1`)
+    *   `REDIS_HOST` (optional, default: `127.0.0.1`)
 
-      * `REDIS_PORT` (optional, default: `6379`)
+    *   `REDIS_PORT` (optional, default: `6379`)
 
-      * `REDIS_PASSWORD` (optional)
+    *   `REDIS_PASSWORD` (optional)
 
-      * `NODE_ENV`: `development`
+    *   `NODE_ENV`: `development`
 
- 3. Run directly:
+3.  Run directly:
  
         node app.js
 
@@ -55,40 +55,41 @@ How to add a board
 User interface
 ==============
 
-  * Portrait and landscape layouts: To give optimal user experience espcially
+*   Portrait and landscape layouts: To give optimal user experience espcially
     on mobile devices, the game adapts the layout depending on whether the
     browser's viewport is in landscape (width > height) or portrait mode.
 
-  * Undo/redo is accessible by standard keyboard shortcuts: Ctrl-Z / Command-Z,
+*   Undo/redo is accessible by standard keyboard shortcuts: Ctrl-Z / Command-Z,
     Ctrl-Y / Shift-Command-Y
 
 
 Hiscores
 ========
 
-  * The hiscores for each board are stored in a Redis database.
+*   The hiscores for each board are stored in a Redis database.
   
-  * On the server, every hiscore entry is tested for plausibility (do the
+*   On the server, every hiscore entry is tested for plausibility (do the
     rotations really solve a board). This prevents cheating by forging client
     server communication.
 
-  * With every hiscore entry, rotations are stored, which makes it possible to
+*   With every hiscore entry, rotations are stored, which makes it possible to
     manually investigate some of the more astonishing solutions.
 
-  * [localStorage][6] is used for offline capability:
+*   [localStorage][6] is used for offline capability:
 
-    - On client load (communication via [Socket.IO][7], automatically repeated
-      until connection is available):
+    +   On client load (communication via [Socket.IO][7], automatically repeated
+        until connection is available):
 
-      . hiscores are retrieved from localStorage,
+        -   hiscores are retrieved from localStorage,
 
-      . updated hiscores are requested from the server,
+        -   updated hiscores are requested from the server,
 
-      . unsaved hiscores are sent to server.
+        -   unsaved hiscores are sent to server.
 
-    - On new hiscores on server: new saved hiscores broadcasted to all clients
+    +   On new hiscores on server: new saved hiscores broadcasted to all
+        clients
 
-    - On new hiscore entry on client: unsaved hiscores sent to server
+    +   On new hiscore entry on client: unsaved hiscores sent to server
 
 
 
@@ -97,11 +98,11 @@ Coordinates
 
 Variable name postfixes of coordinates and dimensions denote units:
   
-  * `T`: multiples of tiles (*tile coordinates*)
-      
-  * `P`: percentage
+*   `T`: multiples of tiles (*tile coordinates*)
+     
+*   `P`: percentage
 
-  * *no postfix:* pixels
+*   *no postfix:* pixels
 
 
 Hard coded values
@@ -109,30 +110,30 @@ Hard coded values
 
 In various places the following values are assumed:
 
-  * Maximum number of rotations: 99
+*   Maximum number of rotations: 99
 
-  * Maximum number of hiscores per board: 7
+*   Maximum number of hiscores per board: 7
       
-  * Maximum number of characters in name in hiscores: 8
+*   Maximum number of characters in name in hiscores: 8
 
 
 Releasing a new version
 =======================
 
-  * Version number schema: major.minor.bugfix
+*   Version number schema: major.minor.bugfix
 
-  * Add tag in GIT.
+*   Add tag in GIT.
 
-  * Update `version` in: `package.json`
+*   Update `version` in: `package.json`
 
 
 Hacking notes
 =============
 
-  * `Object.freeze` is not used due to Android 2.3's native browser not
+*   `Object.freeze` is not used due to Android 2.3's native browser not
     supporting it.
   
-  * Tiles are rendered to `canvas`. This may look cumbersome: Can't tiles be
+*   Tiles are rendered to `canvas`. This may look cumbersome: Can't tiles be
     rendered simply as squared `div` tags? They can. However, in major browser
     `div` tags cannot be positioned with sub pixel accuracy (as of September
     2012). In these browsers, positions are rounded to pixels and the result is
@@ -141,7 +142,7 @@ Hacking notes
     For similar reasons (possible subpixel positioning issues), the rotation is
     *not* done using CSS3 transformations.
   
-  * Format for comments: Mardown
+*   Format for comments: Mardown
 
 
 Legal
