@@ -4,7 +4,7 @@ Introduction
 ROTOGAMEsq is a variant of [Roto Game][1] with *squared tiles*: The [author][4]
 has moved, and in his new home the bathroom tiles are different. ;-)
 
-Play: [sq.rotogame.com][2]
+**Play:** [sq.rotogame.com][2]
 
 
 History
@@ -18,7 +18,11 @@ is tagged (GIT): `js13kgames`
 How to start development environment
 ====================================
 
- 1. Set environment variables:
+ 1. Install latest dependencies:
+ 
+        npm update
+
+ 2. Set environment variables:
  
       * `REDIS_HOST` (optional, default: `127.0.0.1`)
 
@@ -28,7 +32,7 @@ How to start development environment
 
       * `NODE_ENV`: `development`
 
- 2. Run directly:
+ 3. Run directly:
  
         node app.js
 

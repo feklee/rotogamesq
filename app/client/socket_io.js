@@ -21,38 +21,44 @@
 define(function () {
     'use strict';
 
-    var host, on, connect, socket;
+    var host, on, socket;
 
     host = function () {
         var l = window.location;
-        return l.protocol + '//' + l.hostname + ':' + l.port;
+        return l.protocol + '//' + l.host;
     };
 
     on = function () {
-        if (socket === undefined) {
-            socket = io.connect(host());
-            socket.emit('fixme', 'directly past connect'); // fixme
-        }
-
         socket.on.apply(socket, arguments);
     };
 
-    connect = function (onConnect) {
-        if (socket && socket.socket.connected) {
-            onConnect();
-        } else {
-            on('connect', onConnect);
-        }
-    };
+    // There is no callback for waiting until the connection is established:
+    // `socket.emit` can be called right right away as events will be queued.
+    socket = io.connect(host(), {
+        reconnect: false // not needed; own reconnect system is used
+    });
+
+    socket.on('connect_failed', function () {
+        console.log('fixme: connect failed');
+    });
+
+    socket.on('disconnect', function () {
+        console.log('fixme: disconnect');
+    });
+
+    window.socket = socket; // fixme
+
+    // fixme: detect disconnect, and then try to reconnect
 
     return Object.create(null, {
-        // Establishes connection if not yet done.
+        // Emits the specified event. If there currently is no connection, then
+        // the event is queued. See also:
+        //
+        // https://groups.google.com/d/topic/socket_io/3bSl7RP8lpI/discussion
         emit: {value: function () {
             var emitArguments = arguments;
-            connect(function () {
-                socket.emit.apply(socket, emitArguments);
-                socket.emit('fixme', 'from connect callback'); // fixme
-            });
+            socket.emit.apply(socket, emitArguments);
+            socket.emit('fixme', 'from connect callback'); // fixme
         }},
 
         on: {value: on}

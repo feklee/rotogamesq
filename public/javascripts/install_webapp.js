@@ -23,7 +23,7 @@
 
     host = function () {
         var l = window.location;
-        return l.protocol + '//' + l.hostname + ':' + l.port;
+        return l.protocol + '//' + l.host;
     };
 
     install = function () {
