@@ -23,13 +23,9 @@ How to start development environment
         npm update
 
  2. Set environment variables:
- 
       + `REDIS_HOST` (optional, default: `127.0.0.1`)
-
       + `REDIS_PORT` (optional, default: `6379`)
-
       + `REDIS_PASSWORD` (optional)
-
       + `NODE_ENV`: `development`
 
  3. Run directly:
@@ -144,6 +140,9 @@ Hacking notes
   
   * Format for comments: Mardown
 
+  * The current `README.md` has some ugly formatting of lists, to work around
+    [a bug][9] in GitHub's Markdown interpreter.
+
 
 Legal
 =====
@@ -170,3 +169,4 @@ specific language governing permissions and limitations under the License.
 [6]: http://www.w3.org/TR/webstorage/#the-localstorage-attribute
 [7]: http://socket.io/
 [8]: http://www.whatwg.org/specs/web-apps/current-work/multipage/offline.html#appcache
+[9]: https://github.com/github/markup/issues/165
