@@ -21,7 +21,7 @@
 define(function () {
     'use strict';
 
-    var host, on, socket;
+    var host, on, socketNamespace, checkInterval, repeatedlyCheckConnection;
 
     host = function () {
         var l = window.location;
@@ -29,26 +29,36 @@ define(function () {
     };
 
     on = function () {
-        socket.on.apply(socket, arguments);
+        socketNamespace.on.apply(socketNamespace, arguments);
+    };
+
+    // When to check connection the next time, in milliseconds. The value is
+    // random and exponential: Small values are more likely than high values.
+    // This just feels like a good idea.
+    checkInterval = function () {
+        var max = 20000; // milliseconds
+        return Math.exp(Math.log(max) * Math.random());
+    };
+
+    // Initiates (re-)connection if necessary. Schedules its own next call.
+    repeatedlyCheckConnection = function () {
+        var socket = socketNamespace.socket;
+
+        if (!socket.connected && !socket.connecting && !socket.reconnecting &&
+                navigator.onLine) {
+            socket.connect();
+        }
+
+        setTimeout(repeatedlyCheckConnection, checkInterval());
     };
 
     // There is no callback for waiting until the connection is established:
     // `socket.emit` can be called right right away as events will be queued.
-    socket = io.connect(host(), {
+    socketNamespace = io.connect(host(), {
         reconnect: false // not needed; own reconnect system is used
     });
 
-    socket.on('connect_failed', function () {
-        console.log('fixme: connect failed');
-    });
-
-    socket.on('disconnect', function () {
-        console.log('fixme: disconnect');
-    });
-
-    window.socket = socket; // fixme
-
-    // fixme: detect disconnect, and then try to reconnect
+    repeatedlyCheckConnection();
 
     return Object.create(null, {
         // Emits the specified event. If there currently is no connection, then
@@ -57,8 +67,7 @@ define(function () {
         // https://groups.google.com/d/topic/socket_io/3bSl7RP8lpI/discussion
         emit: {value: function () {
             var emitArguments = arguments;
-            socket.emit.apply(socket, emitArguments);
-            socket.emit('fixme', 'from connect callback'); // fixme
+            socketNamespace.emit.apply(socketNamespace, emitArguments);
         }},
 
         on: {value: on}
