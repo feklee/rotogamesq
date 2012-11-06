@@ -32,16 +32,22 @@ define({
             endPosT: [5, 0]
         },
         {
-            name: 'smiley',
-            sideLenT: 5,
-            startPosT: [0, 5],
-            endPosT: [5, 5]
-        },
-        {
             name: 'invaders',
             sideLenT: 11,
             startPosT: [0, 10],
             endPosT: [11, 10]
+        },
+        {
+            name: 'chess',
+            sideLenT: 8,
+            startPosT: [0, 34],
+            endPosT: [8, 34]
+        },
+        {
+            name: 'smiley',
+            sideLenT: 5,
+            startPosT: [0, 5],
+            endPosT: [5, 5]
         },
         {
             name: 'house',
@@ -54,6 +60,24 @@ define({
             sideLenT: 6,
             startPosT: [0, 28],
             endPosT: [6, 28]
+        },
+        {
+            name: 'logo',
+            sideLenT: 5,
+            startPosT: [12, 0],
+            endPosT: [17, 0]
+        },
+        {
+            name: 'star',
+            sideLenT: 7,
+            startPosT: [0, 42],
+            endPosT: [7, 42]
+        },
+        {
+            name: 'race',
+            sideLenT: 7,
+            startPosT: [0, 49],
+            endPosT: [7, 49]
         }
     ]
 });
