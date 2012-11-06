@@ -32,33 +32,12 @@ define(function () {
         socketNamespace.on.apply(socketNamespace, arguments);
     };
 
-    // When to check connection the next time, in milliseconds. The value is
-    // random and exponential: Small values are more likely than high values.
-    // This just feels like a good idea.
-    checkInterval = function () {
-        var max = 20000; // milliseconds
-        return Math.exp(Math.log(max) * Math.random());
-    };
-
-    // Initiates (re-)connection if necessary. Schedules its own next call.
-    repeatedlyCheckConnection = function () {
-        var socket = socketNamespace.socket;
-
-        if (!socket.connected && !socket.connecting && !socket.reconnecting &&
-                navigator.onLine) {
-            socket.connect();
-        }
-
-        setTimeout(repeatedlyCheckConnection, checkInterval());
-    };
-
     // There is no callback for waiting until the connection is established:
     // `socket.emit` can be called right right away as events will be queued.
     socketNamespace = io.connect(host(), {
-        reconnect: false // not needed; own reconnect system is used
+        'reconnection limit': 20000, // ms
+        'max reconnection attempts': Infinity
     });
-
-    repeatedlyCheckConnection();
 
     return Object.create(null, {
         // Emits the specified event. If there currently is no connection, then

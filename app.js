@@ -36,12 +36,6 @@ startServer = function () {
 
     // also triggered on reconnection
     io.sockets.on('connection', function (socket) {
-        // fixme: for understanding Socket.IO
-        console.log('fixme: connection');
-        socket.on('event', function (data) { // fixme
-            console.log('received event:', data);
-        });
-
         boards.emitHiscores(socket);
         boards.listen(socket);
     });
