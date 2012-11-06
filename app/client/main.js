@@ -40,8 +40,6 @@ define([
         width, // px
         height; // px
 
-    console.log('fixme: beginning');
-
     // Updates GUI components for landscape layout.
     updateComponentsLandscapeLayout = function (width, height) {
         // panel = panel with all the elements on the right of the board
