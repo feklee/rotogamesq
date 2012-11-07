@@ -118,9 +118,9 @@ Releasing a new version
 
   * Version number schema: major.minor.bugfix
 
-  * Add tag in GIT.
-
   * Update `version` in: `package.json`
+
+  * Add tag in GIT.
 
 
 Hacking notes
