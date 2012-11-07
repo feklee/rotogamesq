@@ -16,10 +16,12 @@
 html(lang="en", manifest="manifest.appcache")
   head
     meta(charset="UTF-8")
-    meta(name="description", content=description)
 
     title ROTOGAMEsq
 
+    meta(name="description", content=description)
+    meta(name="author", content=author)
+    link(rel="author", href=repository.url)
     link(rel="shortcut icon", href="/images/icon_16.png")
 
     if env == 'development'

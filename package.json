@@ -1,11 +1,12 @@
 {
   "name": "rotogamesq",
-  "version": "0.1.0-17",
+  "version": "0.1.0-18",
+  "author": "Felix E. Klee <felix.klee@inka.de>",
   "subdomain": "rotogamesq",
   "domains": [
     "sq.rotogame.com"
   ],
-  "description": "A puzzle game inspired by squared bathroom tiles.",
+  "description": "ROTOGAMEsq is a puzzle game inspired by squared bathroom tiles.",
   "scripts": {
     "start": "node app.js"
   },

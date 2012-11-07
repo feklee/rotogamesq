@@ -27,18 +27,25 @@ module.exports = function (env) {
                                            'utf8'),
         manifestAppcacheContent;
 
-    manifestAppcacheContent = ('CACHE MANIFEST\n' +
-                               '# ROTOGAMEsq ' +
-                               (env === 'development' ?
-                                'development' :
-                                'v' + packageJson.version) +
-                               '\n\n' +
-                               manifestAppcacheInc);
+    (function () {
+        var versionString = (env === 'development' ?
+                             '(development, random: ' + Math.random() + ')' :
+                             'v' + packageJson.version);
+
+        manifestAppcacheContent =
+                ('CACHE MANIFEST\n' +
+                 '# ROTOGAMEsq ' + versionString + '\n\n' +
+                 manifestAppcacheInc);
+    }());
 
     return Object.create(null, {
         index: {value: function (req, res) {
-            res.render('index', {env: env,
-                                 description: packageJson.description});
+            res.render('index', {
+                env: env,
+                description: packageJson.description,
+                author: packageJson.author,
+                repository: packageJson.repository
+            });
         }},
         installWebapp: {value: function (req, res) {
             res.render('install-webapp');
