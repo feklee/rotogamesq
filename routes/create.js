@@ -20,8 +20,9 @@
 
 var manifestAppcache;
 
-module.exports = function (env, version) {
+module.exports = function (env) {
     var readFileSync = require('fs').readFileSync,
+        packageJson = require('../package.json'),
         manifestAppcacheInc = readFileSync('views/' + env + '.appcache.inc',
                                            'utf8'),
         manifestAppcacheContent;
@@ -30,19 +31,19 @@ module.exports = function (env, version) {
                                '# ROTOGAMEsq ' +
                                (env === 'development' ?
                                 'development' :
-                                'v' + version) +
+                                'v' + packageJson.version) +
                                '\n\n' +
                                manifestAppcacheInc);
 
     return Object.create(null, {
         index: {value: function (req, res) {
-            res.render('index', {env: env});
+            res.render('index', {env: env,
+                                 description: packageJson.description});
         }},
         installWebapp: {value: function (req, res) {
             res.render('install-webapp');
         }},
         manifestAppcache: {value: function (req, res) {
-            // fixme: set mime-type
             res.set('Content-Type', 'text/cache-manifest');
             res.send(manifestAppcacheContent);
         }}

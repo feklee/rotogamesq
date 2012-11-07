@@ -16,18 +16,19 @@
 html(lang="en", manifest="manifest.appcache")
   head
     meta(charset="UTF-8")
+    meta(name="description", content=description)
 
     title ROTOGAMEsq
 
     link(rel="shortcut icon", href="/images/icon_16.png")
 
-    script(src="/socket.io/socket.io.js")
-
     if env == 'development'
       link(rel="stylesheet", href="/app/stylesheets/index.css")
+      script(src="/socket.io/socket.io.js")
       script(data-main="/app/client/main", src="/app/client/vendor/require.js")
     else
       link(rel="stylesheet", href="/app.build/stylesheets/index.css")
+      script(src="/socket.io/socket.io.js")
       script(src="/app.build/client/main.js")
 
     meta(name="HandheldFriendly", content="True")
