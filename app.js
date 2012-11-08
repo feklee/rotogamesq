@@ -35,7 +35,6 @@ startServer = function () {
 
     // also triggered on reconnection
     io.sockets.on('connection', function (socket) {
-        boards.emitHiscores(socket);
         boards.listen(socket);
     });
 };

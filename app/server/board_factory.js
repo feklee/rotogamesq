@@ -88,10 +88,6 @@ create = function (name, startTiles, endTiles) {
 
         listen: {value: function (socket) {
             hiscores.listen(socket, this);
-        }},
-
-        emitHiscores: {value: function (socket) {
-            hiscores.emit(socket, this);
         }}
     });
 };

@@ -112,6 +112,9 @@ listen = function (socket, board) {
             console.log('Invalid hiscore received');
         }
     });
+    socket.on('request of hiscores for ' + board.name, function () {
+        emit.call(this, socket, board);
+    });
 };
 
 // Emits hiscores for the specified board, via Socket.IO.
@@ -150,10 +153,6 @@ create = function () {
     return Object.create(null, {
         listen: {value: function (socket, board) {
             listen.call(this, socket, board);
-        }},
-
-        emit: {value: function (socket, board) {
-            emit.call(this, socket, board);
         }}
     });
 };

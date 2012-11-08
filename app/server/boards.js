@@ -22,7 +22,6 @@ var boardFactory = require('./board_factory'),
     boardsSprites = require('./boards_sprites'),
     config = require('../common/config'),
     createBoards,
-    emitHiscores,
     boards;
 
 createBoards = function () {
@@ -43,12 +42,6 @@ boards = Object.create([], {
         boardsSprites.load(function () {
             createBoards.call(boards);
             onLoaded();
-        });
-    }},
-
-    emitHiscores: {value: function (socket) {
-        this.forEach(function (board) {
-            board.emitHiscores(socket);
         });
     }},
 

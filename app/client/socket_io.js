@@ -21,7 +21,7 @@
 define(function () {
     'use strict';
 
-    var host, on, socketNamespace, checkInterval, repeatedlyCheckConnection;
+    var host, on, socketNamespace;
 
     host = function () {
         var l = window.location;

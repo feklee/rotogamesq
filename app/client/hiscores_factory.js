@@ -21,9 +21,9 @@
 define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
     'use strict';
 
-    var isBetterOrEqual, saveProposal, listenToUpdates, create,
-        updateUnsavedHiscores,
-        updateFromLocalStorage, updateLocalStorage,
+    var isBetterOrEqual, saveProposal, listenToUpdates, requestHiscores,
+        create,
+        updateUnsavedHiscores, updateFromLocalStorage, updateLocalStorage,
         sendUnsavedToServer,
         lastNameSet = ''; // last name edited (preset for new proposals)
 
@@ -115,6 +115,10 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
         });
     };
 
+    requestHiscores = function (internal) {
+        socketIo.emit('request of hiscores for ' + internal.boardName);
+    };
+
     create = function (boardName) {
         var internal = {
             proposal: undefined, // new, proposed hiscore (editable)
@@ -130,6 +134,8 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
                                        // data hadn't been sent to server
 
         listenToUpdates(internal);
+
+        requestHiscores(internal);
 
         return Object.create(null, {
             // Calls callback with three parameters: hiscore, index, and
