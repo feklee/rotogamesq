@@ -34,7 +34,8 @@ define([
 
     var updateComponentsLandscapeLayout, updateLandscapeLayout,
         updateComponentsPortraitLayout, updatePortraitLayout,
-        updateLayout, animStep, onResize, hideLoadScreen, onLoaded,
+        updateLayout, animStep, onResize, hideLoadScreen, onBoardsLoaded,
+        onDocumentComplete,
         loaded = false,
         goldenRatio = 1.61803398875,
         width, // px
@@ -209,7 +210,7 @@ define([
         document.getElementById('loadScreen').style.display = 'none';
     };
 
-    onLoaded = function () {
+    onDocumentComplete = function () {
         loaded = true;
 
         hideLoadScreen();
@@ -226,7 +227,11 @@ define([
                     // continues with animation
     };
 
-    util.whenDocumentIsReady(function () {
-        boards.load(onLoaded);
+    onBoardsLoaded = function () {
+        util.onceDocumentIsComplete(onDocumentComplete);
+    };
+
+    util.onceDocumentIsInteractive(function () {
+        boards.load(onBoardsLoaded);
     });
 });

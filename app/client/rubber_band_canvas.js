@@ -184,7 +184,7 @@ define([
         }
     };
 
-    util.whenDocumentIsReady(function () {
+    util.onceDocumentIsInteractive(function () {
         var el = document.getElementById('rubberBandCanvas');
 
         el.addEventListener('mousedown', onMouseDown);

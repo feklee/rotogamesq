@@ -335,7 +335,7 @@ define([
         }
     };
 
-    util.whenDocumentIsReady(function () {
+    util.onceDocumentIsInteractive(function () {
         var el = document.getElementById('boardsNavigator');
 
         el.addEventListener('mousedown', onMouseDown);

@@ -116,7 +116,7 @@ define(['boards', 'util'], function (boards, util) {
         renderRedoButton();
     };
 
-    util.whenDocumentIsReady(function () {
+    util.onceDocumentIsInteractive(function () {
         setupButton('undo', onUndoClick);
         setupButton('redo', onRedoClick);
 
