@@ -68,7 +68,7 @@ if (app.get('env') === 'development') {
     // advised production settings from Socket.IO wiki (as of Oct. 2012), but
     // without Flash transport (can cause issues with Joyent -
     // <http://blog.dreamflashstudio.com/2012/08/nodejitsu-on-joyent/>):
-    io.enable('browser client minificati kon');
+    io.enable('browser client minification');
     io.enable('browser client etag');
     io.enable('browser client gzip');
     io.set('transports', ['websocket', 'htmlfile', 'xhr-polling',
