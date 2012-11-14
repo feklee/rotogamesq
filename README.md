@@ -88,6 +88,23 @@ Hiscores
       + On new hiscore entry on client: unsaved hiscores sent to server
 
 
+How to inspect Redis database
+=============================
+
+Connect with Redis CLI.
+  
+  * Show hiscores of board `smiley`:
+  
+        ZRANGE smiley 0 -1 WITHSCORES
+  
+  * Show rotations associated with hiscores for board  `smiley`:
+  
+        HGETALL smiley.rotations
+
+  * List all boards with recorded rotations (= all boards with hiscores):
+  
+        KEYS *.rotations
+
 
 Coordinates
 ===========
