@@ -82,6 +82,8 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
             internal.proposal = undefined; // now open for new proposal (e.g.
                                            // after pressing undo and continue
                                            // playing to get better)
+
+            internal.proposalWasSaved = true;
         }
     };
 
@@ -126,7 +128,8 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
             savedHiscores: [],
             unsavedHiscores: [], // new hiscores, not yet on the server
             boardName: boardName,
-            localStorageKey: boardName + '.hiscores'
+            localStorageKey: boardName + '.hiscores',
+            hiscoreHasBeenSaved: false
         };
 
         updateFromLocalStorage(internal);
@@ -161,18 +164,18 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
                     maxSavedI = savedHiscores.length,
                     maxUnsavedI = unsavedHiscores.length,
                     proposal = internal.proposal,
-                    proposalHasBeenShown = false,
+                    proposalWasShown = false,
                     usedNames = [];
 
                 while (i < 7) {
                     savedHiscore = savedHiscores[savedI];
                     unsavedHiscore = unsavedHiscores[unsavedI];
-                    if (!proposalHasBeenShown &&
+                    if (!proposalWasShown &&
                             isBetterOrEqual(proposal, unsavedHiscore) &&
                             isBetterOrEqual(proposal, savedHiscore)) {
                         hiscore = proposal;
                         status = 'editable';
-                        proposalHasBeenShown = true;
+                        proposalWasShown = true;
                     } else if (isBetterOrEqual(unsavedHiscore, savedHiscore)) {
                         hiscore = unsavedHiscore;
                         status = 'unsaved';
@@ -221,6 +224,10 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
 
             saveProposal: {value: function () {
                 saveProposal.call(this, internal);
+            }},
+
+            proposalWasSaved: {get: function () {
+                return internal.proposalWasSaved;
             }},
 
             // proposes a new hiscore (name is to be entered by the player)

@@ -24,9 +24,11 @@ define(['boards', 'util'], function (boards, util) {
 
     var style, buttonEl, onUndoClick, onRedoClick, onKeyUp, setupButton,
         renderButton, renderUndoButton, renderRedoButton, render,
+        undoButtonIsDisabled, redoButtonIsDisabled,
         nRotations, board,
         needsToBeRendered = true,
-        layout = {width: 1, height: 1, left: 0, top: 0};
+        layout = {width: 1, height: 1, left: 0, top: 0},
+        hiscoreWasSaved = false;
 
     style = function () {
         return document.getElementById('rotationsNavigator').style;
@@ -37,12 +39,26 @@ define(['boards', 'util'], function (boards, util) {
                                       '.button');
     };
 
+    undoButtonIsDisabled = function () {
+        // Undo button is disabled when hiscore has been sent (or otherwise
+        // player may do undo, redo, and then enter a new hiscore entry).
+        return hiscoreWasSaved || !board.undoIsPossible;
+    };
+
+    redoButtonIsDisabled = function () {
+        return !board.redoIsPossible;
+    };
+
     onUndoClick = function () {
-        board.undo();
+        if (!undoButtonIsDisabled()) {
+            board.undo();
+        }
     };
 
     onRedoClick = function () {
-        board.redo();
+        if (!redoButtonIsDisabled()) {
+            board.redo();
+        }
     };
 
     onKeyUp = function (e) {
@@ -83,11 +99,11 @@ define(['boards', 'util'], function (boards, util) {
     };
 
     renderUndoButton = function () {
-        renderButton('undo', !board.undoIsPossible);
+        renderButton('undo', undoButtonIsDisabled());
     };
 
     renderRedoButton = function () {
-        renderButton('redo', !board.redoIsPossible);
+        renderButton('redo', redoButtonIsDisabled());
     };
 
     render = function () {
@@ -132,6 +148,11 @@ define(['boards', 'util'], function (boards, util) {
 
             if (board.nRotations !== nRotations) {
                 nRotations = board.nRotations;
+                needsToBeRendered = true;
+            }
+
+            if (board.hiscores.proposalWasSaved !== hiscoreWasSaved) {
+                hiscoreWasSaved = board.hiscores.proposalWasSaved;
                 needsToBeRendered = true;
             }
 
