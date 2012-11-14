@@ -83,12 +83,9 @@ body {
     cursor: pointer;
 }
 
-.disabled {
-    color: #777;
-}
-
 .button.disabled {
     cursor: default;
+    color: #777;
 }
 
 #title, #display, #boardsNavigator, #rotationsNavigator,
