@@ -22,13 +22,15 @@
 define(['boards', 'util'], function (boards, util) {
     'use strict';
 
-    var style, buttonEl, onUndoClick, onRedoClick, onKeyUp, setupButton,
-        renderButton, renderUndoButton, renderRedoButton, render,
-        isDisabled, undoButtonIsDisabled, redoButtonIsDisabled,
+    var style, buttonEl, nRotationsEl,
+        onUndoClick, onRedoClick, onResetClick, onKeyUp,
+        setupButton, renderButton, renderUndoButton, renderRedoButton,
+        updateControlsVisibility,
+        render,
         nRotations, board,
         needsToBeRendered = true,
         layout = {width: 1, height: 1, left: 0, top: 0},
-        hiscoreWasSaved = false;
+        boardIsInteractive = false;
 
     style = function () {
         return document.getElementById('rotationsNavigator').style;
@@ -39,30 +41,20 @@ define(['boards', 'util'], function (boards, util) {
                                       '.button');
     };
 
-    isDisabled = function () {
-        // Navigator is disabled when hiscore has been sent (or otherwise
-        // player may do undo, redo, and then enter a new hiscore entry).
-        return hiscoreWasSaved;
-    };
-
-    undoButtonIsDisabled = function () {
-        return isDisabled() || !board.undoIsPossible;
-    };
-
-    redoButtonIsDisabled = function () {
-        return isDisabled() || !board.redoIsPossible;
+    nRotationsEl = function () {
+        return document.getElementById('nRotations');
     };
 
     onUndoClick = function () {
-        if (!undoButtonIsDisabled()) {
-            board.undo();
-        }
+        board.undo();
     };
 
     onRedoClick = function () {
-        if (!redoButtonIsDisabled()) {
-            board.redo();
-        }
+        board.redo();
+    };
+
+    onResetClick = function () {
+        board.reset();
     };
 
     onKeyUp = function (e) {
@@ -103,11 +95,20 @@ define(['boards', 'util'], function (boards, util) {
     };
 
     renderUndoButton = function () {
-        renderButton('undo', undoButtonIsDisabled());
+        renderButton('undo', !board.undoIsPossible);
     };
 
     renderRedoButton = function () {
-        renderButton('redo', redoButtonIsDisabled());
+        renderButton('redo', !board.redoIsPossible);
+    };
+
+    updateControlsVisibility = function () {
+        buttonEl('undo').style.display =
+            buttonEl('redo').style.display =
+            nRotationsEl().style.display = (boardIsInteractive ?
+                                            'inline' : 'none');
+        buttonEl('reset').style.display = (boardIsInteractive ?
+                                           'none' : 'inline');
     };
 
     render = function () {
@@ -131,9 +132,9 @@ define(['boards', 'util'], function (boards, util) {
             s.textAlign = 'center';
         }
 
-        document.getElementById('rotationsNavigator').className =
-             isDisabled() ? 'disabled' : '';
-        document.getElementById('nRotations').textContent = nRotations;
+        updateControlsVisibility();
+
+        nRotationsEl().textContent = nRotations;
         renderUndoButton();
         renderRedoButton();
     };
@@ -141,6 +142,7 @@ define(['boards', 'util'], function (boards, util) {
     util.onceDocumentIsInteractive(function () {
         setupButton('undo', onUndoClick);
         setupButton('redo', onRedoClick);
+        setupButton('reset', onResetClick);
 
         window.addEventListener('keyup', onKeyUp);
     });
@@ -157,8 +159,8 @@ define(['boards', 'util'], function (boards, util) {
                 needsToBeRendered = true;
             }
 
-            if (board.hiscores.proposalWasSaved !== hiscoreWasSaved) {
-                hiscoreWasSaved = board.hiscores.proposalWasSaved;
+            if (board.isInteractive !== boardIsInteractive) {
+                boardIsInteractive = board.isInteractive;
                 needsToBeRendered = true;
             }
 

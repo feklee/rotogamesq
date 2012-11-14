@@ -153,6 +153,10 @@ body {
     font-weight: bold;
 }
 
+#rotationsNavigator>.reset.button {
+    display: none;
+}
+
 #hiscoresTableGroup {
     overflow: hidden;
 }

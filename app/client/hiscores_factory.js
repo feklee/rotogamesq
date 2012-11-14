@@ -79,11 +79,9 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
 
             sendUnsavedToServer(internal);
 
-            internal.proposal = undefined; // now open for new proposal (e.g.
-                                           // after pressing undo and continue
-                                           // playing to get better)
-
             internal.proposalWasSaved = true;
+
+            internal.proposal = undefined; // or else it would still appear
         }
     };
 
@@ -241,6 +239,11 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
 
             rmProposal: {value: function () {
                 internal.proposal = undefined;
+            }},
+
+            resetProposal: {value: function () {
+                internal.proposal = undefined;
+                internal.proposalWasSaved = false;
             }},
 
             version: {get: function () {

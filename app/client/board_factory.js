@@ -21,7 +21,7 @@
 define(['hiscores_factory'], function (hiscoresFactory) {
     'use strict';
 
-    var prototype, updateIsFinished, create;
+    var prototype, updateIsFinished, initInternal, create;
 
     // Updates `internal.isFinished`.
     updateIsFinished = function (internal, board, rotation) {
@@ -32,8 +32,20 @@ define(['hiscores_factory'], function (hiscoresFactory) {
             }
         } else {
             internal.isFinished = false;
-            board.hiscores.rmProposal();
+            board.hiscores.rmProposal(); // or else it would still appear
         }
+    };
+
+    // May also be used to reset.
+    initInternal = function (internal, startTiles) {
+        if (startTiles !== undefined) {
+            internal.startTiles = startTiles;
+        }
+        internal.tiles = internal.startTiles.copy();
+        internal.rotations = []; // for undo, for counting, ...
+        internal.futureRotations = []; // for redo
+        internal.lastRotation = null;
+        internal.isFinished = false; // true when game is finished
     };
 
     prototype = Object.create(null, {
@@ -66,14 +78,10 @@ define(['hiscores_factory'], function (hiscoresFactory) {
         }}
     });
 
-    create = function (name, tiles, endTiles) {
-        var internal = {
-                rotations: [], // for undo, for counting, ...
-                futureRotations: [], // for redo
-                lastRotation: null,
-                isFinished: false // true when game is finished
-            },
-            hiscores = hiscoresFactory.create(name);
+    create = function (name, startTiles, endTiles) {
+        var board, internal = {}, hiscores = hiscoresFactory.create(name);
+
+        initInternal(internal, startTiles);
 
         return Object.create(prototype, {
             rotate: {value: function (rotation) {
@@ -81,7 +89,7 @@ define(['hiscores_factory'], function (hiscoresFactory) {
             }},
 
             tiles: {get: function () {
-                return tiles;
+                return internal.tiles;
             }},
 
             endTiles: {get: function () {
@@ -89,7 +97,7 @@ define(['hiscores_factory'], function (hiscoresFactory) {
             }},
 
             sideLenT: {get: function () {
-                return tiles.length;
+                return internal.tiles.length;
             }},
 
             nRotations: {get: function () {
@@ -100,20 +108,39 @@ define(['hiscores_factory'], function (hiscoresFactory) {
                 return internal.rotations.length < 99;
             }},
 
+            // True, if user can rotate e.g. by selection or by doing undo /
+            // redo. Once the board is finished, and the hiscore has been
+            // saved, the board is not interactive anymore. Otherwise the user
+            // could undo, redo, and then enter hiscore again.
+            isInteractive: {get: function () {
+                return !hiscores.proposalWasSaved;
+            }},
+
             undoIsPossible: {get: function () {
-                return internal.rotations.length > 0;
+                return (this.isInteractive &&
+                        internal.rotations.length > 0);
             }},
 
             undo: {value: function () {
-                prototype.undo.call(this, internal);
+                if (this.undoIsPossible) {
+                    prototype.undo.call(this, internal);
+                }
             }},
 
             redoIsPossible: {get: function () {
-                return internal.futureRotations.length > 0;
+                return (this.isInteractive &&
+                        internal.futureRotations.length > 0);
             }},
 
             redo: {value: function () {
-                prototype.redo.call(this, internal);
+                if (this.redoIsPossible) {
+                    prototype.redo.call(this, internal);
+                }
+            }},
+
+            reset: {value: function () {
+                initInternal(internal);
+                hiscores.resetProposal();
             }},
 
             isFinished: {get: function () {
