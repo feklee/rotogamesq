@@ -83,8 +83,11 @@ body {
     cursor: pointer;
 }
 
-.button.disabled {
+.disabled {
     color: #777;
+}
+
+.button.disabled {
     cursor: default;
 }
 

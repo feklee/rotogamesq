@@ -24,7 +24,7 @@ define(['boards', 'util'], function (boards, util) {
 
     var style, buttonEl, onUndoClick, onRedoClick, onKeyUp, setupButton,
         renderButton, renderUndoButton, renderRedoButton, render,
-        undoButtonIsDisabled, redoButtonIsDisabled,
+        isDisabled, undoButtonIsDisabled, redoButtonIsDisabled,
         nRotations, board,
         needsToBeRendered = true,
         layout = {width: 1, height: 1, left: 0, top: 0},
@@ -39,14 +39,18 @@ define(['boards', 'util'], function (boards, util) {
                                       '.button');
     };
 
-    undoButtonIsDisabled = function () {
-        // Undo button is disabled when hiscore has been sent (or otherwise
+    isDisabled = function () {
+        // Navigator is disabled when hiscore has been sent (or otherwise
         // player may do undo, redo, and then enter a new hiscore entry).
-        return hiscoreWasSaved || !board.undoIsPossible;
+        return hiscoreWasSaved;
+    };
+
+    undoButtonIsDisabled = function () {
+        return isDisabled() || !board.undoIsPossible;
     };
 
     redoButtonIsDisabled = function () {
-        return !board.redoIsPossible;
+        return isDisabled() || !board.redoIsPossible;
     };
 
     onUndoClick = function () {
@@ -86,12 +90,12 @@ define(['boards', 'util'], function (boards, util) {
         buttonEl(type).addEventListener('click', onClick);
     };
 
-    renderButton = function (type, isDisabled) {
+    renderButton = function (type, buttonIsDisabled) {
         // `classList` is not used as it isn't supported by Android 2.3 browser
 
         var className = type + ' button';
 
-        if (isDisabled) {
+        if (buttonIsDisabled) {
             className += ' disabled';
         }
 
@@ -127,6 +131,8 @@ define(['boards', 'util'], function (boards, util) {
             s.textAlign = 'center';
         }
 
+        document.getElementById('rotationsNavigator').className =
+             isDisabled() ? 'disabled' : '';
         document.getElementById('nRotations').textContent = nRotations;
         renderUndoButton();
         renderRedoButton();
