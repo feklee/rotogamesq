@@ -1,4 +1,11 @@
 // Client for communicating with Redis.
+//
+// The client tries to (re-)connect:
+//
+//   * every time a command is sent,
+//
+//   * automatically and repeatedly (as of `node_redis` v0.8 at exponentially
+//     increasing time intervals).
 
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //

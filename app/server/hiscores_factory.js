@@ -101,18 +101,32 @@ insertHiscore = function (hiscore, board) {
     }
 };
 
+// Using Socket.IO, establishes interchange of hiscores between the server and
+// a client (browser).
 listen = function (socket, board) {
+    // On client submits new hiscore.
     socket.on('hiscore for ' + board.name, function (hiscore) {
         if (hiscoreIsValid(hiscore, board)) {
-            insertHiscore(hiscore, board);
+            insertHiscore(hiscore, board); // insert command is automatically
+                                           // queued in case Redis is down
 
-            emit.call(this, socket, board);
-            emit.call(this, socket.broadcast, board);
+            // Sends updated hiscores:
+            emit.call(this, socket, board); // current client
+            emit.call(this, socket.broadcast, board); // all other clients
         } else {
             console.log('Invalid hiscore received');
         }
     });
+
+    // On client wants updated hiscores
     socket.on('request of hiscores for ' + board.name, function () {
+        emit.call(this, socket, board);
+    });
+
+    // On (re-)connect to Redis. Hiscores need to be sent again, so that
+    // the client doesn't miss possible updates.
+    console.log('fixmeconnect');
+    redisClient.on('connect', function () {
         emit.call(this, socket, board);
     });
 };
