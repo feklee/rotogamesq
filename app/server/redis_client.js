@@ -38,4 +38,10 @@ redisClient.on('error', function (err) {
     console.error('Redis client:', err);
 });
 
+// Disables check for max listeners, because potentially a lot may be created
+// (to listen to "connect", for example). See also the 2012-11-15 CET thread
+// "High number of event handlers problematic?" in the mailing list
+// <nodejs@googlegroups.com>.
+redisClient.setMaxListeners(0);
+
 module.exports = redisClient;

@@ -125,7 +125,6 @@ listen = function (socket, board) {
 
     // On (re-)connect to Redis. Hiscores need to be sent again, so that
     // the client doesn't miss possible updates.
-    console.log('fixmeconnect');
     redisClient.on('connect', function () {
         emit.call(this, socket, board);
     });
