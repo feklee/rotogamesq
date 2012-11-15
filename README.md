@@ -37,6 +37,19 @@ How to start development environment
         nodemon --watch . app.js
 
 
+Open Web App
+============
+
+ROTOGAMEsq supports installation as [Open Web App][11]. Once installed, it can
+be run offline. To test installation, open the relative URL:
+
+    /install-webapp
+
+The manifest is located at:
+
+    /manifest.webapp
+
+
 How to add a board
 ==================
 
@@ -87,23 +100,20 @@ Hiscores
 
       + On new hiscore entry on client: unsaved hiscores sent to server
 
+  * Hiscores may be inspected via the Redis CLI:
+  
+      + To show hiscores of board `smiley`:
+  
+            ZRANGE smiley 0 -1 WITHSCORES
+  
+      + To show rotations associated with hiscores for board  `smiley`:
+  
+            HGETALL smiley.rotations
 
-How to inspect Redis database
-=============================
-
-Connect with Redis CLI.
+      + To list all boards with recorded rotations (= all boards with
+        hiscores):
   
-  * Show hiscores of board `smiley`:
-  
-        ZRANGE smiley 0 -1 WITHSCORES
-  
-  * Show rotations associated with hiscores for board  `smiley`:
-  
-        HGETALL smiley.rotations
-
-  * List all boards with recorded rotations (= all boards with hiscores):
-  
-        KEYS *.rotations
+            KEYS *.rotations
 
 
 Coordinates
@@ -155,7 +165,7 @@ Hacking notes
     For similar reasons (possible subpixel positioning issues), the rotation is
     *not* done using CSS3 transformations.
   
-  * Format for comments: Mardown
+  * Format for comments: [Mardown][10]
 
   * The current `README.md` has some ugly formatting of lists, to work around
     [a bug][9] in GitHub's Markdown interpreter.
@@ -187,3 +197,5 @@ specific language governing permissions and limitations under the License.
 [7]: http://socket.io/
 [8]: http://www.whatwg.org/specs/web-apps/current-work/multipage/offline.html#appcache
 [9]: https://github.com/github/markup/issues/165
+[10]: http://daringfireball.net/projects/markdown/
+[11]: https://developer.mozilla.org/en-US/docs/Apps
