@@ -8,6 +8,8 @@ has moved, and in his new home the bathroom tiles are different. ;-)
 
 **Install:** [Firefox Appstore][12]
 
+**Hack:** [GitHub][13]
+
 
 History
 =======
@@ -202,3 +204,4 @@ specific language governing permissions and limitations under the License.
 [10]: http://daringfireball.net/projects/markdown/
 [11]: https://developer.mozilla.org/en-US/docs/Apps
 [12]: https://marketplace.firefox.com/app/rotogamesq/
+[13]: https://github.com/feklee/rotogamesq
