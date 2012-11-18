@@ -6,7 +6,7 @@ has moved, and in his new home the bathroom tiles are different. ;-)
 
 **Play:** [sq.rotogame.com][2]
 
-**Install:** [Firefox Appstore][12]
+**Install:** [Firefox Marketplace][12]
 
 **Hack:** [GitHub][13]
 
