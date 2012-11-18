@@ -6,6 +6,8 @@ has moved, and in his new home the bathroom tiles are different. ;-)
 
 **Play:** [sq.rotogame.com][2]
 
+**Install:** [Firefox Appstore][12]
+
 
 History
 =======
@@ -199,3 +201,4 @@ specific language governing permissions and limitations under the License.
 [9]: https://github.com/github/markup/issues/165
 [10]: http://daringfireball.net/projects/markdown/
 [11]: https://developer.mozilla.org/en-US/docs/Apps
+[12]: https://marketplace.firefox.com/app/rotogamesq/

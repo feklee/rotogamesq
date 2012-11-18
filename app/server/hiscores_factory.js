@@ -104,8 +104,11 @@ insertHiscore = function (hiscore, board) {
 // Using Socket.IO, establishes interchange of hiscores between the server and
 // a client (browser).
 listen = function (socket, board) {
-    // On client submits new hiscore.
-    socket.on('hiscore for ' + board.name, function (hiscore) {
+    var onHiscoreForBoard, onRequestOfHiscoresForBoard, onRedisConnect,
+        onDisconnect;
+
+    // Called on client (browser) submits new hiscore.
+    onHiscoreForBoard = function (hiscore) {
         if (hiscoreIsValid(hiscore, board)) {
             insertHiscore(hiscore, board); // insert command is automatically
                                            // queued in case Redis is down
@@ -116,18 +119,50 @@ listen = function (socket, board) {
         } else {
             console.log('Invalid hiscore received');
         }
-    });
+    };
 
-    // On client wants updated hiscores
-    socket.on('request of hiscores for ' + board.name, function () {
+    // Called on client wants updated hiscores.
+    onRequestOfHiscoresForBoard = function () {
         emit.call(this, socket, board);
-    });
+    };
 
-    // On (re-)connect to Redis. Hiscores need to be sent again, so that
+    // Called on (re-)connect to Redis. Hiscores need to be sent again, so that
     // the client doesn't miss possible updates.
-    redisClient.on('connect', function () {
+    onRedisConnect = function () {
+        console.log('fixme: connect', board.name);
         emit.call(this, socket, board);
-    });
+    };
+
+    // Called when the client (browser) disconnects. Cleans up.
+    onDisconnect = function () {
+        // fixme: perhaps it's unnecessary to remove the event listeners for
+        // `socket` itself
+
+        socket.removeListener('hiscore for ' + board.name, onHiscoreForBoard);
+        socket.removeListener('request of hiscores for ' + board.name,
+                              onRequestOfHiscoresForBoard);
+        redisClient.removeListener('connect', onRedisConnect);
+        socket.removeListener('disconnect', onDisconnect);
+
+        console.log('fixme listeners after cleanup:',
+                    socket.listeners('hiscore for ' + board.name).length);
+    };
+
+    socket.on('hiscore for ' + board.name, onHiscoreForBoard);
+    socket.on('request of hiscores for ' + board.name,
+              onRequestOfHiscoresForBoard);
+    redisClient.on('connect', onRedisConnect);
+    socket.on('disconnect', onDisconnect);
+
+    // Sends current hiscores to client. If the client (browser) is just
+    // initializing itself and has not set up listeners for getting hiscores,
+    // then the hiscores will get lost. However, if the client is reconnecting
+    // (e.g. after a temporary loss of network connection on a mobile device),
+    // then it will get the latest hiscores, which is good.
+    emit.call(this, socket, board);
+
+    console.log('fixme listeners after creation:',
+                socket.listeners('hiscore for ' + board.name).length);
 };
 
 // Emits hiscores for the specified board, via Socket.IO.
@@ -162,6 +197,7 @@ emit = function (socket, board) {
     );
 };
 
+// Creates hiscores object.
 create = function () {
     return Object.create(null, {
         listen: {value: function (socket, board) {

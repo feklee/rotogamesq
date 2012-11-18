@@ -1,0 +1,138 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Programme\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Programme\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'v8-profiler' ]
+2 info using npm@1.1.59
+3 info using node@v0.8.8
+4 verbose node symlink C:\Programme\nodejs\\node.exe
+5 verbose read json C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\package.json
+6 verbose read json C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\package.json
+7 verbose cache add [ 'v8-profiler', null ]
+8 silly cache add name=undefined spec="v8-profiler" args=["v8-profiler",null]
+9 verbose parsed url { pathname: 'v8-profiler',
+9 verbose parsed url   path: 'v8-profiler',
+9 verbose parsed url   href: 'v8-profiler' }
+10 silly lockFile a12f389f-v8-profiler v8-profiler
+11 verbose lock v8-profiler C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm-cache\a12f389f-v8-profiler.lock
+12 silly lockFile a12f389f-v8-profiler v8-profiler
+13 verbose addNamed [ 'v8-profiler', '' ]
+14 verbose addNamed [ null, '' ]
+15 silly lockFile f875d38f-v8-profiler v8-profiler@
+16 verbose lock v8-profiler@ C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm-cache\f875d38f-v8-profiler.lock
+17 silly addNameRange { name: 'v8-profiler', range: '', hasData: false }
+18 verbose url raw v8-profiler
+19 verbose url resolving [ 'https://registry.npmjs.org/', './v8-profiler' ]
+20 verbose url resolved https://registry.npmjs.org/v8-profiler
+21 info retry registry request attempt 1 at 18:34:59
+22 verbose etag "6101O1WDVRLB7Z9BWU8DFGS3H"
+23 http GET https://registry.npmjs.org/v8-profiler
+24 http 304 https://registry.npmjs.org/v8-profiler
+25 silly registry.get cb [ 304,
+25 silly registry.get   { server: 'CouchDB/1.2.0 (Erlang OTP/R15B)',
+25 silly registry.get     etag: '"6101O1WDVRLB7Z9BWU8DFGS3H"',
+25 silly registry.get     date: 'Sat, 17 Nov 2012 17:34:35 GMT',
+25 silly registry.get     'content-length': '0' } ]
+26 verbose etag v8-profiler from cache
+27 silly addNameRange number 2 { name: 'v8-profiler', range: '', hasData: true }
+28 silly addNameRange versions [ 'v8-profiler',
+28 silly addNameRange   [ '0.0.1', '0.0.2', '0.0.3', '3.6.2beta', '3.6.2beta2', '3.6.2-1' ] ]
+29 verbose addNamed [ 'v8-profiler', '3.6.2-1' ]
+30 verbose addNamed [ '3.6.2-1', '3.6.2-1' ]
+31 silly lockFile 19e1a1b9-v8-profiler-3-6-2-1 v8-profiler@3.6.2-1
+32 verbose lock v8-profiler@3.6.2-1 C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm-cache\19e1a1b9-v8-profiler-3-6-2-1.lock
+33 verbose read json C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm-cache\v8-profiler\3.6.2-1\package\package.json
+34 silly lockFile 19e1a1b9-v8-profiler-3-6-2-1 v8-profiler@3.6.2-1
+35 silly lockFile f875d38f-v8-profiler v8-profiler@
+36 silly resolved [ { name: 'v8-profiler',
+36 silly resolved     version: '3.6.2-1',
+36 silly resolved     description: 'node bindings for the v8 profiler',
+36 silly resolved     homepage: 'http://github.com/dannycoates/v8-profiler',
+36 silly resolved     author: { name: 'Danny Coates', email: 'dannycoates@gmail.com' },
+36 silly resolved     keywords: [ 'profiler', 'inspector' ],
+36 silly resolved     engines: { node: '>=0.6' },
+36 silly resolved     main: 'v8-profiler',
+36 silly resolved     scripts: { install: 'node-gyp rebuild' },
+36 silly resolved     gypfile: true,
+36 silly resolved     readme: 'v8-profiler provides [node](http://github.com/ry/node) bindings for the v8 \nprofiler and integration with [node-inspector](http://github.com/dannycoates/node-inspector)\n\n## Installation\n\n    npm install v8-profiler\n\n## Usage\n\n    var profiler = require(\'v8-profiler\');\n\n## API\n\n    var snapshot = profiler.takeSnapshot([name])      //takes a heap snapshot\n\n    profiler.startProfiling([name])                   //begin cpu profiling\n    var cpuProfile = profiler.stopProfiling([name])   //finish cpu profiling\n\n## node-inspector\n\nCpu profiles can be viewed and heap snapshots may be taken and viewed from the\nprofiles panel.\n',
+36 silly resolved     _id: 'v8-profiler@3.6.2-1',
+36 silly resolved     _from: 'v8-profiler' } ]
+37 info install v8-profiler@3.6.2-1 into C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm
+38 info installOne v8-profiler@3.6.2-1
+39 verbose from cache C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm-cache\v8-profiler\3.6.2-1\package\package.json
+40 info C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler unbuild
+41 verbose read json C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler\package.json
+42 verbose tar unpack C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm-cache\v8-profiler\3.6.2-1\package.tgz
+43 silly lockFile e200c65e-ten-npm-node-modules-v8-profiler C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler
+44 verbose lock C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm-cache\e200c65e-ten-npm-node-modules-v8-profiler.lock
+45 silly gunzTarPerm modes [ '777', '666' ]
+46 silly gunzTarPerm extractEntry package.json
+47 silly gunzTarPerm extractEntry .npmignore
+48 silly gunzTarPerm extractEntry v8-profiler.js
+49 silly gunzTarPerm extractEntry profile.cc
+50 silly gunzTarPerm extractEntry graph_edge.cc
+51 silly gunzTarPerm extractEntry graph_edge.h
+52 silly gunzTarPerm extractEntry graph_node.cc
+53 silly gunzTarPerm extractEntry graph_node.h
+54 silly gunzTarPerm extractEntry heap_profiler.cc
+55 silly gunzTarPerm extractEntry heap_profiler.h
+56 silly gunzTarPerm extractEntry Makefile
+57 silly gunzTarPerm extractEntry binding.gyp
+58 silly gunzTarPerm extractEntry cpu_profiler.h
+59 silly gunzTarPerm extractEntry profile.h
+60 silly gunzTarPerm extractEntry profiler.cc
+61 silly gunzTarPerm extractEntry profile_node.cc
+62 silly gunzTarPerm extractEntry profile_node.h
+63 silly gunzTarPerm extractEntry readme.md
+64 silly gunzTarPerm extractEntry snapshot.cc
+65 silly gunzTarPerm extractEntry snapshot.h
+66 silly gunzTarPerm extractEntry cpu_profiler.cc
+67 silly gunzTarPerm extractEntry wscript
+68 verbose read json C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler\package.json
+69 silly lockFile e200c65e-ten-npm-node-modules-v8-profiler C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler
+70 info preinstall v8-profiler@3.6.2-1
+71 verbose from cache C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler\package.json
+72 verbose readDependencies using package.json deps
+73 verbose from cache C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler\package.json
+74 verbose readDependencies using package.json deps
+75 silly resolved []
+76 verbose about to build C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler
+77 info build C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler
+78 verbose from cache C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler\package.json
+79 verbose linkStuff [ true,
+79 verbose linkStuff   'C:\\Dokumente und Einstellungen\\Felix\\Anwendungsdaten\\npm\\node_modules',
+79 verbose linkStuff   true,
+79 verbose linkStuff   'C:\\Dokumente und Einstellungen\\Felix\\Anwendungsdaten\\npm\\node_modules' ]
+80 info linkStuff v8-profiler@3.6.2-1
+81 verbose linkBins v8-profiler@3.6.2-1
+82 verbose linkMans v8-profiler@3.6.2-1
+83 verbose rebuildBundles v8-profiler@3.6.2-1
+84 info install v8-profiler@3.6.2-1
+85 verbose unsafe-perm in lifecycle true
+86 silly exec cmd "/c" "node-gyp rebuild"
+87 silly cmd,/c,node-gyp rebuild,C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler spawning
+88 info v8-profiler@3.6.2-1 Failed to exec install script
+89 info C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler unbuild
+90 verbose from cache C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules\v8-profiler\package.json
+91 info preuninstall v8-profiler@3.6.2-1
+92 info uninstall v8-profiler@3.6.2-1
+93 verbose true,C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules,C:\Dokumente und Einstellungen\Felix\Anwendungsdaten\npm\node_modules unbuild v8-profiler@3.6.2-1
+94 info postuninstall v8-profiler@3.6.2-1
+95 error v8-profiler@3.6.2-1 install: `node-gyp rebuild`
+95 error `cmd "/c" "node-gyp rebuild"` failed with 1
+96 error Failed at the v8-profiler@3.6.2-1 install script.
+96 error This is most likely a problem with the v8-profiler package,
+96 error not with npm itself.
+96 error Tell the author that this fails on your system:
+96 error     node-gyp rebuild
+96 error You can get their info via:
+96 error     npm owner ls v8-profiler
+96 error There is likely additional logging output above.
+97 error System Windows_NT 5.1.2600
+98 error command "C:\\Programme\\nodejs\\\\node.exe" "C:\\Programme\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "-g" "v8-profiler"
+99 error cwd C:\Dokumente und Einstellungen\Felix\Eigene Dateien\My Dropbox\Public\Temp\ROTOGAMEsq\rotogamesq
+100 error node -v v0.8.8
+101 error npm -v 1.1.59
+102 error code ELIFECYCLE
+103 verbose exit [ 1, true ]
