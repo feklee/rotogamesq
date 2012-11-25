@@ -36,11 +36,6 @@ startServer = function () {
     // also triggered on reconnection
     io.sockets.on('connection', function (socket) {
         boards.listen(socket);
-        console.log(process.memoryUsage()); // fixme: remove
-        console.log('fixme: connect');
-        socket.on('disconnect', function () {
-            console.log('fixme: disconnect');
-        });
     });
 };
 
