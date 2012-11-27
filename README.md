@@ -175,7 +175,7 @@ Hacking notes
     [a bug][9] in GitHub's Markdown interpreter.
 
   * Browsers to test on, as of November 2012: Firefox, Chrome, Opera, Android
-    2.3.5 standard browser, iPhone 5 browser
+    2.3 standard browser, iOS browser
 
 
 Legal
