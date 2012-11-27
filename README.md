@@ -174,6 +174,9 @@ Hacking notes
   * The current `README.md` has some ugly formatting of lists, to work around
     [a bug][9] in GitHub's Markdown interpreter.
 
+  * Browsers to test on, as of November 2012: Firefox, Chrome, Opera, Android
+    2.3.5 standard browser, iPhone 5 browser
+
 
 Legal
 =====
