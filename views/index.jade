@@ -24,6 +24,9 @@ html(lang="en", manifest="manifest.appcache")
     link(rel="author", href=repository.url)
     link(rel="shortcut icon", href="/images/icon_16.png")
 
+    //- For displaying an image when sharing on Facebook, for example.
+    link(rel="image_src", href="/images/icon_256.png")
+
     if env == 'development'
       link(rel="stylesheet", href="/app/stylesheets/index.css")
       script(src="/socket.io/socket.io.js")
