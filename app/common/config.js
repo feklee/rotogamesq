@@ -25,11 +25,11 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: '13',
+            name: 'nikolaus',
             sideLenT: 5, // px
-            startPosT: [0, 0], // position of upper left corner of start tiles
-                               // in boards sprites
-            endPosT: [5, 0]
+            startPosT: [12, 5], // position of upper left corner of start tiles
+                                // in boards sprites
+            endPosT: [17, 5]
         },
         {
             name: 'chess',
@@ -48,6 +48,12 @@ define({
             sideLenT: 7,
             startPosT: [0, 10],
             endPosT: [7, 10]
+        },
+        {
+            name: '13',
+            sideLenT: 5,
+            startPosT: [0, 0],
+            endPosT: [5, 0]
         },
         {
             name: 'rgbcmy',
