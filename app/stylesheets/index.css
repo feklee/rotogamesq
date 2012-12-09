@@ -79,7 +79,7 @@ body {
     position: relative;
 }
 
-.button {
+.button, #boardsNavigator, #rubberBandCanvas {
     cursor: pointer;
 }
 
