@@ -79,11 +79,18 @@ body {
     position: relative;
 }
 
-.button {
+button {
     cursor: pointer;
+	vertical-align: baseline;
+    background: transparent;
+    font: inherit;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    color: inherit;
 }
 
-.button.disabled {
+button:disabled {
     cursor: default;
     color: #777;
 }
@@ -153,7 +160,11 @@ body {
     font-weight: bold;
 }
 
-#rotationsNavigator>.reset.button {
+#rotationsNavigator>button {
+    display: inline;
+}
+
+#rotationsNavigator>button.reset {
     display: none;
 }
 

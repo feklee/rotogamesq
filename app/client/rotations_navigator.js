@@ -37,8 +37,7 @@ define(['boards', 'util'], function (boards, util) {
     };
 
     buttonEl = function (type) {
-        return document.querySelector('#rotationsNavigator>.' + type +
-                                      '.button');
+        return document.querySelector('#rotationsNavigator>button.' + type);
     };
 
     nRotationsEl = function () {
@@ -83,15 +82,13 @@ define(['boards', 'util'], function (boards, util) {
     };
 
     renderButton = function (type, buttonIsDisabled) {
-        // `classList` is not used as it isn't supported by Android 2.3 browser
-
-        var className = type + ' button';
+        var el = buttonEl(type);
 
         if (buttonIsDisabled) {
-            className += ' disabled';
+            el.setAttribute('disabled', true);
+        } else {
+            el.removeAttribute('disabled');
         }
-
-        buttonEl(type).className = className;
     };
 
     renderUndoButton = function () {
