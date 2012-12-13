@@ -1,6 +1,6 @@
 {
   "name": "rotogamesq",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "author": "Felix E. Klee <felix.klee@inka.de>",
   "subdomain": "rotogamesq",
   "domains": [
@@ -17,8 +17,7 @@
     "redis": "0.8.x",
     "amdefine": ">=0.0.2",
     "requirejs": "2.1.x",
-    "png-js": "0.1.x",
-    "nodetime": "0.6.x"
+    "png-js": "0.1.x"
   },
   "engines": {
     "node": "0.8.x"

@@ -27,8 +27,6 @@ var express = require('express'),
     startServer,
     loadBoardsAndStartServer;
 
-require('nodetime').profile();
-
 startServer = function () {
     server.listen(app.get('port'), function () {
         console.log('Express server listening on port %d in %s mode',
