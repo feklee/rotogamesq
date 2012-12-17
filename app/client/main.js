@@ -35,7 +35,7 @@ define([
     var updateComponentsLandscapeLayout, updateLandscapeLayout,
         updateComponentsPortraitLayout, updatePortraitLayout,
         updateLayout, animStep, onResize, hideLoadScreen, onBoardsLoaded,
-        onDocumentComplete,
+        onDocumentComplete, preventPageDrag,
         loaded = false,
         goldenRatio = 1.61803398875,
         width, // px
@@ -210,6 +210,18 @@ define([
         document.getElementById('loadScreen').style.display = 'none';
     };
 
+    // Needed e.g. on iOS 6 to prevent default dragging of page.
+    preventPageDrag = function () {
+        var preventDefault = function (e) {
+            e.preventDefault();
+        };
+
+        document.addEventListener('touchmove', preventDefault);
+
+        // Don't prevent default on `touchstart`. See also:
+        // <http://stackoverflow.com/a/13720649>
+    };
+
     onDocumentComplete = function () {
         loaded = true;
 
@@ -232,6 +244,7 @@ define([
     };
 
     util.onceDocumentIsInteractive(function () {
+        preventPageDrag();
         boards.load(onBoardsLoaded);
     });
 });

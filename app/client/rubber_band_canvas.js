@@ -145,7 +145,6 @@ define([
     onTouchStart = function (e) {
         var touches;
 
-        e.preventDefault();
         touches = e.changedTouches;
         if (touches.length > 0) {
             onDragStart([touches[0].pageX, touches[0].pageY]);
@@ -161,7 +160,6 @@ define([
     onTouchMove = function (e) {
         var touches = e.changedTouches;
 
-        e.preventDefault();
         if (isBeingDragged) {
             if (touches.length > 0) {
                 onDrag([touches[0].pageX, touches[0].pageY]);
@@ -176,9 +174,6 @@ define([
     };
 
     onTouchEnd = function (e) {
-        var touches = e.changedTouches;
-
-        e.preventDefault();
         if (isBeingDragged) {
             onDragEnd();
         }

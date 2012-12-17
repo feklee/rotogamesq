@@ -329,7 +329,6 @@ define([
     onTouchEnd = function (e) {
         var touches = e.changedTouches;
 
-        e.preventDefault();
         if (isBeingDragged) {
             onDragEnd();
         }
