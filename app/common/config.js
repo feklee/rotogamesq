@@ -25,17 +25,17 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'nikolaus',
-            sideLenT: 5, // px
-            startPosT: [12, 5], // position of upper left corner of start tiles
-                                // in boards sprites
-            endPosT: [17, 5]
+            name: 'xmastree',
+            sideLenT: 7, // px
+            startPosT: [14, 31], // position of upper left corner of start
+                                 // tiles in boards sprites
+            endPosT: [14, 38]
         },
         {
-            name: 'chess',
-            sideLenT: 8,
-            startPosT: [0, 23],
-            endPosT: [8, 23]
+            name: 'nikolaus',
+            sideLenT: 5,
+            startPosT: [12, 5],
+            endPosT: [17, 5]
         },
         {
             name: 'smiley',
@@ -78,6 +78,12 @@ define({
             sideLenT: 7,
             startPosT: [0, 38],
             endPosT: [7, 38]
+        },
+        {
+            name: 'chess',
+            sideLenT: 8,
+            startPosT: [0, 23],
+            endPosT: [8, 23]
         }
     ]
 });

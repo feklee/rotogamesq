@@ -79,7 +79,7 @@ body {
     position: relative;
 }
 
-button {
+button, button:focus, button:hover, button:active {
     cursor: pointer;
 	vertical-align: baseline;
     background: transparent;
@@ -87,6 +87,7 @@ button {
     padding: 0;
     margin: 0;
     border: 0;
+    outline: 0;
     color: inherit;
 }
 
