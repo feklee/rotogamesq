@@ -30,6 +30,9 @@ var port = process.env.REDIS_PORT || 6379,
     password = process.env.REDIS_PASSWORD,
     redisClient = require('redis').createClient(port, host);
 
+redisClient.retry_backoff = 1; // disables backoff
+redisClient.retry_delay = 500; // ms
+
 if (password) {
     redisClient.auth(password);
 }
