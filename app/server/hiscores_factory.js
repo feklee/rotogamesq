@@ -147,6 +147,8 @@ listen = function (socket, board) {
     redisClient.on('connect', function () {
         onRedisConnect.call(this, socket, board);
     });
+    socket.setMaxListeners('disconnect', 0); // to avoid warning if there are
+                                             // more than 10 boards
     socket.once('disconnect', function () {
         onDisconnect.call(this, socket, board);
     });
