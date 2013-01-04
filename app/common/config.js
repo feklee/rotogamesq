@@ -25,18 +25,30 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'xmastree',
-            sideLenT: 7, // px
-            startPosT: [14, 31], // position of upper left corner of start
-                                 // tiles in boards sprites
-            endPosT: [14, 38]
+            name: '13',
+            sideLenT: 5, // px
+            startPosT: [0, 0], // position of upper left corner of start tiles
+                               // in boards sprites
+            endPosT: [5, 0]
         },
         {
-            name: 'nikolaus',
-            sideLenT: 5,
-            startPosT: [12, 5],
-            endPosT: [17, 5]
+            name: 'chess',
+            sideLenT: 8,
+            startPosT: [0, 23],
+            endPosT: [8, 23]
         },
+        // {
+        //     name: 'xmastree',
+        //     sideLenT: 7,
+        //     startPosT: [14, 31],
+        //     endPosT: [14, 38]
+        // },
+        // {
+        //     name: 'nikolaus',
+        //     sideLenT: 5,
+        //     startPosT: [12, 5],
+        //     endPosT: [17, 5]
+        // },
         {
             name: 'smiley',
             sideLenT: 5,
@@ -48,12 +60,6 @@ define({
             sideLenT: 7,
             startPosT: [0, 10],
             endPosT: [7, 10]
-        },
-        {
-            name: '13',
-            sideLenT: 5,
-            startPosT: [0, 0],
-            endPosT: [5, 0]
         },
         {
             name: 'rgbcmy',
@@ -80,10 +86,10 @@ define({
             endPosT: [7, 38]
         },
         {
-            name: 'chess',
-            sideLenT: 8,
-            startPosT: [0, 23],
-            endPosT: [8, 23]
+            name: '20',
+            sideLenT: 6,
+            startPosT: [14, 10],
+            endPosT: [14, 16]
         }
     ]
 });

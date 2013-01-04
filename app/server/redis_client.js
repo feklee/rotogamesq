@@ -32,6 +32,7 @@ var port = process.env.REDIS_PORT || 6379,
 
 redisClient.retry_backoff = 1; // disables backoff
 redisClient.retry_delay = 500; // ms
+redisClient.debug_mode = true;
 
 if (password) {
     redisClient.auth(password);
