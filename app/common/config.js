@@ -25,6 +25,18 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
+            name: 'flower',
+            sideLenT: 5,
+            startPosT: [0, 45],
+            endPosT: [5, 45]
+        },
+        {
+            name: '20',
+            sideLenT: 6,
+            startPosT: [14, 10],
+            endPosT: [14, 16]
+        },
+        {
             name: '13',
             sideLenT: 5, // px
             startPosT: [0, 0], // position of upper left corner of start tiles
@@ -84,12 +96,6 @@ define({
             sideLenT: 7,
             startPosT: [0, 38],
             endPosT: [7, 38]
-        },
-        {
-            name: '20',
-            sideLenT: 6,
-            startPosT: [14, 10],
-            endPosT: [14, 16]
         }
     ]
 });
