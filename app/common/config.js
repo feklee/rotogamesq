@@ -31,6 +31,12 @@ define({
             endPosT: [5, 45]
         },
         {
+            name: 'bfly',
+            sideLenT: 7,
+            startPosT: [0, 50],
+            endPosT: [7, 50]
+        },
+        {
             name: '20',
             sideLenT: 6,
             startPosT: [14, 10],
