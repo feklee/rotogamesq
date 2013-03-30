@@ -25,10 +25,10 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'flower',
+            name: 'ebunny',
             sideLenT: 5,
-            startPosT: [0, 45],
-            endPosT: [5, 45]
+            startPosT: [10, 45],
+            endPosT: [15, 45]
         },
         {
             name: 'bfly',
@@ -102,6 +102,12 @@ define({
             sideLenT: 7,
             startPosT: [0, 38],
             endPosT: [7, 38]
+        },
+        {
+            name: 'flower',
+            sideLenT: 5,
+            startPosT: [0, 45],
+            endPosT: [5, 45]
         }
     ]
 });
