@@ -178,10 +178,17 @@ Hacking notes
     2.3 browser, iOS Safari, Firefox OS
 
 
+Contributors
+============
+
+  * Maria Morillas: board "ebunny" (easter bunny), copyright 2013, licensed
+    under a [Creative Commons Attribution 3.0 Spain License][14].
+
+
 Legal
 =====
 
-Copyright 2012 [Felix E. Klee][4]
+Copyright 2012 [Felix E. Klee][4], 
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
@@ -208,3 +215,4 @@ specific language governing permissions and limitations under the License.
 [11]: https://developer.mozilla.org/en-US/docs/Apps
 [12]: https://marketplace.firefox.com/app/rotogamesq/
 [13]: https://github.com/feklee/rotogamesq
+[14]: http://creativecommons.org/licenses/by/3.0/es/
