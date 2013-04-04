@@ -76,11 +76,19 @@ define(function () {
             }
         }},
 
-
         // Returns position of element on viewport, in pixels.
         viewportPos: {value: function (el) {
             var rect = el.getBoundingClientRect();
             return [rect.left, rect.top];
+        }},
+
+        // Returns true, iff the browser is a WebKit browser running on iOS.
+        // See also: <url:http://stackoverflow.com/questions/4460205/
+        // detect-ipad-iphone-webview-via-javascript>
+        browserIsWebKitOnIos: {get: function () {
+            var ua = navigator.userAgent;
+
+            return /(iPhone|iPod|iPad).*AppleWebKit/i.test(ua);
         }}
     });
 });

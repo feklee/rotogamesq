@@ -273,6 +273,10 @@ define(['util', 'boards'], function (util, boards) {
         layout: {set: function (newLayout) {
             layout = newLayout;
             needsToBeRendered = true;
+        }},
+
+        hasFocus: {get: function () {
+            return document.activeElement === nameInputFieldEl;
         }}
     });
 });

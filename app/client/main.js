@@ -34,8 +34,8 @@ define([
 
     var updateComponentsLandscapeLayout, updateLandscapeLayout,
         updateComponentsPortraitLayout, updatePortraitLayout,
-        updateLayout, animStep, onResize, hideLoadScreen, onBoardsLoaded,
-        onDocumentComplete, preventPageDrag,
+        updateLayout, animStep, doNotUpdateLayout, onResize,
+        hideLoadScreen, onBoardsLoaded, onDocumentComplete, preventPageDrag,
         loaded = false,
         goldenRatio = 1.61803398875,
         width, // px
@@ -202,8 +202,19 @@ define([
         window.requestAnimationFrame(animStep);
     };
 
+    doNotUpdateLayout = function () {
+        // At least on iOS 6.0 devices, updating layout causes loss of keyboard
+        // focus, since focus cannot be reassigned after redrawing. See also:
+        //
+        // <url:http://stackoverflow.com/questions/15797991/
+        // check-if-keyboard-focus-can-be-set-by-javascript>
+        return hiscoresTable.hasFocus && util.browserIsWebKitOnIos;
+    };
+
     onResize = function () {
-        updateLayout();
+        if (!doNotUpdateLayout()) {
+            updateLayout();
+        }
     };
 
     hideLoadScreen = function () {
