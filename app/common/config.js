@@ -25,11 +25,17 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'ebunny',
+            name: 'flower',
             sideLenT: 5,
-            startPosT: [10, 45],
-            endPosT: [15, 45]
+            startPosT: [0, 45],
+            endPosT: [5, 45]
         },
+        // {
+        //     name: 'ebunny',
+        //     sideLenT: 5,
+        //     startPosT: [10, 45],
+        //     endPosT: [15, 45]
+        // },
         {
             name: 'bfly',
             sideLenT: 7,
@@ -104,10 +110,10 @@ define({
             endPosT: [7, 38]
         },
         {
-            name: 'flower',
-            sideLenT: 5,
-            startPosT: [0, 45],
-            endPosT: [5, 45]
+            name: 'bee',
+            sideLenT: 8,
+            startPosT: [0, 57],
+            endPosT: [8, 57]
         }
     ]
 });
