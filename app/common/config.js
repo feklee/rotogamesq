@@ -25,22 +25,22 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'flower',
+            name: 'ebunny',
             sideLenT: 5,
-            startPosT: [0, 45],
-            endPosT: [5, 45]
+            startPosT: [10, 45],
+            endPosT: [15, 45]
         },
-        // {
-        //     name: 'ebunny',
-        //     sideLenT: 5,
-        //     startPosT: [10, 45],
-        //     endPosT: [15, 45]
-        // },
         {
             name: 'bfly',
             sideLenT: 7,
             startPosT: [0, 50],
             endPosT: [7, 50]
+        },
+        {
+            name: 'flower',
+            sideLenT: 5,
+            startPosT: [0, 45],
+            endPosT: [5, 45]
         },
         {
             name: '20',
