@@ -24,11 +24,12 @@ module.exports = function (env) {
     /*jslint stupid: true */
     var readFileSync = require('fs').readFileSync,
         packageJson = require('../package.json'),
-        webAppManifestJson = require('../views/web-app-manifest.json'),
+        openWebAppManifestJson =
+            require('../views/open-web-app-manifest.json'),
+        amazonWebAppManifestJson,
         manifestAppcacheInc = readFileSync('views/' + env + '.appcache.inc',
                                            'utf8'),
-        manifestAppcacheContent,
-        webAppManifestContent;
+        manifestAppcacheContent;
     /*jslint stupid: false */
 
     (function () {
@@ -41,7 +42,14 @@ module.exports = function (env) {
                  '# ROTOGAMEsq ' + versionString + '\n\n' +
                  manifestAppcacheInc);
 
-        webAppManifestJson.version = packageJson.version;
+        openWebAppManifestJson.version = packageJson.version;
+
+        amazonWebAppManifestJson = {
+            verification_key: process.env.AMAZON_VERIFICATION_KEY || '',
+            type: openWebAppManifestJson.type,
+            version: openWebAppManifestJson.version,
+            created_by: openWebAppManifestJson.developer.name
+        };
     }());
 
     return Object.create(null, {
@@ -63,15 +71,11 @@ module.exports = function (env) {
         manifestWebapp: {value: function (req, res) {
             res.set('Content-Type', 'application/x-web-app-manifest+json; ' +
                     'charset=utf-8');
-            res.send(JSON.stringify(webAppManifestJson));
+            res.send(JSON.stringify(openWebAppManifestJson));
         }},
         webAppManifestJson: {value: function (req, res) { // for Amazon
-            webAppManifestJson.verification_key =
-                process.env.AMAZON_VERIFICATION_KEY ||
-                '';
-            webAppManifestJson.created_by = webAppManifestJson.developer.name;
             res.set('Content-Type', 'application/json; charset=utf-8');
-            res.send(JSON.stringify(webAppManifestJson));
+            res.send(JSON.stringify(amazonWebAppManifestJson));
         }}
     });
 };
