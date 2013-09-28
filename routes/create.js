@@ -42,13 +42,6 @@ module.exports = function (env) {
                  manifestAppcacheInc);
 
         webAppManifestJson.version = packageJson.version;
-
-        // for Amazon's Mobile App Distribution Portal:
-        webAppManifestJson.verification_key =
-            process.env.AMAZON_VERIFICATION_KEY ||
-            '';
-
-        webAppManifestContent = JSON.stringify(webAppManifestJson);
     }());
 
     return Object.create(null, {
@@ -70,11 +63,15 @@ module.exports = function (env) {
         manifestWebapp: {value: function (req, res) {
             res.set('Content-Type', 'application/x-web-app-manifest+json; ' +
                     'charset=utf-8');
-            res.send(webAppManifestContent);
+            res.send(JSON.stringify(webAppManifestJson));
         }},
         webAppManifestJson: {value: function (req, res) { // for Amazon
+            webAppManifestJson.verification_key =
+                process.env.AMAZON_VERIFICATION_KEY ||
+                '';
+            webAppManifestJson.created_by = webAppManifestJson.developer.name;
             res.set('Content-Type', 'application/json; charset=utf-8');
-            res.send(webAppManifestContent);
+            res.send(JSON.stringify(webAppManifestJson));
         }}
     });
 };

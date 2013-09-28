@@ -17,7 +17,6 @@
         "name": "Felix E. Klee",
         "url": "https://github.com/feklee"
     },
-    "created_by": "Felix E. Klee",
     "type": "web",
     "default_locale": "en",
     "appcache_path": "/manifest.appcache"
