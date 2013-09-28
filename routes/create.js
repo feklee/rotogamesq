@@ -21,11 +21,15 @@
 var manifestAppcache;
 
 module.exports = function (env) {
+    /*jslint stupid: true */
     var readFileSync = require('fs').readFileSync,
         packageJson = require('../package.json'),
+        webAppManifestJson = require('../views/web-app-manifest.json'),
         manifestAppcacheInc = readFileSync('views/' + env + '.appcache.inc',
                                            'utf8'),
-        manifestAppcacheContent;
+        manifestAppcacheContent,
+        webAppManifestContent;
+    /*jslint stupid: false */
 
     (function () {
         var versionString = (env === 'development' ?
@@ -36,6 +40,15 @@ module.exports = function (env) {
                 ('CACHE MANIFEST\n' +
                  '# ROTOGAMEsq ' + versionString + '\n\n' +
                  manifestAppcacheInc);
+
+        webAppManifestJson.version = packageJson.version;
+
+        // for Amazon's Mobile App Distribution Portal:
+        webAppManifestJson.verification_key =
+            process.env.AMAZON_VERIFICATION_KEY ||
+            '';
+
+        webAppManifestContent = JSON.stringify(webAppManifestJson);
     }());
 
     return Object.create(null, {
@@ -53,6 +66,15 @@ module.exports = function (env) {
         manifestAppcache: {value: function (req, res) {
             res.set('Content-Type', 'text/cache-manifest');
             res.send(manifestAppcacheContent);
+        }},
+        manifestWebapp: {value: function (req, res) {
+            res.set('Content-Type', 'application/x-web-app-manifest+json; ' +
+                    'charset=utf-8');
+            res.send(webAppManifestContent);
+        }},
+        webAppManifestJson: {value: function (req, res) { // for Amazon
+            res.set('Content-Type', 'application/json; charset=utf-8');
+            res.send(webAppManifestContent);
         }}
     });
 };
