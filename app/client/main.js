@@ -208,7 +208,13 @@ define([
         //
         // <url:http://stackoverflow.com/questions/15797991/
         // check-if-keyboard-focus-can-be-set-by-javascript>
-        return hiscoresTable.hasFocus && util.browserIsWebKitOnIos;
+        //
+        // As of October 2013, the issue has also been detected on Firefox OS
+        // 1.3 nightly running on a Geeksphone Keon.
+        //
+        // => It's better not to update layout when the hiscores table has
+        // (keyboard) focus.
+        return hiscoresTable.hasFocus;
     };
 
     onResize = function () {
