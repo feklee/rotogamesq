@@ -182,8 +182,9 @@ Hacking notes
 Contributors
 ============
 
-  * Maria Morillas: board "ebunny" (easter bunny), copyright 2013, licensed
-    under a [Creative Commons Attribution 3.0 Spain License][14].
+  * Maria Morillas: boards "ebunny" (easter bunny) and "pumpkin", both
+    copyright 2013 and licensed under a
+    [Creative Commons Attribution 3.0 Spain License][14].
 
 
 Legal
