@@ -25,23 +25,41 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'ebunny',
-            sideLenT: 5,
-            startPosT: [10, 45],
-            endPosT: [15, 45]
-        },
-        {
-            name: 'bfly',
+            name: 'pumpkin',
             sideLenT: 7,
-            startPosT: [0, 50],
-            endPosT: [7, 50]
+            startPosT: [0, 65],
+            endPosT: [7, 65]
         },
         {
-            name: 'flower',
+            name: 'pumpkins',
             sideLenT: 5,
-            startPosT: [0, 45],
-            endPosT: [5, 45]
+            startPosT: [0, 78],
+            endPosT: [5, 78]
         },
+        // {
+        //     name: 'bee',
+        //     sideLenT: 8,
+        //     startPosT: [0, 57],
+        //     endPosT: [8, 57]
+        // },
+        // {
+        //     name: 'ebunny',
+        //     sideLenT: 5,
+        //     startPosT: [10, 45],
+        //     endPosT: [15, 45]
+        // },
+        // {
+        //     name: 'bfly',
+        //     sideLenT: 7,
+        //     startPosT: [0, 50],
+        //     endPosT: [7, 50]
+        // },
+        // {
+        //     name: 'flower',
+        //     sideLenT: 5,
+        //     startPosT: [0, 45],
+        //     endPosT: [5, 45]
+        // },
         {
             name: '20',
             sideLenT: 6,
@@ -110,10 +128,10 @@ define({
             endPosT: [7, 38]
         },
         {
-            name: 'bee',
-            sideLenT: 8,
-            startPosT: [0, 57],
-            endPosT: [8, 57]
+            name: 'pumpkinm',
+            sideLenT: 6,
+            startPosT: [0, 72],
+            endPosT: [6, 72]
         }
     ]
 });
