@@ -26,7 +26,8 @@ define(['util', 'boards'], function (util, boards) {
         onSubmit, updateSubmitButtonClasses, updateAbilityToSubmit,
         onKeyUpInNameInputField, newNameInputTdEl, newSubmitButtonTdEl,
         newInputTrEl, renderRows, render,
-        board, nameInputFieldEl, submitButtonEl,
+        board,
+        nameInputFieldEl, submitButtonEl,
         boardIsFinished,
         submitIsEnabled = false,
         needsToBeRendered = true,
@@ -186,7 +187,10 @@ define(['util', 'boards'], function (util, boards) {
         var el = tableEl(),
             elc = contTableEl(),
             currentEl = el,
-            iToContinue = Math.ceil(board.hiscores.length / 2);
+            iToContinue = Math.ceil(board.hiscores.length / 2),
+            nameInputFieldElNeedsFocus =
+                (!document.contains(nameInputFieldEl) ||
+                 (document.activeElement === nameInputFieldEl));
 
         util.clear(el);
         util.clear(elc);
@@ -206,7 +210,10 @@ define(['util', 'boards'], function (util, boards) {
             switch (status) {
             case 'editable':
                 currentEl.appendChild(newInputTrEl(hiscore));
-                nameInputFieldEl.focus();
+                if (nameInputFieldElNeedsFocus) {
+                    // input element is new or already had focus
+                    nameInputFieldEl.focus();
+                } // else: did not have focus before
                 break;
             case 'unsaved':
                 currentEl.appendChild(newUnsavedTrEl(hiscore, lineHeight));
