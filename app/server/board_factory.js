@@ -46,7 +46,7 @@ rotationFromData = function (rotationData) {
 // Note that rotations data at best (i.e. if not broken) is an array of data
 // describing rotations; it is not an array of rotation objects.
 isSolvedBy = function (rotationsData) {
-    var i, rotation, rectT, cw, tiles = this.startTiles.copy();
+    var i, rotation, tiles = this.startTiles.copy();
 
     try {
         if (Array.isArray(rotationsData)) {
@@ -59,9 +59,8 @@ isSolvedBy = function (rotationsData) {
             }
 
             return tiles.colorsAreEqualTo(this.endTiles);
-        } else {
-            return false;
         }
+        return false;
     } catch (err) { // just in case some bad data is not handled correctly
         return false;
     }

@@ -24,7 +24,7 @@ define(['hiscores_factory'], function (hiscoresFactory) {
     var prototype, updateIsFinished, initInternal, create;
 
     // Updates `internal.isFinished`.
-    updateIsFinished = function (internal, board, rotation) {
+    updateIsFinished = function (internal, board) {
         if (board.tiles.colorsAreEqualTo(board.endTiles)) {
             if (!internal.isFinished) {
                 internal.isFinished = true;

@@ -104,8 +104,6 @@ define([
     };
 
     updateThumbsCoordinates = function () {
-        var thumbI, thumb;
-
         thumbs.forEach(function (thumb, i) {
             var thumbI = i - nSideThumbs;
             thumb.maxSideLen = thumbSideLen(0); // center is largest
@@ -326,9 +324,7 @@ define([
         }
     };
 
-    onTouchEnd = function (e) {
-        var touches = e.changedTouches;
-
+    onTouchEnd = function () {
         if (isBeingDragged) {
             onDragEnd();
         }

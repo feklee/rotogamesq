@@ -21,8 +21,7 @@
 var redis = require('redis'),
     redisClient = require('./redis_client'),
     fs = require('fs'),
-    insertHiscoreScript = fs.readFileSync(__dirname + '/insert_hiscore.lua',
-                                          'utf8'),
+    insertHiscoreScript,
     create,
     load,
     listen,
@@ -35,6 +34,11 @@ var redis = require('redis'),
     onRequestOfHiscoresForBoard,
     onRedisConnect,
     onDisconnect;
+
+/*jslint stupid: true */
+insertHiscoreScript = fs.readFileSync(__dirname + '/insert_hiscore.lua',
+                                      'utf8');
+/*jslint stupid: false */
 
 // Verfifies that the hiscores entry is valid by checking if the rotations
 // solve the board. This prevents cheating by sending forged data to the
@@ -131,7 +135,7 @@ onRedisConnect = function (socket, board) {
 };
 
 // Called when the client (browser) disconnects. Cleans up.
-onDisconnect = function (socket, board) {
+onDisconnect = function () {
     redisClient.removeListener('connect', onRedisConnect);
 };
 

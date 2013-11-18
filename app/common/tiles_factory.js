@@ -44,31 +44,31 @@ define(function () {
         return sTiles;
     };
 
-    rotator90CW = function (sTiles, xT, yT, widthT, heightT) {
-        return sTiles[yT][widthT - xT];
+    rotator90CW = function (sTiles, xT, yT, dimensions) {
+        return sTiles[yT][dimensions.widthT - xT];
     };
 
-    rotator90CCW = function (sTiles, xT, yT, widthT, heightT) {
-        return sTiles[heightT - yT][xT];
+    rotator90CCW = function (sTiles, xT, yT, dimensions) {
+        return sTiles[dimensions.heightT - yT][xT];
     };
 
-    rotator180 = function (sTiles, xT, yT, widthT, heightT) {
-        return sTiles[widthT - xT][heightT - yT];
+    rotator180 = function (sTiles, xT, yT, dimensions) {
+        return sTiles[dimensions.widthT - xT][dimensions.heightT - yT];
     };
 
     rotateWithRotator = function (rectT, rotator) {
         var xT, yT,
             x1T = rectT[0][0], y1T = rectT[0][1],
             x2T = rectT[1][0], y2T = rectT[1][1],
-            widthT = x2T - x1T,
-            heightT = y2T - y1T,
+            dimensions = {
+                widthT: x2T - x1T,
+                heightT: y2T - y1T
+            },
             sTiles = selectedTiles.call(this, x1T, y1T, x2T, y2T);
 
         for (xT = x1T; xT <= x2T; xT += 1) {
             for (yT = y1T; yT <= y2T; yT += 1) {
-                this[xT][yT] = rotator(sTiles,
-                                       xT - x1T, yT - y1T,
-                                       widthT, heightT);
+                this[xT][yT] = rotator(sTiles, xT - x1T, yT - y1T, dimensions);
             }
         }
     };
@@ -117,10 +117,9 @@ define(function () {
     // This makes it possible to differentiate between tiles that have the same
     // color (when comparing them using e.g. `===`).
     createFromCtx = function (ctx, posT, sideLenT) {
-        var tiles, tilesColumn, xT, yT, triple, offs,
+        var tiles, tilesColumn, xT, yT, offs,
             imgData = ctx.getImageData(posT[0], posT[1],
-                                       sideLenT, sideLenT).data,
-            tileId = 0;
+                                       sideLenT, sideLenT).data;
 
         tiles = Object.create(prototype);
         for (xT = 0; xT < sideLenT; xT += 1) {
@@ -141,8 +140,7 @@ define(function () {
     //
     // <https://github.com/devongovett/png.js/>
     createFromImgData = function (imgData, imgWidth, posT, sideLenT) {
-        var tiles, tilesColumn, xT, yT, triple, offs,
-            tileId = 0;
+        var tiles, tilesColumn, xT, yT, offs;
 
         tiles = Object.create(prototype);
         for (xT = posT[0]; xT < posT[0] + sideLenT; xT += 1) {
@@ -202,8 +200,8 @@ define(function () {
         }},
 
         // Returns a deep copy of `this`.
-        copy: {value: function (rectT) {
-            var newTiles = Object.create(prototype), xT;
+        copy: {value: function () {
+            var newTiles = Object.create(prototype);
 
             this.forEach(function (thisColumn) {
                 newTiles.push(thisColumn.slice());

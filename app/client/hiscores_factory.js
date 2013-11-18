@@ -159,8 +159,6 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
                     savedHiscore, unsavedHiscore,
                     savedHiscores = internal.savedHiscores,
                     unsavedHiscores = internal.unsavedHiscores,
-                    maxSavedI = savedHiscores.length,
-                    maxUnsavedI = unsavedHiscores.length,
                     proposal = internal.proposal,
                     proposalWasShown = false,
                     usedNames = [];

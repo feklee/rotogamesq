@@ -22,7 +22,8 @@ define(['boards'], function (boards) {
     'use strict';
 
     var updateDimensions,
-        sideLen, board,
+        sideLen,
+        board,
         tileSideLen = 0,
         spacing = 0,
         spacingIsDisabled = false;
