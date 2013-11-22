@@ -25,26 +25,33 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
+            name: 'apple',
+            sideLenT: 5, // px
+            startPosT: [15, 78], // position of upper left corner of start
+                                 // tiles in boards sprites
+            endPosT: [10, 78],
+            firstMonth: 11,
+            firstDay: 22,
+            duration: 25
+        },
+        {
             name: 'pumpkin',
-            sideLenT: 7, // px
-            startPosT: [0, 65], // position of upper left corner of start tiles
-                                // in boards sprites
+            sideLenT: 7,
+            startPosT: [0, 65],
             endPosT: [7, 65],
             firstMonth: 10,
             firstDay: 31,
-            lastMonth: 11,
-            lastDay: 20
+            duration: 25
         },
-        {
-            name: 'pumpkins',
-            sideLenT: 5,
-            startPosT: [0, 78],
-            endPosT: [5, 78],
-            firstMonth: 10,
-            firstDay: 31,
-            lastMonth: 11,
-            lastDay: 20
-        },
+        // {
+        //     name: 'pumpkins',
+        //     sideLenT: 5,
+        //     startPosT: [0, 78],
+        //     endPosT: [5, 78],
+        //     firstMonth: 10,
+        //     firstDay: 31,
+        //     duration: 25
+        // },
         // {
         //     name: 'bee',
         //     sideLenT: 8,
@@ -173,15 +180,23 @@ define({
             lastMonth: 6,
             lastDay: 30
         },
+        // {
+        //     name: 'pumpkinm',
+        //     sideLenT: 6,
+        //     startPosT: [0, 72],
+        //     endPosT: [6, 72],
+        //     firstMonth: 9,
+        //     firstDay: 1,
+        //     duration: 25
+        // },
         {
-            name: 'pumpkinm',
-            sideLenT: 6,
-            startPosT: [0, 72],
-            endPosT: [6, 72],
-            firstMonth: 9,
-            firstDay: 1,
-            lastMonth: 7,
-            lastDay: 31
+            name: 'mushroom',
+            sideLenT: 7,
+            startPosT: [14, 65],
+            endPosT: [14, 50],
+            firstMonth: 11,
+            firstDay: 22,
+            duration: 25
         }
     ]
 });
