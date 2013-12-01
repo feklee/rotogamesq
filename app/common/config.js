@@ -1,5 +1,7 @@
 // Common configuration, for client and server.
 
+// 
+
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -25,31 +27,36 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'apple',
+            name: 'firtree:2013-12-01:2013-12-31',
             sideLenT: 5, // px
-            startPosT: [15, 78], // position of upper left corner of start
+            startPosT: [17, 72], // position of upper left corner of start
                                  // tiles in boards sprites
-            endPosT: [10, 78],
-            firstMonth: 11,
-            firstDay: 22,
-            duration: 25
+            endPosT: [12, 72],
+            start: '12-01',
+            duration: 31
         },
         {
-            name: 'pumpkin',
-            sideLenT: 7,
-            startPosT: [0, 65],
-            endPosT: [7, 65],
-            firstMonth: 10,
-            firstDay: 31,
+            name: 'apple',
+            sideLenT: 5,
+            startPosT: [15, 78],
+            endPosT: [10, 78],
+            start: '11-22',
             duration: 25
         },
+        // {
+        //     name: 'pumpkin',
+        //     sideLenT: 7,
+        //     startPosT: [0, 65],
+        //     endPosT: [7, 65],
+        //     start: '10-31',
+        //     duration: 40
+        // },
         // {
         //     name: 'pumpkins',
         //     sideLenT: 5,
         //     startPosT: [0, 78],
         //     endPosT: [5, 78],
-        //     firstMonth: 10,
-        //     firstDay: 31,
+        //     start: '10-31',
         //     duration: 25
         // },
         // {
@@ -81,32 +88,24 @@ define({
             sideLenT: 6,
             startPosT: [14, 10],
             endPosT: [14, 16],
-            firstMonth: 1,
-            firstDay: 1,
-            lastMonth: 12,
-            lastDay: 31
+            start: '01-01',
+            duration: 330
         },
         {
             name: '13',
             sideLenT: 5,
             startPosT: [0, 0],
             endPosT: [5, 0],
-            firstYear: 2013,
-            firstMonth: 1,
-            firstDay: 1,
-            lastYear: 2013,
-            lastMonth: 12,
-            lastDay: 31
+            start: '2013-01-01',
+            duration: 330
         },
         {
             name: 'chess',
             sideLenT: 8,
             startPosT: [0, 23],
             endPosT: [8, 23],
-            firstMonth: 2, // display of board is paused for one month
-            firstDay: 1,
-            lastMonth: 12,
-            lastDay: 31
+            start: '02-01',
+            duration: 330
         },
         // {
         //     name: 'xmastree',
@@ -125,68 +124,55 @@ define({
             sideLenT: 5,
             startPosT: [0, 5],
             endPosT: [5, 5],
-            firstMonth: 3,
-            firstDay: 1,
-            lastMonth: 1,
-            lastDay: 31
+            start: '03-01',
+            duration: 330
         },
         {
             name: 'house',
             sideLenT: 7,
             startPosT: [0, 10],
             endPosT: [7, 10],
-            firstMonth: 4,
-            firstDay: 1,
-            lastMonth: 2,
-            lastDay: 29
+            start: '04-01',
+            duration: 330
         },
         {
             name: 'rgbcmy',
             sideLenT: 6,
             startPosT: [0, 17],
             endPosT: [6, 17],
-            firstMonth: 5,
-            firstDay: 1,
-            lastMonth: 3,
-            lastDay: 31
+            start: '05-01',
+            duration: 330
         },
         {
             name: 'logo',
             sideLenT: 5,
             startPosT: [12, 0],
             endPosT: [17, 0],
-            firstMonth: 6,
-            firstDay: 1,
-            lastMonth: 4,
-            lastDay: 30
+            start: '06-01',
+            duration: 330
         },
         {
             name: 'star',
             sideLenT: 7,
             startPosT: [0, 31],
             endPosT: [7, 31],
-            firstMonth: 7,
-            firstDay: 1,
-            lastMonth: 5,
-            lastDay: 31
+            start: '07-01',
+            duration: 330
         },
         {
             name: 'race',
             sideLenT: 7,
             startPosT: [0, 38],
             endPosT: [7, 38],
-            firstMonth: 8,
-            firstDay: 1,
-            lastMonth: 6,
-            lastDay: 30
+            start: '08-01',
+            duration: 330
         },
         // {
         //     name: 'pumpkinm',
         //     sideLenT: 6,
         //     startPosT: [0, 72],
         //     endPosT: [6, 72],
-        //     firstMonth: 9,
-        //     firstDay: 1,
+        //     start: '10-31'
         //     duration: 25
         // },
         {
@@ -194,8 +180,7 @@ define({
             sideLenT: 7,
             startPosT: [14, 65],
             endPosT: [14, 50],
-            firstMonth: 11,
-            firstDay: 22,
+            start: '11-22',
             duration: 25
         }
     ]
