@@ -98,6 +98,8 @@ define(['util', 'boards'], function (util, boards) {
             // after insertion (successful or not), the proposal is removed.
             board.hiscores.saveProposal();
 
+            nameInputFieldEl.blur();
+
             needsToBeRendered = true;
         }
     };
