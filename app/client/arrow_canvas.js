@@ -30,7 +30,8 @@ define([
         renderArc,
         renderTriangle,
         renderArrow,
-        render;
+        render,
+        origShow;
 
     renderArc = function (ctx, x, y, u, angleDeg) {
         var startAngle = 0,
@@ -127,6 +128,21 @@ define([
             }
         }}
     });
+
+    origShow = object.show;
+
+    Object.defineProperty(
+        object,
+        'show',
+        {
+            value: function () {
+                rotation = undefined; // old rotation can cause popup of arrow
+                                      // in old place, rotation first needs to
+                                      // be re-set
+                return origShow();
+            }
+        }
+    );
 
     object.hide();
 

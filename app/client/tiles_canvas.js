@@ -79,7 +79,7 @@ define([
     };
 
     updateRubberBandCanvasVisibility = function () {
-        var board = boards.selected;
+        board = boards.selected;
         if (board.isFinished || !board.rotationIsPossible) {
             rubberBandCanvas.hide();
         } else {
