@@ -1,7 +1,5 @@
 // Common configuration, for client and server.
 
-// 
-
 // Copyright 2012 Felix E. Klee <felix.klee@inka.de>
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -181,6 +179,14 @@ define({
             startPosT: [14, 65],
             endPosT: [14, 50],
             start: '11-22',
+            duration: 25
+        },
+        {
+            name: 'santa:2013-12-06:2013-12-31',
+            sideLenT: 6,
+            startPosT: [6, 83],
+            endPosT: [0, 83],
+            start: '12-06',
             duration: 25
         }
     ]
