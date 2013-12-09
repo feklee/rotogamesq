@@ -25,6 +25,14 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
+            name: 'apple',
+            sideLenT: 5,
+            startPosT: [15, 78],
+            endPosT: [10, 78],
+            start: '11-22',
+            duration: 25
+        },
+        {
             name: 'firtree:2013-12-01:2013-12-31',
             sideLenT: 5, // px
             startPosT: [17, 72], // position of upper left corner of start
@@ -32,14 +40,6 @@ define({
             endPosT: [12, 72],
             start: '12-01',
             duration: 31
-        },
-        {
-            name: 'apple',
-            sideLenT: 5,
-            startPosT: [15, 78],
-            endPosT: [10, 78],
-            start: '11-22',
-            duration: 25
         },
         // {
         //     name: 'pumpkin',
