@@ -33,14 +33,22 @@ define({
             duration: 25
         },
         {
-            name: 'firtree:2013-12-01:2013-12-31',
-            sideLenT: 5, // px
-            startPosT: [17, 72], // position of upper left corner of start
-                                 // tiles in boards sprites
-            endPosT: [12, 72],
-            start: '12-01',
-            duration: 31
+            name: 'xmastree:2013-12-11:2013-12-31',
+            sideLenT: 7,
+            startPosT: [21, 38],
+            endPosT: [14, 38],
+            start: '12-11',
+            duration: 22
         },
+        // {
+        //     name: 'firtree:2013-12-01:2013-12-11',
+        //     sideLenT: 5, // px
+        //     startPosT: [17, 72], // position of upper left corner of start
+        //                          // tiles in boards sprites
+        //     endPosT: [12, 72],
+        //     start: '12-01',
+        //     duration: 31
+        // },
         // {
         //     name: 'pumpkin',
         //     sideLenT: 7,
