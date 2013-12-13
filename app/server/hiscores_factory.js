@@ -33,7 +33,8 @@ var redis = require('redis'),
     onHiscoreForBoard,
     onRequestOfHiscoresForBoard,
     onRedisConnect,
-    onDisconnect;
+    onDisconnect,
+    maxNameLen = 8;
 
 /*jslint stupid: true */
 insertHiscoreScript = fs.readFileSync(__dirname + '/insert_hiscore.lua',
@@ -83,7 +84,8 @@ nRotationsFromRedisScore = function (redisScore) {
 // Insert the hiscore into the hiscores for the specified board, if it is good
 // enough. Fails silently on error.
 insertHiscore = function (hiscore, board) {
-    var score = redisScore(hiscore.nRotations);
+    var score = redisScore(hiscore.nRotations),
+        hiscoreName = hiscore.name.toString().trim().substring(0, maxNameLen);
 
     if (score === false) {
         return;
@@ -95,7 +97,7 @@ insertHiscore = function (hiscore, board) {
             1,
             board.name,
             score,
-            hiscore.name.toString(),
+            hiscoreName,
             JSON.stringify(hiscore.rotations),
             function (err) {
                 if (err) {

@@ -212,7 +212,7 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
 
             nameInProposal: {set: function (name) {
                 if (internal.proposal !== undefined) {
-                    name = name.substring(0, this.maxNameLen);
+                    name = name.trim().substring(0, this.maxNameLen);
                     internal.proposal.name = name;
                     lastNameSet = name;
                 }
