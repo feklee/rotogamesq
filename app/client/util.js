@@ -80,6 +80,17 @@ define(function () {
         viewportPos: {value: function (el) {
             var rect = el.getBoundingClientRect();
             return [rect.left, rect.top];
+        }},
+
+        elIsInDom: {value: function (el) {
+            // `document.contains()` is an alternative, but it's not supported
+            // by all targeted browsers (as of December 2013)
+            while (el = el.parentNode) {
+                if (el === document) {
+                    return true;
+                }
+            }
+            return false;
         }}
     });
 });

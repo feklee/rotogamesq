@@ -32,7 +32,8 @@ define(['util', 'boards'], function (util, boards) {
         submitIsEnabled = false,
         needsToBeRendered = true,
         layout = {width: 1, height: 1, left: 0, top: 0, portrait: false},
-        hiscoresVersion = 0;
+        hiscoresVersion = 0,
+        nameInputFieldIsVisible;
 
     groupEl = function () {
         return document.getElementById('hiscoresTableGroup');
@@ -185,14 +186,19 @@ define(['util', 'boards'], function (util, boards) {
         return el;
     };
 
+    nameInputFieldIsVisible = function () {
+        return (nameInputFieldEl !== undefined &&
+                util.elIsInDom(nameInputFieldEl));
+    };
+
     renderRows = function (lineHeight) {
         var el = tableEl(),
             elc = contTableEl(),
             currentEl = el,
             iToContinue = Math.ceil(board.hiscores.length / 2),
             nameInputFieldElNeedsFocus =
-                (!document.contains(nameInputFieldEl) ||
-                 (document.activeElement === nameInputFieldEl));
+                (!nameInputFieldIsVisible() ||
+                 document.activeElement === nameInputFieldEl);
 
         util.clear(el);
         util.clear(elc);
