@@ -25,12 +25,13 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'apple',
-            sideLenT: 5,
-            startPosT: [15, 78],
-            endPosT: [10, 78],
-            start: '11-22',
-            duration: 25
+            name: 'firtree:2013-12-14:2013-12-31',
+            sideLenT: 5, // px
+            startPosT: [22, 72], // position of upper left corner of start
+                                 // tiles in boards sprites
+            endPosT: [12, 72],
+            start: '12-14',
+            duration: 28
         },
         {
             name: 'xmastree:2013-12-11:2013-12-31',
@@ -39,6 +40,14 @@ define({
             endPosT: [14, 38],
             start: '12-11',
             duration: 22
+        },
+        {
+            name: 'apple',
+            sideLenT: 5,
+            startPosT: [15, 78],
+            endPosT: [10, 78],
+            start: '11-22',
+            duration: 25
         },
         // {
         //     name: 'firtree:2013-12-01:2013-12-11',
