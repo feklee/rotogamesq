@@ -2,7 +2,7 @@ Introduction
 ============
 
 ROTOGAMEsq is a variant of [Roto Game][1] with *squared tiles*: The [author][4]
-has moved, and in his new home the bathroom tiles are different. ;-)
+has moved, and in his new home the [bathroom tiles][15] are different. ;-)
 
 **Play:** [sq.rotogame.com][2]
 
@@ -218,3 +218,4 @@ specific language governing permissions and limitations under the License.
 [12]: https://marketplace.firefox.com/app/rotogamesq/
 [13]: https://github.com/feklee/rotogamesq
 [14]: http://creativecommons.org/licenses/by/3.0/es/
+[15]: https://blog.mozilla.org/apps/2013/11/19/q-a-rotogamesq/
