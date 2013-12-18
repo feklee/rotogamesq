@@ -69,8 +69,7 @@ module.exports = function (env) {
             res.send(manifestAppcacheContent);
         }},
         manifestWebapp: {value: function (req, res) {
-            res.set('Content-Type', 'application/x-web-app-manifest+json; ' +
-                    'charset=utf-8');
+            res.set('Content-Type', 'application/x-web-app-manifest+json');
             res.send(JSON.stringify(openWebAppManifestJson));
         }},
         webAppManifestJson: {value: function (req, res) { // for Amazon
