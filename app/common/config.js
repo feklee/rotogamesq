@@ -25,14 +25,23 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'firtree:2013-12-14:2013-12-31',
+            name: 'firtree:2013-12-24:2013-12-31',
             sideLenT: 5, // px
-            startPosT: [22, 72], // position of upper left corner of start
+            startPosT: [22, 77], // position of upper left corner of start
                                  // tiles in boards sprites
             endPosT: [12, 72],
-            start: '12-14',
-            duration: 28
+            start: '12-24',
+            duration: 7
         },
+        // {
+        //     name: 'firtree:2013-12-14:2013-12-24',
+        //     sideLenT: 5, // px
+        //     startPosT: [22, 72], // position of upper left corner of start
+        //                          // tiles in boards sprites
+        //     endPosT: [12, 72],
+        //     start: '12-14',
+        //     duration: 10
+        // },
         {
             name: 'xmastree:2013-12-11:2013-12-31',
             sideLenT: 7,
@@ -198,13 +207,21 @@ define({
             start: '11-22',
             duration: 25
         },
+        // {
+        //     name: 'santa:2013-12-06:2013-12-24',
+        //     sideLenT: 6,
+        //     startPosT: [6, 83],
+        //     endPosT: [0, 83],
+        //     start: '12-06',
+        //     duration: 18
+        // },
         {
-            name: 'santa:2013-12-06:2013-12-31',
+            name: 'santa:2013-12-24:2013-12-31',
             sideLenT: 6,
-            startPosT: [6, 83],
+            startPosT: [12, 83],
             endPosT: [0, 83],
-            start: '12-06',
-            duration: 25
+            start: '12-24',
+            duration: 7
         }
     ]
 });
