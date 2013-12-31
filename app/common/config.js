@@ -25,7 +25,7 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: '14:2013-12-31:2014-01:31',
+            name: '14:2013-12-31:2014-01-31',
             sideLenT: 5,
             startPosT: [5, 95],
             endPosT: [0, 95],
@@ -33,7 +33,7 @@ define({
             duration: 31
         },
         {
-            name: 'logo:2013-12-31:2014-01:31',
+            name: 'logo:2013-12-31:2014-01-31',
             sideLenT: 5,
             startPosT: [22, 0],
             endPosT: [17, 0],
@@ -41,7 +41,7 @@ define({
             duration: 31
         },
         {
-            name: 'spiral:2013-12-31:2014-01:31',
+            name: 'spiral:2013-12-31:2014-01-31',
             sideLenT: 6,
             startPosT: [6, 100],
             endPosT: [0, 100],
@@ -232,7 +232,7 @@ define({
             duration: 25
         },
         {
-            name: '20:2013-12-31:2014-01:31',
+            name: '20:2013-12-31:2014-01-31',
             sideLenT: 6,
             startPosT: [6, 89],
             endPosT: [0, 89],
