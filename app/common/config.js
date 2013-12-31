@@ -25,14 +25,38 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'firtree:2013-12-24:2013-12-31',
-            sideLenT: 5, // px
-            startPosT: [22, 77], // position of upper left corner of start
-                                 // tiles in boards sprites
-            endPosT: [12, 72],
-            start: '12-24',
-            duration: 7
+            name: '14:2013-12-31:2014-01:31',
+            sideLenT: 5,
+            startPosT: [5, 95],
+            endPosT: [0, 95],
+            start: '12-31',
+            duration: 31
         },
+        {
+            name: 'logo:2013-12-31:2014-01:31',
+            sideLenT: 5,
+            startPosT: [22, 0],
+            endPosT: [17, 0],
+            start: '12-31',
+            duration: 31
+        },
+        {
+            name: 'spiral:2013-12-31:2014-01:31',
+            sideLenT: 6,
+            startPosT: [6, 100],
+            endPosT: [0, 100],
+            start: '12-31',
+            duration: 31
+        },
+        // {
+        //     name: 'firtree:2013-12-24:2013-12-31',
+        //     sideLenT: 5, // px
+        //     startPosT: [22, 77], // position of upper left corner of start
+        //                          // tiles in boards sprites
+        //     endPosT: [12, 72],
+        //     start: '12-24',
+        //     duration: 7
+        // },
         // {
         //     name: 'firtree:2013-12-14:2013-12-24',
         //     sideLenT: 5, // px
@@ -42,14 +66,14 @@ define({
         //     start: '12-14',
         //     duration: 10
         // },
-        {
-            name: 'xmastree:2013-12-11:2013-12-31',
-            sideLenT: 7,
-            startPosT: [21, 38],
-            endPosT: [14, 38],
-            start: '12-11',
-            duration: 22
-        },
+        // {
+        //     name: 'xmastree:2013-12-11:2013-12-31',
+        //     sideLenT: 7,
+        //     startPosT: [21, 38],
+        //     endPosT: [14, 38],
+        //     start: '12-11',
+        //     duration: 22
+        // },
         {
             name: 'apple',
             sideLenT: 5,
@@ -107,22 +131,22 @@ define({
         //     startPosT: [0, 45],
         //     endPosT: [5, 45]
         // },
-        {
-            name: '20',
-            sideLenT: 6,
-            startPosT: [14, 10],
-            endPosT: [14, 16],
-            start: '01-01',
-            duration: 330
-        },
-        {
-            name: '13',
-            sideLenT: 5,
-            startPosT: [0, 0],
-            endPosT: [5, 0],
-            start: '2013-01-01',
-            duration: 330
-        },
+        // {
+        //     name: '20',
+        //     sideLenT: 6,
+        //     startPosT: [14, 10],
+        //     endPosT: [14, 16],
+        //     start: '01-01',
+        //     duration: 330
+        // },
+        // {
+        //     name: '13',
+        //     sideLenT: 5,
+        //     startPosT: [0, 0],
+        //     endPosT: [5, 0],
+        //     start: '2013-01-01',
+        //     duration: 330
+        // },
         {
             name: 'chess',
             sideLenT: 8,
@@ -167,14 +191,14 @@ define({
             start: '05-01',
             duration: 330
         },
-        {
-            name: 'logo',
-            sideLenT: 5,
-            startPosT: [12, 0],
-            endPosT: [17, 0],
-            start: '06-01',
-            duration: 330
-        },
+        // {
+        //     name: 'logo',
+        //     sideLenT: 5,
+        //     startPosT: [12, 0],
+        //     endPosT: [17, 0],
+        //     start: '06-01',
+        //     duration: 330
+        // },
         {
             name: 'star',
             sideLenT: 7,
@@ -207,6 +231,14 @@ define({
             start: '11-22',
             duration: 25
         },
+        {
+            name: '20:2013-12-31:2014-01:31',
+            sideLenT: 6,
+            startPosT: [6, 89],
+            endPosT: [0, 89],
+            start: '12-31',
+            duration: 31
+        }
         // {
         //     name: 'santa:2013-12-06:2013-12-24',
         //     sideLenT: 6,
@@ -215,13 +247,13 @@ define({
         //     start: '12-06',
         //     duration: 18
         // },
-        {
-            name: 'santa:2013-12-24:2013-12-31',
-            sideLenT: 6,
-            startPosT: [12, 83],
-            endPosT: [0, 83],
-            start: '12-24',
-            duration: 7
-        }
+        // {
+        //     name: 'santa:2013-12-24:2013-12-31',
+        //     sideLenT: 6,
+        //     startPosT: [12, 83],
+        //     endPosT: [0, 83],
+        //     start: '12-24',
+        //     duration: 7
+        // }
     ]
 });
