@@ -41,6 +41,14 @@ define({
             duration: 31
         },
         {
+            name: 'hppyclwn',
+            sideLenT: 8,
+            startPosT: [16, 124],
+            endPosT: [0, 124],
+            start: '02-26',
+            duration: 31
+        },
+        {
             name: '20:2013-12-31:2014-01-31',
             sideLenT: 6,
             startPosT: [6, 89],
@@ -214,6 +222,14 @@ define({
             endPosT: [6, 17],
             start: '05-01',
             duration: 330
+        },
+        {
+            name: 'psycclwn',
+            sideLenT: 8,
+            startPosT: [16, 124],
+            endPosT: [8, 124],
+            start: '02-26',
+            duration: 31
         },
         {
             name: 'jester',
