@@ -25,6 +25,30 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
+            name: 'mask',
+            sideLenT: 5,
+            startPosT: [5, 106],
+            endPosT: [0, 106],
+            start: '02-26',
+            duration: 31
+        },
+        {
+            name: 'freak',
+            sideLenT: 6,
+            startPosT: [6, 111],
+            endPosT: [0, 111],
+            start: '02-26',
+            duration: 31
+        },
+        {
+            name: '20:2013-12-31:2014-01-31',
+            sideLenT: 6,
+            startPosT: [6, 89],
+            endPosT: [0, 89],
+            start: '12-31',
+            duration: 31
+        },
+        {
             name: '14:2013-12-31:2014-01-31',
             sideLenT: 5,
             startPosT: [5, 95],
@@ -191,6 +215,14 @@ define({
             start: '05-01',
             duration: 330
         },
+        {
+            name: 'jester',
+            sideLenT: 7,
+            startPosT: [7, 117],
+            endPosT: [0, 117],
+            start: '02-26',
+            duration: 31
+        }
         // {
         //     name: 'logo',
         //     sideLenT: 5,
@@ -199,22 +231,22 @@ define({
         //     start: '06-01',
         //     duration: 330
         // },
-        {
-            name: 'star',
-            sideLenT: 7,
-            startPosT: [0, 31],
-            endPosT: [7, 31],
-            start: '07-01',
-            duration: 330
-        },
-        {
-            name: 'race',
-            sideLenT: 7,
-            startPosT: [0, 38],
-            endPosT: [7, 38],
-            start: '08-01',
-            duration: 330
-        },
+        // {
+        //     name: 'star',
+        //     sideLenT: 7,
+        //     startPosT: [0, 31],
+        //     endPosT: [7, 31],
+        //     start: '07-01',
+        //     duration: 330
+        // },
+        // {
+        //     name: 'race',
+        //     sideLenT: 7,
+        //     startPosT: [0, 38],
+        //     endPosT: [7, 38],
+        //     start: '08-01',
+        //     duration: 330
+        // },
         // {
         //     name: 'pumpkinm',
         //     sideLenT: 6,
@@ -223,22 +255,14 @@ define({
         //     start: '10-31'
         //     duration: 25
         // },
-        {
-            name: 'mushroom',
-            sideLenT: 7,
-            startPosT: [14, 65],
-            endPosT: [14, 50],
-            start: '11-22',
-            duration: 25
-        },
-        {
-            name: '20:2013-12-31:2014-01-31',
-            sideLenT: 6,
-            startPosT: [6, 89],
-            endPosT: [0, 89],
-            start: '12-31',
-            duration: 31
-        }
+        // {
+        //     name: 'mushroom',
+        //     sideLenT: 7,
+        //     startPosT: [14, 65],
+        //     endPosT: [14, 50],
+        //     start: '11-22',
+        //     duration: 25
+        // }
         // {
         //     name: 'santa:2013-12-06:2013-12-24',
         //     sideLenT: 6,
