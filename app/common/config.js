@@ -25,18 +25,39 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'ebunny:2014',
+            name: 'logo:2014',
             sideLenT: 5,
-            startPosT: [20, 45],
-            endPosT: [15, 45],
-            start: '04-18'
+            startPosT: [27, 0],
+            endPosT: [17, 0],
+            start: '08-06'
         },
+        {
+            name: 'bee:2014',
+            sideLenT: 8,
+            startPosT: [16, 57],
+            endPosT: [8, 57],
+            start: '08-06'
+        },
+        // {
+        //     name: 'ebunny:2014',
+        //     sideLenT: 5,
+        //     startPosT: [20, 45],
+        //     endPosT: [15, 45],
+        //     start: '04-18'
+        // },
         {
             name: 'flower:2014',
             sideLenT: 5,
             startPosT: [25, 45],
             endPosT: [5, 45],
             start: '04-18'
+        },
+        {
+            name: 'mushroom:2014',
+            sideLenT: 7,
+            startPosT: [21, 65],
+            endPosT: [14, 50],
+            start: '08-06'
         },
         // {
         //     name: 'mask',
@@ -62,22 +83,22 @@ define({
         //     start: '02-26',
         //     duration: 31
         // },
-        {
-            name: '20:2013-12-31:2014-01-31',
-            sideLenT: 6,
-            startPosT: [6, 89],
-            endPosT: [0, 89],
-            start: '12-31',
-            duration: 31
-        },
-        {
-            name: '14:2013-12-31:2014-01-31',
-            sideLenT: 5,
-            startPosT: [5, 95],
-            endPosT: [0, 95],
-            start: '12-31',
-            duration: 31
-        },
+        // {
+        //     name: '20:2013-12-31:2014-01-31',
+        //     sideLenT: 6,
+        //     startPosT: [6, 89],
+        //     endPosT: [0, 89],
+        //     start: '12-31',
+        //     duration: 31
+        // },
+        // {
+        //     name: '14:2013-12-31:2014-01-31',
+        //     sideLenT: 5,
+        //     startPosT: [5, 95],
+        //     endPosT: [0, 95],
+        //     start: '12-31',
+        //     duration: 31
+        // },
         // {
         //     name: 'logo:2013-12-31:2014-01-31',
         //     sideLenT: 5,
@@ -86,6 +107,14 @@ define({
         //     start: '12-31',
         //     duration: 31
         // },
+        {
+            name: 'apple',
+            sideLenT: 5,
+            startPosT: [15, 78],
+            endPosT: [10, 78],
+            start: '11-22',
+            duration: 25
+        },
         {
             name: 'spiral:2013-12-31:2014-01-31',
             sideLenT: 6,
@@ -120,14 +149,6 @@ define({
         //     start: '12-11',
         //     duration: 22
         // },
-        {
-            name: 'apple',
-            sideLenT: 5,
-            startPosT: [15, 78],
-            endPosT: [10, 78],
-            start: '11-22',
-            duration: 25
-        },
         // {
         //     name: 'firtree:2013-12-01:2013-12-11',
         //     sideLenT: 5, // px
@@ -314,6 +335,13 @@ define({
             sideLenT: 7,
             startPosT: [21, 50],
             endPosT: [7, 50]
+        },
+        {
+            name: 'tree:2014',
+            sideLenT: 7,
+            startPosT: [7, 132],
+            endPosT: [0, 132],
+            start: '08-06'
         }
     ]
 });
