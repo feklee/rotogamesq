@@ -159,9 +159,7 @@ define(['util', 'boards'], function (util, boards) {
 
         if (submitButtonEl === undefined) {
             submitButtonEl = document.createElement('span');
-            submitButtonEl.appendChild(
-                document.createTextNode('↵') // &crarr;
-            );
+            submitButtonEl.appendChild(document.createTextNode(''));
             submitButtonEl.addEventListener('click', onSubmit);
             updateSubmitButtonClasses();
         }

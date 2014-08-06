@@ -172,11 +172,14 @@ button:disabled {
     font-weight: bold;
 }
 
-#rotationsNavigator>button {
-    display: inline;
+#rotationsNavigator>button, #hiscoresTableGroup .submit.button {
     font-family: 'fontello';
     font-weight: normal;
     font-size: 0.7em;
+}
+
+#rotationsNavigator>button {
+    display: inline;
 }
 
 #nRotations {
