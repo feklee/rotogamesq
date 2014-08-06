@@ -1,55 +1,63 @@
 @import 'reset.css';
 
 @font-face {
-  font-family: 'Droid Sans';
-  font-style: normal;
-  font-weight: normal;
-  src: local('Droid Sans'), local('DroidSans'),
-       url(/fonts/DroidSans.woff) format('woff'),
-       url(/fonts/DroidSans.ttf) format('truetype');
+    font-family: 'Droid Sans';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Droid Sans'), local('DroidSans'),
+         url(/fonts/DroidSans.woff) format('woff'),
+         url(/fonts/DroidSans.ttf) format('truetype');
 }
 
 @font-face {
-  font-family: 'Droid Sans';
-  font-style: normal;
-  font-weight: bold;
-  src: local('Droid Sans Bold'), local('DroidSans-Bold'),
-       url(/fonts/DroidSans-Bold_subset.woff) format('woff'),
-       url(/fonts/DroidSans-Bold_subset.ttf) format('truetype');
+    font-family: 'Droid Sans';
+    font-style: normal;
+    font-weight: bold;
+    src: local('Droid Sans Bold'), local('DroidSans-Bold'),
+         url(/fonts/DroidSans-Bold_subset.woff) format('woff'),
+         url(/fonts/DroidSans-Bold_subset.ttf) format('truetype');
 }
 
 @font-face {
-  font-family: 'Allan';
-  font-style: normal;
-  font-weight: normal;
-  src: local('Allan'), local('Allan-Regular'),
-       url(/fonts/Allan-Regular_subset.woff) format('woff'),
-       url(/fonts/Allan-Regular_subset.ttf) format('truetype');
+    font-family: 'Allan';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Allan'), local('Allan-Regular'),
+         url(/fonts/Allan-Regular_subset.woff) format('woff'),
+         url(/fonts/Allan-Regular_subset.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'fontello';
+    font-style: normal;
+    font-weight: normal;
+    src: url(/fonts/fontello.woff) format('woff'),
+         url(/fonts/fontello.ttf) format('truetype');
 }
 
 @-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
 }
 
 @-moz-keyframes spin {
-  0% { -moz-transform: rotate(0deg); }
-  100% { -moz-transform: rotate(360deg); }
+    0% { -moz-transform: rotate(0deg); }
+    100% { -moz-transform: rotate(360deg); }
 }
 
 @-ms-keyframes spin {
-  0% { -ms-transform: rotate(0deg); }
-  100% { -ms-transform: rotate(360deg); }
+    0% { -ms-transform: rotate(0deg); }
+    100% { -ms-transform: rotate(360deg); }
 }
 
 @-o-keyframes spin {
-  0% { -o-transform: rotate(0deg); }
-  100% { -o-transform: rotate(360deg); }
+    0% { -o-transform: rotate(0deg); }
+    100% { -o-transform: rotate(360deg); }
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 * {
@@ -81,7 +89,7 @@ body {
 
 button, button:focus, button:hover, button:active {
     cursor: pointer;
-	vertical-align: baseline;
+    vertical-align: baseline;
     background: transparent;
     font: inherit;
     padding: 0;
@@ -128,19 +136,19 @@ button:disabled {
     -ms-animation-name: spin;
     -o-animation-name: spin;
     animation-name: spin;
-    
+
     -webkit-animation-duration: 0.4s;
     -moz-animation-duration: 0.4s;
     -ms-animation-duration: 0.4s;
     -o-animation-duration: 0.4s;
     animation-duration: 0.4s;
-    
+
     -webkit-animation-iteration-count: infinite;
     -moz-animation-iteration-count: infinite;
     -ms-animation-iteration-count: infinite;
     -o-animation-iteration-count: infinite;
     animation-iteration-count: infinite;
-  
+
     -webkit-animation-timing-function: linear;
     -moz-animation-timing-function: linear;
     -ms-animation-timing-function: linear;
@@ -163,6 +171,13 @@ button:disabled {
 
 #rotationsNavigator>button {
     display: inline;
+    font-family: 'fontello';
+    font-weight: normal;
+    font-size: 0.7em;
+}
+
+#nRotations {
+    padding: 0 0.2em;
 }
 
 #rotationsNavigator>button.reset {
