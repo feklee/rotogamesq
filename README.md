@@ -23,7 +23,7 @@ How to start development environment
 ====================================
 
  1. Bring dependencies up to date:
- 
+
         npm update
 
  2. Set environment variables:
@@ -34,7 +34,7 @@ How to start development environment
       + `NODE_ENV`: `development`
 
  3. Run directly:
- 
+
         node app.js
 
     Or with [nodemon][5] (on Windows specifiying `-L` may be necessary):
@@ -81,7 +81,7 @@ Hiscores
 ========
 
   * The hiscores for each board are stored in a Redis database.
-  
+
   * On the server, every hiscore entry is tested for plausibility (do the
     rotations really solve a board). This prevents cheating by forging client
     server communication.
@@ -106,18 +106,18 @@ Hiscores
       + On new hiscore entry on client: unsaved hiscores sent to server
 
   * Hiscores may be inspected via the Redis CLI:
-  
+
       + To show hiscores of board `smiley`:
-  
+
             ZRANGE smiley 0 -1 WITHSCORES
-  
+
       + To show rotations associated with hiscores for board  `smiley`:
-  
+
             HGETALL smiley.rotations
 
       + To list all boards with recorded rotations (= all boards with
         hiscores):
-  
+
             KEYS *.rotations
 
 
@@ -125,9 +125,9 @@ Coordinates
 ===========
 
 Variable name postfixes of coordinates and dimensions denote units:
-  
+
   * `T`: multiples of tiles (*tile coordinates*)
-     
+
   * `P`: percentage
 
   * *no postfix:* pixels
@@ -141,7 +141,7 @@ In various places the following values are assumed:
   * Maximum number of rotations: 99
 
   * Maximum number of hiscores per board: 7
-      
+
   * Maximum number of characters in name in hiscores: 8
 
 
@@ -160,16 +160,16 @@ Hacking notes
 
   * `Object.freeze` is not used due to Android 2.3's native browser not
     supporting it.
-  
+
   * Tiles are rendered to `canvas`. This may look cumbersome: Can't tiles be
     rendered simply as squared `div` tags? They can. However, in major browser
     `div` tags cannot be positioned with sub pixel accuracy (as of September
     2012). In these browsers, positions are rounded to pixels and the result is
     irregular spacing, e.g.: one spacing 2px, another one 3px
-    
+
     For similar reasons (possible subpixel positioning issues), the rotation is
     *not* done using CSS3 transformations.
-  
+
   * Format for comments: [Mardown][10]
 
   * The current `README.md` has some ugly formatting of lists, to work around

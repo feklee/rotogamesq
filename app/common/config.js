@@ -25,19 +25,28 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'logo:2014',
-            sideLenT: 5,
-            startPosT: [27, 0],
-            endPosT: [17, 0],
-            start: '08-06'
+            name: 'pumpkin:2014',
+            sideLenT: 7,
+            startPosT: [0, 65],
+            endPosT: [7, 65],
+            start: '10-31',
+            duration: 40
         },
         {
-            name: 'bee:2014',
-            sideLenT: 8,
-            startPosT: [16, 57],
-            endPosT: [8, 57],
-            start: '08-06'
+            name: 'pumpkins:2014',
+            sideLenT: 5,
+            startPosT: [0, 78],
+            endPosT: [5, 78],
+            start: '10-31',
+            duration: 25
         },
+        // {
+        //     name: 'bee:2014',
+        //     sideLenT: 8,
+        //     startPosT: [16, 57],
+        //     endPosT: [8, 57],
+        //     start: '08-06'
+        // },
         // {
         //     name: 'ebunny:2014',
         //     sideLenT: 5,
@@ -45,20 +54,13 @@ define({
         //     endPosT: [15, 45],
         //     start: '04-18'
         // },
-        {
-            name: 'flower:2014',
-            sideLenT: 5,
-            startPosT: [25, 45],
-            endPosT: [5, 45],
-            start: '04-18'
-        },
-        {
-            name: 'mushroom:2014',
-            sideLenT: 7,
-            startPosT: [21, 65],
-            endPosT: [14, 50],
-            start: '08-06'
-        },
+        // {
+        //     name: 'flower:2014',
+        //     sideLenT: 5,
+        //     startPosT: [25, 45],
+        //     endPosT: [5, 45],
+        //     start: '04-18'
+        // },
         // {
         //     name: 'mask',
         //     sideLenT: 5,
@@ -108,12 +110,18 @@ define({
         //     duration: 31
         // },
         {
-            name: 'apple',
+            name: 'mushroom:2014',
+            sideLenT: 7,
+            startPosT: [21, 65],
+            endPosT: [14, 50],
+            start: '08-06'
+        },
+        {
+            name: 'logo:2014',
             sideLenT: 5,
-            startPosT: [15, 78],
-            endPosT: [10, 78],
-            start: '11-22',
-            duration: 25
+            startPosT: [27, 0],
+            endPosT: [17, 0],
+            start: '08-06'
         },
         {
             name: 'spiral:2013-12-31:2014-01-31',
@@ -330,18 +338,34 @@ define({
         //     start: '12-24',
         //     duration: 7
         // },
+        // {
+        //     name: 'bfly:2014',
+        //     sideLenT: 7,
+        //     startPosT: [21, 50],
+        //     endPosT: [7, 50]
+        // },
+        // {
+        //     name: 'tree:2014',
+        //     sideLenT: 7,
+        //     startPosT: [7, 132],
+        //     endPosT: [0, 132],
+        //     start: '08-06'
+        // },
         {
-            name: 'bfly:2014',
-            sideLenT: 7,
-            startPosT: [21, 50],
-            endPosT: [7, 50]
+            name: 'apple',
+            sideLenT: 5,
+            startPosT: [15, 78],
+            endPosT: [10, 78],
+            start: '11-22',
+            duration: 25
         },
         {
-            name: 'tree:2014',
-            sideLenT: 7,
-            startPosT: [7, 132],
-            endPosT: [0, 132],
-            start: '08-06'
+            name: 'pumpkinm:2014',
+            sideLenT: 6,
+            startPosT: [0, 72],
+            endPosT: [6, 72],
+            start: '10-31',
+            duration: 25
         }
     ]
 });
