@@ -25,21 +25,36 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'pumpkin:2014',
-            sideLenT: 7,
-            startPosT: [0, 65],
-            endPosT: [7, 65],
-            start: '10-31',
-            duration: 40
+            name: 'firtree:2014',
+            sideLenT: 5, // px
+            startPosT: [22, 72], // position of upper left corner of start
+                                 // tiles in boards sprites
+            endPosT: [12, 72],
+            start: '12-03'
         },
         {
-            name: 'pumpkins:2014',
-            sideLenT: 5,
-            startPosT: [0, 78],
-            endPosT: [5, 78],
-            start: '10-31',
-            duration: 25
+            name: 'santa:2014',
+            sideLenT: 6,
+            startPosT: [18, 83],
+            endPosT: [0, 83],
+            start: '12-03'
         },
+        // {
+        //     name: 'pumpkin:2014',
+        //     sideLenT: 7,
+        //     startPosT: [0, 65],
+        //     endPosT: [7, 65],
+        //     start: '10-31',
+        //     duration: 40
+        // },
+        // {
+        //     name: 'pumpkins:2014',
+        //     sideLenT: 5,
+        //     startPosT: [0, 78],
+        //     endPosT: [5, 78],
+        //     start: '10-31',
+        //     duration: 25
+        // },
         // {
         //     name: 'bee:2014',
         //     sideLenT: 8,
@@ -116,13 +131,13 @@ define({
             endPosT: [14, 50],
             start: '08-06'
         },
-        {
-            name: 'logo:2014',
-            sideLenT: 5,
-            startPosT: [27, 0],
-            endPosT: [17, 0],
-            start: '08-06'
-        },
+        // {
+        //     name: 'logo:2014',
+        //     sideLenT: 5,
+        //     startPosT: [27, 0],
+        //     endPosT: [17, 0],
+        //     start: '08-06'
+        // },
         {
             name: 'spiral:2013-12-31:2014-01-31',
             sideLenT: 6,
@@ -298,6 +313,13 @@ define({
         //     start: '07-01',
         //     duration: 330
         // },
+        {
+            name: 'race:2014',
+            sideLenT: 7,
+            startPosT: [0, 38],
+            endPosT: [7, 38],
+            start: '12-03'
+        },
         // {
         //     name: 'race',
         //     sideLenT: 7,
@@ -351,20 +373,20 @@ define({
         //     endPosT: [0, 132],
         //     start: '08-06'
         // },
+        // {
+        //     name: 'pumpkinm:2014',
+        //     sideLenT: 6,
+        //     startPosT: [0, 72],
+        //     endPosT: [6, 72],
+        //     start: '10-31',
+        //     duration: 25
+        // }
         {
             name: 'apple',
             sideLenT: 5,
             startPosT: [15, 78],
             endPosT: [10, 78],
             start: '11-22',
-            duration: 25
-        },
-        {
-            name: 'pumpkinm:2014',
-            sideLenT: 6,
-            startPosT: [0, 72],
-            endPosT: [6, 72],
-            start: '10-31',
             duration: 25
         }
     ]
