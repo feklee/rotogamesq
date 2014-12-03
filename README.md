@@ -148,7 +148,7 @@ In various places the following values are assumed:
 Releasing a new version
 =======================
 
-  * Version number schema: major.minor.bugfix
+  * Version number schema: [major.minor.patch][16]
 
   * Update `version` in: `package.json`
 
@@ -219,3 +219,4 @@ specific language governing permissions and limitations under the License.
 [13]: https://github.com/feklee/rotogamesq
 [14]: http://creativecommons.org/licenses/by/3.0/es/
 [15]: https://blog.mozilla.org/apps/2013/11/19/q-a-rotogamesq/
+[16]: http://semver.org/
