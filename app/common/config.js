@@ -25,6 +25,20 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
+            name: '15:2015',
+            sideLenT: 5,
+            startPosT: [5, 150],
+            endPosT: [0, 150],
+            start: '01-01'
+        },
+        {
+            name: 'logo:2015',
+            sideLenT: 5,
+            startPosT: [32, 0],
+            endPosT: [17, 0],
+            start: '01-01'
+        },
+        {
             name: 'xmastree:2014',
             sideLenT: 7,
             startPosT: [21, 31],
@@ -402,6 +416,13 @@ define({
             startPosT: [5, 139],
             endPosT: [0, 139],
             start: '12-23'
+        },
+        {
+            name: '20:2015',
+            sideLenT: 6,
+            startPosT: [6, 144],
+            endPosT: [0, 144],
+            start: '01-01'
         }
     ]
 });
