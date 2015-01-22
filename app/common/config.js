@@ -38,28 +38,28 @@ define({
             endPosT: [17, 0],
             start: '01-01'
         },
-        {
-            name: 'xmastree:2014',
-            sideLenT: 7,
-            startPosT: [21, 31],
-            endPosT: [14, 38],
-            start: '12-23'
-        },
-        {
-            name: 'santa:2014',
-            sideLenT: 6,
-            startPosT: [18, 83],
-            endPosT: [0, 83],
-            start: '12-03'
-        },
-        {
-            name: 'firtree:2014',
-            sideLenT: 5, // px
-            startPosT: [22, 72], // position of upper left corner of start
-                                 // tiles in boards sprites
-            endPosT: [12, 72],
-            start: '12-03'
-        },
+        // {
+        //     name: 'xmastree:2014',
+        //     sideLenT: 7,
+        //     startPosT: [21, 31],
+        //     endPosT: [14, 38],
+        //     start: '12-23'
+        // },
+        // {
+        //     name: 'santa:2014',
+        //     sideLenT: 6,
+        //     startPosT: [18, 83],
+        //     endPosT: [0, 83],
+        //     start: '12-03'
+        // },
+        // {
+        //     name: 'firtree:2014',
+        //     sideLenT: 5, // px
+        //     startPosT: [22, 72], // position of upper left corner of start
+        //                          // tiles in boards sprites
+        //     endPosT: [12, 72],
+        //     start: '12-03'
+        // },
         // {
         //     name: 'pumpkin:2014',
         //     sideLenT: 7,
@@ -145,13 +145,13 @@ define({
         //     start: '12-31',
         //     duration: 31
         // },
-        {
-            name: 'mushroom:2014',
-            sideLenT: 7,
-            startPosT: [21, 65],
-            endPosT: [14, 50],
-            start: '08-06'
-        },
+        // {
+        //     name: 'mushroom:2014',
+        //     sideLenT: 7,
+        //     startPosT: [21, 65],
+        //     endPosT: [14, 50],
+        //     start: '08-06'
+        // },
         // {
         //     name: 'logo:2014',
         //     sideLenT: 5,
@@ -258,14 +258,6 @@ define({
         //     start: '2013-01-01',
         //     duration: 330
         // },
-        {
-            name: 'chess',
-            sideLenT: 8,
-            startPosT: [0, 23],
-            endPosT: [8, 23],
-            start: '02-01',
-            duration: 330
-        },
         // {
         //     name: 'xmastree',
         //     sideLenT: 7,
@@ -341,6 +333,21 @@ define({
             endPosT: [7, 38],
             start: '12-03'
         },
+        {
+            name: 'star:2015',
+            sideLenT: 7,
+            startPosT: [23, 23],
+            endPosT: [16, 23],
+            start: '01-22'
+        },
+        {
+            name: 'chess',
+            sideLenT: 8,
+            startPosT: [0, 23],
+            endPosT: [8, 23],
+            start: '02-01',
+            duration: 330
+        },
         // {
         //     name: 'race',
         //     sideLenT: 7,
@@ -402,21 +409,21 @@ define({
         //     start: '10-31',
         //     duration: 25
         // }
-        {
-            name: 'apple',
-            sideLenT: 5,
-            startPosT: [15, 78],
-            endPosT: [10, 78],
-            start: '11-22',
-            duration: 25
-        },
-        {
-            name: 'santas:2014',
-            sideLenT: 5,
-            startPosT: [5, 139],
-            endPosT: [0, 139],
-            start: '12-23'
-        },
+        // {
+        //     name: 'apple',
+        //     sideLenT: 5,
+        //     startPosT: [15, 78],
+        //     endPosT: [10, 78],
+        //     start: '11-22',
+        //     duration: 25
+        // },
+        // {
+        //     name: 'santas:2014',
+        //     sideLenT: 5,
+        //     startPosT: [5, 139],
+        //     endPosT: [0, 139],
+        //     start: '12-23'
+        // },
         {
             name: '20:2015',
             sideLenT: 6,
