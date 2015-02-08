@@ -453,7 +453,7 @@ define({
         //     start: '12-23'
         // },
         {
-            name: 'psycclwn',
+            name: 'psycclwn:2015',
             sideLenT: 8,
             startPosT: [24, 124],
             endPosT: [8, 124],
