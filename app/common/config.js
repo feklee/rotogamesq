@@ -25,19 +25,47 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
+            name: 'mask:2015',
+            sideLenT: 5,
+            startPosT: [10, 106],
+            endPosT: [0, 106],
+            start: '02-05'
+        },
+        {
+            name: 'freak:2015',
+            sideLenT: 6,
+            startPosT: [12, 111],
+            endPosT: [0, 111],
+            start: '02-05'
+        },
+        {
+            name: 'hppyclwn:2015',
+            sideLenT: 8,
+            startPosT: [24, 124],
+            endPosT: [0, 124],
+            start: '02-05'
+        },
+        {
+            name: '20:2015',
+            sideLenT: 6,
+            startPosT: [6, 144],
+            endPosT: [0, 144],
+            start: '01-01'
+        },
+        {
             name: '15:2015',
             sideLenT: 5,
             startPosT: [5, 150],
             endPosT: [0, 150],
             start: '01-01'
         },
-        {
-            name: 'logo:2015',
-            sideLenT: 5,
-            startPosT: [32, 0],
-            endPosT: [17, 0],
-            start: '01-01'
-        },
+        // {
+        //     name: 'logo:2015',
+        //     sideLenT: 5,
+        //     startPosT: [32, 0],
+        //     endPosT: [17, 0],
+        //     start: '01-01'
+        // },
         // {
         //     name: 'xmastree:2014',
         //     sideLenT: 7,
@@ -425,11 +453,19 @@ define({
         //     start: '12-23'
         // },
         {
-            name: '20:2015',
-            sideLenT: 6,
-            startPosT: [6, 144],
-            endPosT: [0, 144],
-            start: '01-01'
+            name: 'psycclwn',
+            sideLenT: 8,
+            startPosT: [24, 124],
+            endPosT: [8, 124],
+            start: '02-05'
+        },
+        {
+            name: 'jester:2015',
+            sideLenT: 7,
+            startPosT: [14, 117],
+            endPosT: [0, 117],
+            start: '02-05',
+            duration: 31
         }
     ]
 });
