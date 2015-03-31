@@ -25,26 +25,40 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'mask:2015',
+            name: 'ebunny:2015',
             sideLenT: 5,
-            startPosT: [10, 106],
-            endPosT: [0, 106],
-            start: '02-05'
+            startPosT: [30, 45],
+            endPosT: [15, 45],
+            start: '03-31'
         },
         {
-            name: 'freak:2015',
-            sideLenT: 6,
-            startPosT: [12, 111],
-            endPosT: [0, 111],
-            start: '02-05'
+            name: 'logo:2015a',
+            sideLenT: 5,
+            startPosT: [37, 0],
+            endPosT: [17, 0],
+            start: '03-31'
         },
-        {
-            name: 'hppyclwn:2015',
-            sideLenT: 8,
-            startPosT: [24, 124],
-            endPosT: [0, 124],
-            start: '02-05'
-        },
+        // {
+        //     name: 'mask:2015',
+        //     sideLenT: 5,
+        //     startPosT: [10, 106],
+        //     endPosT: [0, 106],
+        //     start: '02-05'
+        // },
+        // {
+        //     name: 'freak:2015',
+        //     sideLenT: 6,
+        //     startPosT: [12, 111],
+        //     endPosT: [0, 111],
+        //     start: '02-05'
+        // },
+        // {
+        //     name: 'hppyclwn:2015',
+        //     sideLenT: 8,
+        //     startPosT: [24, 124],
+        //     endPosT: [0, 124],
+        //     start: '02-05'
+        // },
         {
             name: '20:2015',
             sideLenT: 6,
@@ -452,20 +466,27 @@ define({
         //     endPosT: [0, 139],
         //     start: '12-23'
         // },
+        // {
+        //     name: 'psycclwn:2015',
+        //     sideLenT: 8,
+        //     startPosT: [24, 124],
+        //     endPosT: [8, 124],
+        //     start: '02-05'
+        // },
+        // {
+        //     name: 'jester:2015',
+        //     sideLenT: 7,
+        //     startPosT: [14, 117],
+        //     endPosT: [0, 117],
+        //     start: '02-05',
+        //     duration: 31
+        // },
         {
-            name: 'psycclwn:2015',
-            sideLenT: 8,
-            startPosT: [24, 124],
-            endPosT: [8, 124],
-            start: '02-05'
-        },
-        {
-            name: 'jester:2015',
-            sideLenT: 7,
-            startPosT: [14, 117],
-            endPosT: [0, 117],
-            start: '02-05',
-            duration: 31
+            name: 'flower:2015',
+            sideLenT: 5,
+            startPosT: [35, 45],
+            endPosT: [5, 45],
+            start: '03-31'
         }
     ]
 });
