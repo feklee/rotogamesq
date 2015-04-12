@@ -25,10 +25,10 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'ebunny:2015',
+            name: 'flower:2015',
             sideLenT: 5,
-            startPosT: [30, 45],
-            endPosT: [15, 45],
+            startPosT: [35, 45],
+            endPosT: [5, 45],
             start: '03-31'
         },
         {
@@ -38,6 +38,13 @@ define({
             endPosT: [17, 0],
             start: '03-31'
         },
+        // {
+        //     name: 'ebunny:2015',
+        //     sideLenT: 5,
+        //     startPosT: [30, 45],
+        //     endPosT: [15, 45],
+        //     start: '03-31'
+        // },
         // {
         //     name: 'mask:2015',
         //     sideLenT: 5,
@@ -482,11 +489,10 @@ define({
         //     duration: 31
         // },
         {
-            name: 'flower:2015',
-            sideLenT: 5,
-            startPosT: [35, 45],
-            endPosT: [5, 45],
-            start: '03-31'
+            name: 'bfly:2015',
+            sideLenT: 7,
+            startPosT: [28, 50],
+            endPosT: [7, 50]
         }
     ]
 });
