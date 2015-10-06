@@ -204,7 +204,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 
 
-[1]: http://code.google.com/p/rotogame
+[1]: https://github.com/feklee/rotogame
 [2]: http://sq.rotogame.com
 [3]: http://js13kgames.com
 [4]: mailto:felix.klee@inka.de
