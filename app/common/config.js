@@ -60,12 +60,12 @@ define({
             start: '01-01'
         },
         {
-            name: 'spiral:2013-12-31:2014-01-31',
-            sideLenT: 6,
-            startPosT: [6, 100],
-            endPosT: [0, 100],
-            start: '12-31',
-            duration: 31
+            name: 'house',
+            sideLenT: 7,
+            startPosT: [0, 10],
+            endPosT: [7, 10],
+            start: '04-01',
+            duration: 330
         },
         {
             name: 'smiley',
@@ -76,12 +76,12 @@ define({
             duration: 330
         },
         {
-            name: 'house',
-            sideLenT: 7,
-            startPosT: [0, 10],
-            endPosT: [7, 10],
-            start: '04-01',
-            duration: 330
+            name: 'spiral:2013-12-31:2014-01-31',
+            sideLenT: 6,
+            startPosT: [6, 100],
+            endPosT: [0, 100],
+            start: '12-31',
+            duration: 31
         },
         {
             name: 'rgbcmy',
