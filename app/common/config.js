@@ -25,11 +25,18 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'flower:2015',
+            name: 'pumpkin:2015',
+            sideLenT: 7,
+            startPosT: [0, 65],
+            endPosT: [7, 65],
+            start: '10-30'
+        },
+        {
+            name: 'pumpkins:2015',
             sideLenT: 5,
-            startPosT: [35, 45],
-            endPosT: [5, 45],
-            start: '03-31'
+            startPosT: [0, 78],
+            endPosT: [5, 78],
+            start: '10-30'
         },
         {
             name: 'logo:2015a',
@@ -38,6 +45,89 @@ define({
             endPosT: [17, 0],
             start: '03-31'
         },
+        {
+            name: '20:2015',
+            sideLenT: 6,
+            startPosT: [6, 144],
+            endPosT: [0, 144],
+            start: '01-01'
+        },
+        {
+            name: '15:2015',
+            sideLenT: 5,
+            startPosT: [5, 150],
+            endPosT: [0, 150],
+            start: '01-01'
+        },
+        {
+            name: 'spiral:2013-12-31:2014-01-31',
+            sideLenT: 6,
+            startPosT: [6, 100],
+            endPosT: [0, 100],
+            start: '12-31',
+            duration: 31
+        },
+        {
+            name: 'smiley',
+            sideLenT: 5,
+            startPosT: [0, 5],
+            endPosT: [5, 5],
+            start: '03-01',
+            duration: 330
+        },
+        {
+            name: 'house',
+            sideLenT: 7,
+            startPosT: [0, 10],
+            endPosT: [7, 10],
+            start: '04-01',
+            duration: 330
+        },
+        {
+            name: 'rgbcmy',
+            sideLenT: 6,
+            startPosT: [0, 17],
+            endPosT: [6, 17],
+            start: '05-01',
+            duration: 330
+        },
+        {
+            name: 'race:2014',
+            sideLenT: 7,
+            startPosT: [0, 38],
+            endPosT: [7, 38],
+            start: '12-03'
+        },
+        {
+            name: 'star:2015',
+            sideLenT: 7,
+            startPosT: [23, 23],
+            endPosT: [16, 23],
+            start: '01-22'
+        },
+        {
+            name: 'chess',
+            sideLenT: 8,
+            startPosT: [0, 23],
+            endPosT: [8, 23],
+            start: '02-01',
+            duration: 330
+        },
+        {
+            name: 'pumpkinm:2015',
+            sideLenT: 6,
+            startPosT: [0, 72],
+            endPosT: [6, 72],
+            start: '10-30'
+        }
+
+        // {
+        //     name: 'flower:2015',
+        //     sideLenT: 5,
+        //     startPosT: [35, 45],
+        //     endPosT: [5, 45],
+        //     start: '03-31'
+        // },
         // {
         //     name: 'ebunny:2015',
         //     sideLenT: 5,
@@ -66,20 +156,6 @@ define({
         //     endPosT: [0, 124],
         //     start: '02-05'
         // },
-        {
-            name: '20:2015',
-            sideLenT: 6,
-            startPosT: [6, 144],
-            endPosT: [0, 144],
-            start: '01-01'
-        },
-        {
-            name: '15:2015',
-            sideLenT: 5,
-            startPosT: [5, 150],
-            endPosT: [0, 150],
-            start: '01-01'
-        },
         // {
         //     name: 'logo:2015',
         //     sideLenT: 5,
@@ -208,14 +284,6 @@ define({
         //     endPosT: [17, 0],
         //     start: '08-06'
         // },
-        {
-            name: 'spiral:2013-12-31:2014-01-31',
-            sideLenT: 6,
-            startPosT: [6, 100],
-            endPosT: [0, 100],
-            start: '12-31',
-            duration: 31
-        },
         // {
         //     name: 'firtree:2013-12-24:2013-12-31',
         //     sideLenT: 5, // px
@@ -319,30 +387,6 @@ define({
         //     startPosT: [12, 5],
         //     endPosT: [17, 5]
         // },
-        {
-            name: 'smiley',
-            sideLenT: 5,
-            startPosT: [0, 5],
-            endPosT: [5, 5],
-            start: '03-01',
-            duration: 330
-        },
-        {
-            name: 'house',
-            sideLenT: 7,
-            startPosT: [0, 10],
-            endPosT: [7, 10],
-            start: '04-01',
-            duration: 330
-        },
-        {
-            name: 'rgbcmy',
-            sideLenT: 6,
-            startPosT: [0, 17],
-            endPosT: [6, 17],
-            start: '05-01',
-            duration: 330
-        },
         // {
         //     name: 'psycclwn',
         //     sideLenT: 8,
@@ -375,28 +419,6 @@ define({
         //     start: '07-01',
         //     duration: 330
         // },
-        {
-            name: 'race:2014',
-            sideLenT: 7,
-            startPosT: [0, 38],
-            endPosT: [7, 38],
-            start: '12-03'
-        },
-        {
-            name: 'star:2015',
-            sideLenT: 7,
-            startPosT: [23, 23],
-            endPosT: [16, 23],
-            start: '01-22'
-        },
-        {
-            name: 'chess',
-            sideLenT: 8,
-            startPosT: [0, 23],
-            endPosT: [8, 23],
-            start: '02-01',
-            duration: 330
-        },
         // {
         //     name: 'race',
         //     sideLenT: 7,
@@ -488,11 +510,11 @@ define({
         //     start: '02-05',
         //     duration: 31
         // },
-        {
-            name: 'bfly:2015',
-            sideLenT: 7,
-            startPosT: [28, 50],
-            endPosT: [7, 50]
-        }
+        // {
+        //     name: 'bfly:2015',
+        //     sideLenT: 7,
+        //     startPosT: [28, 50],
+        //     endPosT: [7, 50]
+        // }
     ]
 });
