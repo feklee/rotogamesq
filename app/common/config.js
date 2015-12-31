@@ -25,40 +25,54 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: 'pumpkin:2015',
-            sideLenT: 7,
-            startPosT: [0, 65],
-            endPosT: [7, 65],
-            start: '10-30'
-        },
-        {
-            name: 'pumpkins:2015',
-            sideLenT: 5,
-            startPosT: [0, 78],
-            endPosT: [5, 78],
-            start: '10-30'
-        },
-        {
-            name: 'logo:2015a',
-            sideLenT: 5,
-            startPosT: [37, 0],
-            endPosT: [17, 0],
-            start: '03-31'
-        },
-        {
             name: '20:2015',
             sideLenT: 6,
-            startPosT: [6, 144],
-            endPosT: [0, 144],
-            start: '01-01'
+            startPosT: [6, 155],
+            endPosT: [0, 155],
+            start: '12-31'
         },
         {
-            name: '15:2015',
+            name: '16:2015',
             sideLenT: 5,
-            startPosT: [5, 150],
-            endPosT: [0, 150],
-            start: '01-01'
+            startPosT: [5, 161],
+            endPosT: [0, 161],
+            start: '12-31'
         },
+        // {
+        //     name: 'pumpkin:2015',
+        //     sideLenT: 7,
+        //     startPosT: [0, 65],
+        //     endPosT: [7, 65],
+        //     start: '10-30'
+        // },
+        // {
+        //     name: 'pumpkins:2015',
+        //     sideLenT: 5,
+        //     startPosT: [0, 78],
+        //     endPosT: [5, 78],
+        //     start: '10-30'
+        // },
+        // {
+        //     name: 'logo:2015a',
+        //     sideLenT: 5,
+        //     startPosT: [37, 0],
+        //     endPosT: [17, 0],
+        //     start: '03-31'
+        // },
+        // {
+        //     name: '20:2015',
+        //     sideLenT: 6,
+        //     startPosT: [6, 144],
+        //     endPosT: [0, 144],
+        //     start: '01-01'
+        // },
+        // {
+        //     name: '15:2015',
+        //     sideLenT: 5,
+        //     startPosT: [5, 150],
+        //     endPosT: [0, 150],
+        //     start: '01-01'
+        // },
         {
             name: 'house',
             sideLenT: 7,
@@ -114,13 +128,19 @@ define({
             duration: 330
         },
         {
-            name: 'pumpkinm:2015',
-            sideLenT: 6,
-            startPosT: [0, 72],
-            endPosT: [6, 72],
-            start: '10-30'
+            name: 'logo:2015b',
+            sideLenT: 5,
+            startPosT: [37, 5],
+            endPosT: [17, 0],
+            start: '12-31'
         }
-
+        // {
+        //     name: 'pumpkinm:2015',
+        //     sideLenT: 6,
+        //     startPosT: [0, 72],
+        //     endPosT: [6, 72],
+        //     start: '10-30'
+        // },
         // {
         //     name: 'flower:2015',
         //     sideLenT: 5,
