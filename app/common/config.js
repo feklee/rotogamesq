@@ -25,7 +25,7 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: '20:2015',
+            name: '20:2015a',
             sideLenT: 6,
             startPosT: [6, 155],
             endPosT: [0, 155],
