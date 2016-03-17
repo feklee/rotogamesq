@@ -25,6 +25,20 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
+            name: 'ebunny:2016',
+            sideLenT: 5,
+            startPosT: [40, 45],
+            endPosT: [15, 45],
+            start: '03-16'
+        },
+        {
+            name: 'flower:2016',
+            sideLenT: 5,
+            startPosT: [45, 45],
+            endPosT: [5, 45],
+            start: '03-16'
+        },
+        {
             name: '20:2015a',
             sideLenT: 6,
             startPosT: [6, 155],
