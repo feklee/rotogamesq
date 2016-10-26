@@ -14,27 +14,27 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-/*jslint node: true, maxerr: 50, maxlen: 79, nomen: true, unparam: true */
+/*jslint node: true, maxerr: 50, maxlen: 79 */
 
-'use strict';
+"use strict";
 
-var express = require('express'),
-    app = express(),
-    server = require('http').createServer(app),
-    boards = require('./app/server/boards'),
-    routes = require('./routes/create')(app.get('env')),
-    io = require('socket.io').listen(server),
-    startServer,
-    loadBoardsAndStartServer;
+var express = require("express");
+var app = express();
+var server = require("http").createServer(app);
+var boards = require("./app/server/boards");
+var routes = require("./routes/create")(app.get("env"));
+var io = require("socket.io").listen(server);
+var startServer;
+var loadBoardsAndStartServer;
 
 startServer = function () {
-    server.listen(app.get('port'), function () {
-        console.log('Express server listening on port %d in %s mode',
-                    app.get('port'), app.settings.env);
+    server.listen(app.get("port"), function () {
+        console.log("Express server listening on port %d in %s mode",
+                app.get("port"), app.settings.env);
     });
 
     // also triggered on reconnection
-    io.sockets.on('connection', function (socket) {
+    io.sockets.on("connection", function (socket) {
         boards.listen(socket);
     });
 };
@@ -43,39 +43,35 @@ loadBoardsAndStartServer = function () {
     boards.load(startServer);
 };
 
-app.set('port', process.env.PORT || 3000);
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
+app.set("port", process.env.PORT || 3000);
+app.set("views", __dirname + "/views");
+app.set("view engine", "jade");
 
 app.use(express.compress());
-app.use(express.logger('dev'));
+app.use(express.logger("dev"));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(express['static'](__dirname + '/public'));
+app.use(express.static(__dirname + "/public"));
 
-app.get('/', routes.index);
-app.get('/install-webapp', routes.installWebapp);
-app.get('/manifest.appcache', routes.manifestAppcache);
-app.get('/manifest.webapp', routes.manifestWebapp);
-app.get('/web-app-manifest.json', routes.webAppManifestJson);
+app.get("/", routes.index);
+app.get("/install-webapp", routes.installWebapp);
+app.get("/manifest.appcache", routes.manifestAppcache);
+app.get("/manifest.webapp", routes.manifestWebapp);
+app.get("/web-app-manifest.json", routes.webAppManifestJson);
 
-io.set('log level', 1);
-
-if (app.get('env') === 'development') {
-    app.use('/app', express['static'](__dirname + '/app'));
+if (app.get("env") === "development") {
+    app.use("/app", express.static(__dirname + "/app"));
     app.use(express.errorHandler());
     loadBoardsAndStartServer();
 } else { // production
-    // advised production settings from Socket.IO wiki (as of Oct. 2012), but
-    // without Flash transport (can cause issues with Joyent -
-    // <http://blog.dreamflashstudio.com/2012/08/nodejitsu-on-joyent/>):
-    io.enable('browser client minification');
-    io.enable('browser client etag');
-    io.enable('browser client gzip');
-    io.set('transports', ['websocket', 'htmlfile', 'xhr-polling',
-                          'jsonp-polling']);
+    io.set("transports", [
+        "websocket",
+        "htmlfile",
+        "xhr-polling",
+        "jsonp-polling"
+    ]);
 
-    app.use('/app.build', express['static'](__dirname + '/app.build'));
-    require('./app/server/optimize')(loadBoardsAndStartServer);
+    app.use("/app.build", express.static(__dirname + "/app.build"));
+    require("./app/server/optimize")(loadBoardsAndStartServer);
 }
