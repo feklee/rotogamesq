@@ -91,8 +91,8 @@ Hiscores
 
   * [localStorage][6] is used for offline capability:
 
-      + On client load (communication via [Socket.IO][7], automatically repeated
-        until connection is available):
+      + On client load (communication via [Socket.IO][7], automatically
+        repeated until connection is available):
 
           - hiscores are retrieved from localStorage,
 
@@ -190,7 +190,7 @@ Contributors
 Legal
 =====
 
-Copyright 2012—13 [Felix E. Klee][4],
+Copyright 2012—16 [Felix E. Klee][4],
 
 Licensed under the Apache License, Version 2.0 (the “License”); you may not use
 this file except in compliance with the License. You may obtain a copy of the
