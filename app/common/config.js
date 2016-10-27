@@ -16,10 +16,8 @@
 
 /*jslint node: true, maxerr: 50, maxlen: 79 */
 
-var define;
-
-if (define === undefined) {
-    define = require("amdefine")(module);
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
 }
 
 define({
