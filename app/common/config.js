@@ -577,6 +577,13 @@ define({
         //     endPosT: [7, 50]
         // },
         {
+            name: "jester:2016",
+            sideLenT: 7,
+            startPosT: [21, 117],
+            endPosT: [0, 117],
+            start: "10-29"
+        },
+        {
             name: "pumpkin:2016",
             sideLenT: 7,
             startPosT: [28, 65],
