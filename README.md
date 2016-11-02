@@ -60,6 +60,9 @@ How to add a board
 
  1. Add the tiles for the start and end to: `public/images/boards_sprites.png`
 
+    Note: Making the image too large can trigger a Bugzilla@Mozilla
+    [bug 1314597][17] on the Fx0 smartphone.
+
  2. Add the description to: `app/common/config.js`
 
     Limit board names to eight alphanumeric characters, even though they are
@@ -220,3 +223,4 @@ specific language governing permissions and limitations under the License.
 [14]: http://creativecommons.org/licenses/by/3.0/es/
 [15]: https://blog.mozilla.org/apps/2013/11/19/q-a-rotogamesq/
 [16]: http://semver.org/
+[17]: https://bugzilla.mozilla.org/show_bug.cgi?id=1314597
