@@ -23,19 +23,33 @@ if (typeof define !== 'function') {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: "pumpkins:2016",
+            name: "sapple:2016",
             sideLenT: 5,
-            startPosT: [27, 78],
-            endPosT: [5, 78],
-            start: "10-26"
+            startPosT: [15, 95],
+            endPosT: [10, 95],
+            start: "11-13"
         },
         {
-            name: "pumpkinm:2016",
-            sideLenT: 6,
-            startPosT: [27, 72],
-            endPosT: [6, 72],
-            start: "10-26"
+            name: "cat:2016",
+            sideLenT: 7,
+            startPosT: [19, 144],
+            endPosT: [12, 144],
+            start: "11-13"
         },
+        // {
+        //     name: "pumpkins:2016",
+        //     sideLenT: 5,
+        //     startPosT: [27, 78],
+        //     endPosT: [5, 78],
+        //     start: "10-26"
+        // },
+        // {
+        //     name: "pumpkinm:2016",
+        //     sideLenT: 6,
+        //     startPosT: [27, 72],
+        //     endPosT: [6, 72],
+        //     start: "10-26"
+        // },
         // {
         //     name: "flower:2016",
         //     sideLenT: 5,
@@ -583,12 +597,19 @@ define({
             endPosT: [0, 117],
             start: "10-29"
         },
+        // {
+        //     name: "pumpkin:2016",
+        //     sideLenT: 7,
+        //     startPosT: [28, 65],
+        //     endPosT: [7, 65],
+        //     start: "10-26"
+        // }
         {
-            name: "pumpkin:2016",
+            name: "giraffe:2016",
             sideLenT: 7,
-            startPosT: [28, 65],
-            endPosT: [7, 65],
-            start: "10-26"
+            startPosT: [27, 16],
+            endPosT: [20, 16],
+            start: "11-13"
         }
     ]
 });
