@@ -20,41 +20,24 @@
 
 var express = require("express");
 var app = express();
-var server = require("http").createServer(app);
+var httpServer = require("http").createServer(app);
+var wsConnections = require("./app/server/ws_connections");
 var boards = require("./app/server/boards");
 var routes = require("./routes/create")(app.get("env"));
-var WebSocketServer = require("websocket").server;
-var startServer;
+var startHttpServer;
 var loadBoardsAndStartServer;
 
-startServer = function () {
-    server.listen(app.get("port"), function () {
+startHttpServer = function () {
+    httpServer.listen(app.get("port"), function () {
         console.log("Express server listening on port %d in %s mode",
                 app.get("port"), app.settings.env);
     });
 
-    // also triggered on reconnection
-    var wsServer = new WebSocketServer({
-        httpServer: server,
-        autoAcceptConnections: false
-    });
-
-    wsServer.on("request", function (request) {
-        var wsBrowserConnection = request.accept(null, request.origin);
-        console.log("Connection from browser accepted");
-
-        boards.listen(wsBrowserConnection);
-
-        wsBrowserConnection.on("message", function (message) {
-            if (message.type === "utf8") {
-                console.log(message.utf8Data);
-            }
-        });
-    });
+    wsConnections.startServer(httpServer);
 };
 
 loadBoardsAndStartServer = function () {
-    boards.load(startServer);
+    boards.load(startHttpServer);
 };
 
 app.set("port", process.env.PORT || 3000);

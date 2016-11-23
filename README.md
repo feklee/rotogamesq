@@ -37,9 +37,9 @@ How to start development environment
 
         node app.js
 
-    Or with [nodemon][5] (on Windows specifiying `-L` may be necessary):
+    Or with [nodemon][5]:
 
-        nodemon --watch . app.js
+        nodemon --watch .
 
 
 Open Web App

@@ -23,6 +23,7 @@ var boardFactory = require('./board_factory'),
     config = require('../common/config'),
     createBoards,
     boards;
+var hiscores = require('./hiscores');
 
 createBoards = function () {
     config.boards.forEach(function (boardConfig) {
@@ -32,8 +33,10 @@ createBoards = function () {
             endTiles = boardsSprites.tiles(boardConfig.endPosT,
                                            sideLenT);
 
-        boards.push(boardFactory.create(boardConfig.name,
-                                        startTiles, endTiles));
+        var board = boardFactory.create(boardConfig.name,
+                                        startTiles, endTiles);
+        hiscores.add(board);
+        boards.push(board);
     });
 };
 
@@ -44,12 +47,6 @@ boards = Object.create([], {
             onLoaded();
         });
     }},
-
-    listen: {value: function (wsBrowserConnection) {
-        this.forEach(function (board) {
-            board.listen(wsBrowserConnection);
-        });
-    }}
 });
 
 module.exports = boards;

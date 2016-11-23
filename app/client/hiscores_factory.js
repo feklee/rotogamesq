@@ -18,8 +18,10 @@
 
 /*global define */
 
-define(['web_socket', 'local_storage'], function (webSocket, localStorage) {
-    'use strict';
+define([
+    "ws_connection", "local_storage"
+], function (wsConnection, localStorage) {
+    "use strict";
 
     var isBetterOrEqual, saveProposal, listenToUpdates, requestHiscores,
         create,
@@ -49,13 +51,14 @@ define(['web_socket', 'local_storage'], function (webSocket, localStorage) {
         });
     };
 
-    // via Socket.IO (will automatically retry on broken connection)
+    // via WebSocket (will automatically retry on broken connection)
     sendUnsavedToServer = function (internal) {
-/* TODO:
         internal.unsavedHiscores.forEach(function (unsavedHiscore) {
-            socketIo.emit('hiscore for ' + internal.boardName, unsavedHiscore);
+            wsConnection.emit({
+                eventName: "hiscore for " + internal.boardName,
+                eventData: unsavedHiscore
+            });
         });
-*/
     };
 
     // Triggers saving of new hiscores entry:
@@ -107,22 +110,21 @@ define(['web_socket', 'local_storage'], function (webSocket, localStorage) {
     };
 
     listenToUpdates = function (internal) {
-        var eventName = "hiscores for " + internal.boardName;
-
-/* TODO:
-        socketIo.on(eventName, function (newSavedHiscores) {
-            internal.savedHiscores = newSavedHiscores;
-            updateUnsavedHiscores(internal);
-            updateLocalStorage(internal);
-            internal.version += 1;
+        wsConnection.addListener({
+            eventName: "hiscores for " + internal.boardName,
+            callback: function (newSavedHiscores) {
+                internal.savedHiscores = newSavedHiscores;
+                updateUnsavedHiscores(internal);
+                updateLocalStorage(internal);
+                internal.version += 1;
+            }
         });
-*/
     };
 
     requestHiscores = function (internal) {
-/* TODO
-        socketIo.emit('request of hiscores for ' + internal.boardName);
-*/
+        wsConnection.emit({
+            eventName: "request of hiscores for " + internal.boardName
+        });
     };
 
     create = function (boardName) {
@@ -142,7 +144,9 @@ define(['web_socket', 'local_storage'], function (webSocket, localStorage) {
 
         listenToUpdates(internal);
 
-        requestHiscores(internal);
+        wsConnection.addOnOpenCallback(function () {
+            requestHiscores(internal);
+        });
 
         return Object.create(null, {
             // Calls callback with three parameters: hiscore, index, and

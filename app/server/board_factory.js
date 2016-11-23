@@ -18,8 +18,7 @@
 
 'use strict';
 
-var hiscoresFactory = require('./hiscores_factory'),
-    rotationFactory = require('../common/rotation_factory'),
+var rotationFactory = require('../common/rotation_factory'),
     rectTFactory = require('../common/rect_t_factory'),
     create,
     isSolvedBy,
@@ -68,8 +67,6 @@ isSolvedBy = function (rotationsData) {
 
 // Loads a board synchronously.
 create = function (name, startTiles, endTiles) {
-    var hiscores = hiscoresFactory.create();
-
     return Object.create(null, {
         name: {get: function () {
             return name;
@@ -83,11 +80,7 @@ create = function (name, startTiles, endTiles) {
             return endTiles;
         }},
 
-        isSolvedBy: {value: isSolvedBy},
-
-        listen: {value: function (wsBrowserConnection) {
-            hiscores.listen(wsBrowserConnection, this);
-        }}
+        isSolvedBy: {value: isSolvedBy}
     });
 };
 
