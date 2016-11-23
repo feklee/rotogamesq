@@ -5,28 +5,30 @@
 /*global define */
 
 define([
-    'boards_sprites', 'board_factory', '../common/config'
+    "boards_sprites", "board_factory", "../common/config"
 ], function (
     boardsSprites,
     boardFactory,
     config
 ) {
-    'use strict';
+    "use strict";
 
-    var selectedI = 0,
-        object,
-        createBoards;
+    var selectedI = 0;
+    var object;
 
-    createBoards = function () {
+    var createBoards = function () {
         config.boards.forEach(function (boardConfig) {
-            var sideLenT = boardConfig.sideLenT,
-                startTiles = boardsSprites.tiles(boardConfig.startPosT,
-                                                 sideLenT),
-                endTiles = boardsSprites.tiles(boardConfig.endPosT,
-                                               sideLenT);
+            var sideLenT = boardConfig.sideLenT;
+            var startTiles = boardsSprites.tiles(boardConfig.startPosT,
+                    sideLenT);
+            var endTiles = boardsSprites.tiles(boardConfig.endPosT,
+                    sideLenT);
 
-            object.push(boardFactory.create(boardConfig.name,
-                                            startTiles, endTiles));
+            object.push(boardFactory.create(
+                boardConfig.name,
+                startTiles,
+                endTiles
+            ));
         });
     };
 
@@ -39,7 +41,7 @@ define([
         }},
 
         selected: {get: function () {
-            return this[selectedI];
+            return object[selectedI];
         }},
 
         selectedI: {
