@@ -5,24 +5,20 @@
 /*global define */
 
 define([
-    'display_c_sys', 'display_canvas_factory'
+    "display_c_sys", "display_canvas_factory"
 ], function (displayCSys, displayCanvasFactory) {
-    'use strict';
+    "use strict";
 
-    var sideLen,
-        needsToBeRendered = false,
-        rotation,
-        object,
-        renderArc,
-        renderTriangle,
-        renderArrow,
-        render,
-        origShow;
+    var needsToBeRendered = false;
+    var sideLen;
+    var rotation;
+    var object;
 
-    renderArc = function (ctx, x, y, u, angleDeg) {
-        var startAngle = 0,
-            endAngle = (angleDeg === 90 || angleDeg === -90 ?
-                        Math.PI / 2 : Math.PI);
+    var renderArc = function (ctx, x, y, u, angleDeg) {
+        var startAngle = 0;
+        var endAngle = (angleDeg === 90 || angleDeg === -90)
+            ? Math.PI / 2
+            : Math.PI;
 
         // Angle is slightly extended, to avoid small gap to triangle, visible
         // in some browsers as of September 2012 (precision errors).
@@ -37,12 +33,14 @@ define([
         ctx.stroke();
     };
 
-    renderTriangle = function (ctx, x, y, u, angleDeg) {
+    var renderTriangle = function (ctx, x, y, u, angleDeg) {
         var s;
 
         ctx.beginPath();
         if (angleDeg === 90 || angleDeg === 180 || angleDeg === -180) {
-            s = (angleDeg === -180) ? -3 * u : 0;
+            s = (angleDeg === -180)
+                ? -3 * u
+                : 0;
             ctx.moveTo(x + 10 * u + s, y + 10 * u);
             ctx.lineTo(x + 13 * u + s, y + 10 * u);
             ctx.lineTo(x + 11.5 * u + s, y + 8 * u);
@@ -57,35 +55,39 @@ define([
         ctx.closePath();
     };
 
-    renderArrow = function (ctx, posT, angleDeg) {
-        var pos = displayCSys.posFromPosT(posT),
-            x = pos[0],
-            y = pos[1],
-            tsl = displayCSys.tileSideLen,
-            u = tsl / 14;
+    var renderArrow = function (ctx, posT, angleDeg) {
+        var pos = displayCSys.posFromPosT(posT);
+        var x = pos[0];
+        var y = pos[1];
+        var tsl = displayCSys.tileSideLen;
+        var u = tsl / 14;
 
         ctx.lineWidth = u;
         renderArc(ctx, x, y, u, angleDeg);
         renderTriangle(ctx, x, y, u, angleDeg);
     };
 
-    render = function (el) {
-        var ctx = el.getContext('2d');
+    var render = function (el) {
+        var ctx = el.getContext("2d");
 
-        el.height = el.width = sideLen; // also clears canvas
+        // also clears canvas:
+        el.height = sideLen;
+        el.width = sideLen;
 
         if (rotation !== undefined && rotation.makesSense) {
             renderArrow(ctx, rotation.rectT[1], rotation.angleDeg);
         }
     };
 
-    object = Object.create(displayCanvasFactory.create(), {
-        animStep: {value: function () {
-            var el = document.getElementById('arrowCanvas');
+    var displayCanvas = displayCanvasFactory.create();
 
-            if (this.visibilityNeedsToBeUpdated) {
-                this.updateVisibility(el);
-                if (this.isVisible) {
+    object = Object.create(displayCanvas, {
+        animStep: {value: function () {
+            var el = document.getElementById("arrowCanvas");
+
+            if (displayCanvas.visibilityNeedsToBeUpdated) {
+                displayCanvas.updateVisibility(el);
+                if (displayCanvas.isVisible) {
                     needsToBeRendered = true;
                 }
             }
@@ -99,7 +101,7 @@ define([
         rotation: {set: function (x) {
             if (rotation === undefined || !rotation.isEqualTo(x)) {
                 rotation = x;
-                if (this.isVisible) {
+                if (displayCanvas.isVisible) {
                     needsToBeRendered = true;
                 }
             }
@@ -108,18 +110,18 @@ define([
         sideLen: {set: function (x) {
             if (x !== sideLen) {
                 sideLen = x;
-                if (this.isVisible) {
+                if (displayCanvas.isVisible) {
                     needsToBeRendered = true;
                 }
             }
         }}
     });
 
-    origShow = object.show;
+    var origShow = object.show;
 
     Object.defineProperty(
         object,
-        'show',
+        "show",
         {
             value: function () {
                 rotation = undefined; // old rotation can cause popup of arrow
