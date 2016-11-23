@@ -5,27 +5,33 @@
 
 /*global define */
 
-define(['boards'], function (boards) {
-    'use strict';
+define(["boards"], function (boards) {
+    "use strict";
 
-    var posFromPosT, renderTile, renderCanvas, render;
-
-    posFromPosT = function (posT, sideLen, sideLenT) {
+    var posFromPosT = function (posT, sideLen, sideLenT) {
         return posT.map(function (coordT) {
             return coordT * sideLen / sideLenT;
         });
     };
 
-    renderTile = function (ctx, board, posT, maxSideLenCeil) {
-        var sideLenT = board.sideLenT,
-            tiles = board.endTiles,
-            pos = posFromPosT(posT, maxSideLenCeil, sideLenT),
-            color = tiles[posT[0]][posT[1]].color,
-            tileSideLen = maxSideLenCeil / sideLenT + 1; // +1 to avoid ugly
+    var renderTile = function (ctx, board, posT, maxSideLenCeil) {
+        var sideLenT = board.sideLenT;
+        var tiles = board.endTiles;
+        var pos = posFromPosT(posT, maxSideLenCeil, sideLenT);
+        var color = tiles[posT[0]][posT[1]].color;
+        var tileSideLen = maxSideLenCeil / sideLenT + 1; // +1 to avoid ugly
                                                          // spacing
 
         ctx.fillStyle = color;
         ctx.fillRect(pos[0], pos[1], tileSideLen, tileSideLen);
+    };
+
+    var renderColumn = function (ctx, sideLenT, maxSideLenCeil, board, xT) {
+        var yT = 0;
+        while (yT < sideLenT) {
+            renderTile(ctx, board, [xT, yT], maxSideLenCeil);
+            yT += 1;
+        }
     };
 
     // The canvas is only rendered when needed. One reason, aside from low
@@ -33,15 +39,14 @@ define(['boards'], function (boards) {
     // in a quick succession, sometimes on the iPad with IOS 5.1.1, the canvas
     // drawing on the canvas has no effect after increasing its size - it stays
     // empty. The new code minimizes situations like that.
-    renderCanvas = function (el, board, maxSideLenCeil) {
-        var xT, yT,
-            sideLenT = board.sideLenT,
-            ctx = el.getContext('2d');
+    var renderCanvas = function (el, board, maxSideLenCeil) {
+        var xT = 0;
+        var sideLenT = board.sideLenT;
+        var ctx = el.getContext("2d");
 
-        for (xT = 0; xT < sideLenT; xT += 1) {
-            for (yT = 0; yT < sideLenT; yT += 1) {
-                renderTile(ctx, board, [xT, yT], maxSideLenCeil);
-            }
+        while (xT < sideLenT) {
+            renderColumn(ctx, sideLenT, maxSideLenCeil, board, xT);
+            xT += 1;
         }
     };
 
@@ -53,31 +58,33 @@ define(['boards'], function (boards) {
     // tag, then it is smoothed/blurred, and there is no way to turn off that
     // behavior. In particular, there is no equivalent to Firefox 14.0's
     // `-moz-crisp-edges`.
-    render = function (el, board, sideLen, maxSideLenCeil, x, y,
-                       canvasNeedsToBeRendered) {
+    var render = function (el, board, sideLen, maxSideLenCeil, x, y,
+            canvasNeedsToBeRendered) {
         var s = el.style;
 
-        s.width = s.height = sideLen + 'px';
-        s.left = (x - sideLen / 2) + 'px';
-        s.top = (y - sideLen / 2) + 'px';
+        s.width = sideLen + "px";
+        s.height = s.width;
+        s.left = (x - sideLen / 2) + "px";
+        s.top = (y - sideLen / 2) + "px";
 
         if (canvasNeedsToBeRendered) {
-            el.width = el.height = maxSideLenCeil;
+            el.width = maxSideLenCeil;
+            el.height = el.width;
             renderCanvas(el, board, maxSideLenCeil);
         }
     };
 
     return Object.create(null, {
         create: {value: function (boardI, onThumbSelected) {
-            var el = document.createElement('canvas'),
-                needsToBeRendered = true,
-                canvasNeedsToBeRendered = true,
-                maxSideLenCeil = 0, // max. side length (size of canvas, int)
-                sideLen = 0, // actual side length, set with CSS
-                x = 0, // x-position of center within outher container
-                y = 0;
+            var el = document.createElement("canvas");
+            var needsToBeRendered = true;
+            var canvasNeedsToBeRendered = true;
+            var maxSideLenCeil = 0; // max. side length (size of canvas, int)
+            var sideLen = 0; // actual side length, set with CSS
+            var x = 0; // x-position of center within outher container
+            var y = 0;
 
-            el.addEventListener('click', function () {
+            el.addEventListener("click", function () {
                 onThumbSelected(boardI);
             });
 
@@ -126,9 +133,15 @@ define(['boards'], function (boards) {
 
                 animStep: {value: function () {
                     if (needsToBeRendered) {
-                        render(el, boards[boardI],
-                               sideLen, maxSideLenCeil, x, y,
-                               canvasNeedsToBeRendered);
+                        render(
+                            el,
+                            boards[boardI],
+                            sideLen,
+                            maxSideLenCeil,
+                            x,
+                            y,
+                            canvasNeedsToBeRendered
+                        );
                         needsToBeRendered = false;
                         canvasNeedsToBeRendered = false;
                     }

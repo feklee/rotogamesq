@@ -7,13 +7,8 @@
 define(["hiscores_factory"], function (hiscoresFactory) {
     "use strict";
 
-    var prototype;
-    var updateIsFinished;
-    var initInternal;
-    var create;
-
     // Updates `internal.isFinished`.
-    updateIsFinished = function (internal, board) {
+    var updateIsFinished = function (internal, board) {
         if (board.tiles.colorsAreEqualTo(board.endTiles)) {
             if (!internal.isFinished) {
                 internal.isFinished = true;
@@ -26,7 +21,7 @@ define(["hiscores_factory"], function (hiscoresFactory) {
     };
 
     // May also be used to reset.
-    initInternal = function (internal, startTiles) {
+    var initInternal = function (internal, startTiles) {
         if (startTiles !== undefined) {
             internal.startTiles = startTiles;
         }
@@ -37,7 +32,7 @@ define(["hiscores_factory"], function (hiscoresFactory) {
         internal.isFinished = false; // true when game is finished
     };
 
-    prototype = Object.create(null, {
+    var prototype = Object.create(null, {
         rotate: {value: function (board, internal, rotation) {
             internal.rotations.push(rotation);
             internal.futureRotations.length = 0; // resets redo history
@@ -67,7 +62,7 @@ define(["hiscores_factory"], function (hiscoresFactory) {
         }}
     });
 
-    create = function (name, startTiles, endTiles) {
+    var create = function (name, startTiles, endTiles) {
         var internal = {};
         var hiscores = hiscoresFactory.create(name);
 
