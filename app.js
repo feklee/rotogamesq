@@ -14,7 +14,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-/*jslint node: true, maxerr: 50, maxlen: 79 */
+/*jslint node: true, maxlen: 80 */
 
 "use strict";
 
