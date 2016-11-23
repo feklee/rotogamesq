@@ -61,7 +61,7 @@ How to add a board
  1. Add the tiles for the start and end to: `public/images/boards_sprites.png`
 
     Note: Making the image too large can trigger a Bugzilla@Mozilla
-    [bug 1314597][17] on the Fx0 smartphone.
+    [bug 1314597][7] on the Fx0 smartphone.
 
  2. Add the description to: `app/common/config.js`
 
@@ -94,8 +94,8 @@ Hiscores
 
   * [localStorage][6] is used for offline capability:
 
-      + On client load (communication via [Socket.IO][7], automatically
-        repeated until connection is available):
+      + On client load (communication via WebSocket, automatically repeated
+        until connection is available):
 
           - hiscores are retrieved from localStorage,
 
@@ -213,7 +213,7 @@ specific language governing permissions and limitations under the License.
 [4]: mailto:felix.klee@inka.de
 [5]: https://github.com/remy/nodemon
 [6]: http://www.w3.org/TR/webstorage/#the-localstorage-attribute
-[7]: http://socket.io/
+[7]: https://bugzilla.mozilla.org/show_bug.cgi?id=1314597
 [8]: http://www.whatwg.org/specs/web-apps/current-work/multipage/offline.html#appcache
 [9]: https://github.com/github/markup/issues/165
 [10]: http://daringfireball.net/projects/markdown/
@@ -223,4 +223,3 @@ specific language governing permissions and limitations under the License.
 [14]: http://creativecommons.org/licenses/by/3.0/es/
 [15]: https://blog.mozilla.org/apps/2013/11/19/q-a-rotogamesq/
 [16]: http://semver.org/
-[17]: https://bugzilla.mozilla.org/show_bug.cgi?id=1314597
