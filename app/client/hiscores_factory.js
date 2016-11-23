@@ -1,6 +1,6 @@
 // Creates lists of top players, associated with a certain board.
 
-/*jslint browser: true, maxlen: 80 */
+/*jslint browser: true, maxlen: 80, es6 */
 
 /*global define */
 
@@ -111,6 +111,7 @@ define([
     };
 
     var create = function (boardName) {
+        const maxNameLen = 8;
         var internal = {
             proposal: undefined, // new, proposed hiscore (editable)
             version: 0, // incremented on every update
@@ -210,19 +211,19 @@ define([
             }},
 
             maxNameLen: {get: function () {
-                return 8;
+                return maxNameLen;
             }},
 
             nameInProposal: {set: function (name) {
                 if (internal.proposal !== undefined) {
-                    name = name.trim().substring(0, this.maxNameLen);
+                    name = name.trim().substring(0, maxNameLen);
                     internal.proposal.name = name;
                     lastNameSet = name;
                 }
             }},
 
             saveProposal: {value: function () {
-                saveProposal.call(this, internal);
+                saveProposal(internal);
             }},
 
             proposalWasSaved: {get: function () {
