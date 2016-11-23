@@ -4,10 +4,13 @@
 
 /*global define */
 
-define(['hiscores_factory'], function (hiscoresFactory) {
-    'use strict';
+define(["hiscores_factory"], function (hiscoresFactory) {
+    "use strict";
 
-    var prototype, updateIsFinished, initInternal, create;
+    var prototype;
+    var updateIsFinished;
+    var initInternal;
+    var create;
 
     // Updates `internal.isFinished`.
     updateIsFinished = function (internal, board) {
@@ -35,43 +38,46 @@ define(['hiscores_factory'], function (hiscoresFactory) {
     };
 
     prototype = Object.create(null, {
-        rotate: {value: function (internal, rotation) {
+        rotate: {value: function (board, internal, rotation) {
             internal.rotations.push(rotation);
             internal.futureRotations.length = 0; // resets redo history
-            this.tiles.rotate(rotation);
-            updateIsFinished(internal, this);
+            board.tiles.rotate(rotation);
+            updateIsFinished(internal, board);
             internal.lastRotation = rotation;
         }},
 
-        undo: {value: function (internal) {
+        undo: {value: function (board, internal) {
             var rotation = internal.rotations.pop();
             if (rotation !== undefined) {
                 internal.futureRotations.push(rotation);
-                this.tiles.rotateInverse(rotation);
-                updateIsFinished(internal, this);
+                board.tiles.rotateInverse(rotation);
+                updateIsFinished(internal, board);
                 internal.lastRotation = rotation.inverse;
             } // else: no more undo
         }},
 
-        redo: {value: function (internal) {
+        redo: {value: function (board, internal) {
             var rotation = internal.futureRotations.pop();
             if (rotation !== undefined) {
                 internal.rotations.push(rotation);
-                this.tiles.rotate(rotation);
-                updateIsFinished(internal, this);
+                board.tiles.rotate(rotation);
+                updateIsFinished(internal, board);
                 internal.lastRotation = rotation;
             } // else: no more redo
         }}
     });
 
     create = function (name, startTiles, endTiles) {
-        var board, internal = {}, hiscores = hiscoresFactory.create(name);
+        var internal = {};
+        var hiscores = hiscoresFactory.create(name);
 
         initInternal(internal, startTiles);
 
-        return Object.create(prototype, {
+        var board = Object.create(prototype);
+
+        return Object.defineProperties(board, {
             rotate: {value: function (rotation) {
-                prototype.rotate.call(this, internal, rotation);
+                prototype.rotate(board, internal, rotation);
             }},
 
             tiles: {get: function () {
@@ -103,24 +109,24 @@ define(['hiscores_factory'], function (hiscoresFactory) {
             }},
 
             undoIsPossible: {get: function () {
-                return (this.isInteractive &&
+                return (board.isInteractive &&
                         internal.rotations.length > 0);
             }},
 
             undo: {value: function () {
-                if (this.undoIsPossible) {
-                    prototype.undo.call(this, internal);
+                if (board.undoIsPossible) {
+                    prototype.undo(board, internal);
                 }
             }},
 
             redoIsPossible: {get: function () {
-                return (this.isInteractive &&
+                return (board.isInteractive &&
                         internal.futureRotations.length > 0);
             }},
 
             redo: {value: function () {
-                if (this.redoIsPossible) {
-                    prototype.redo.call(this, internal);
+                if (board.redoIsPossible) {
+                    prototype.redo(board, internal);
                 }
             }},
 
