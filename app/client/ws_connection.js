@@ -14,7 +14,7 @@ define(function () {
 
     var url = function () {
         var l = window.location;
-        var protocol = l.protocol === "https"
+        var protocol = l.protocol === "https:"
             ? "wss"
             : "ws";
         return protocol + "://" + l.host;
