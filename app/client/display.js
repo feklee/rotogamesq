@@ -5,27 +5,28 @@
 /*global define */
 
 define([
-    'tiles_canvas', 'arrow_canvas', 'rubber_band_canvas', 'rot_anim_canvas',
-    'display_c_sys'
+    "tiles_canvas", "arrow_canvas", "rubber_band_canvas", "rot_anim_canvas",
+    "display_c_sys"
 ], function (tilesCanvas, arrowCanvas, rubberBandCanvas, rotAnimCanvas,
              displayCSys) {
-    'use strict';
+    "use strict";
 
-    var style, render,
-        isVisible = false,
-        needsToBeRendered = true,
-        layout = {width: 1, height: 1, left: 0, top: 0};
+    var style;
+    var render;
+    var isVisible = false;
+    var needsToBeRendered = true;
+    var layout = {width: 1, height: 1, left: 0, top: 0};
 
     style = function () {
-        return document.getElementById('display').style;
+        return document.getElementById("display").style;
     };
 
     render = function () {
         var s = style();
 
-        s.width = layout.sideLen + 'px';
-        s.height = layout.sideLen + 'px';
-        s.top = layout.top + 'px';
+        s.width = layout.sideLen + "px";
+        s.height = layout.sideLen + "px";
+        s.top = layout.top + "px";
     };
 
     return Object.create(null, {

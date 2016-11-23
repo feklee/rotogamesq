@@ -5,25 +5,25 @@
 
 /*global define */
 
-define(['../common/tiles_factory'], function (tilesFactory) {
-    'use strict';
+define(["../common/tiles_factory"], function (tilesFactory) {
+    "use strict";
 
-    var img = new Image(),
-        canvas,
-        ctx;
+    var img = new Image();
+    var canvas;
+    var ctx;
 
     return Object.create(null, {
         // Loads boards sprites.
         load: {value: function (onLoaded) {
             img.onload = function () {
-                canvas = document.createElement('canvas');
-                ctx = canvas.getContext('2d');
+                canvas = document.createElement("canvas");
+                ctx = canvas.getContext("2d");
                 canvas.width = img.width;
                 canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
                 onLoaded();
             };
-            img.src = '/images/boards_sprites.png';
+            img.src = "/images/boards_sprites.png";
         }},
 
         tiles: {value: function (posT, sideLenT) {

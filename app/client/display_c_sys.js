@@ -4,22 +4,23 @@
 
 /*global define */
 
-define(['boards'], function (boards) {
-    'use strict';
+define(["boards"], function (boards) {
+    "use strict";
 
-    var updateDimensions,
-        sideLen,
-        board,
-        tileSideLen = 0,
-        spacing = 0,
-        spacingIsDisabled = false;
+    var tileSideLen = 0;
+    var spacing = 0;
+    var spacingIsDisabled = false;
+    var board;
+    var sideLen;
 
-    updateDimensions = function () {
+    var updateDimensions = function () {
         var sideLenT;
 
         if (board !== undefined) {
             sideLenT = board.sideLenT;
-            spacing = spacingIsDisabled ? 0 : 0.05 * sideLen / sideLenT;
+            spacing = spacingIsDisabled
+                ? 0
+                : 0.05 * sideLen / sideLenT;
             tileSideLen = (sideLen - spacing * (sideLenT + 1)) / sideLenT;
         }
     };
@@ -59,9 +60,9 @@ define(['boards'], function (boards) {
         decIfInSpacing: {value: function (pos) {
             return pos.map(function (coord) {
                 var modulo = coord % (tileSideLen + spacing);
-                return ((coord > 0 && modulo < spacing) ?
-                        (coord - modulo - tileSideLen / 2) :
-                        coord);
+                return (coord > 0 && modulo < spacing)
+                    ? (coord - modulo - tileSideLen / 2)
+                    : coord;
             });
         }},
 
@@ -70,9 +71,9 @@ define(['boards'], function (boards) {
         incIfInSpacing: {value: function (pos) {
             return pos.map(function (coord) {
                 var modulo = coord % (tileSideLen + spacing);
-                return ((coord > 0 && modulo < spacing) ?
-                        (coord - modulo + spacing + tileSideLen / 2) :
-                        coord);
+                return (coord > 0 && modulo < spacing)
+                    ? (coord - modulo + spacing + tileSideLen / 2)
+                    : coord;
             });
         }},
 
