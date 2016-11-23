@@ -131,6 +131,7 @@ define([
         listenToUpdates(internal);
 
         wsConnection.addOnOpenCallback(function () {
+            console.log("connected"); // TODO
             requestHiscores(internal);
         });
 

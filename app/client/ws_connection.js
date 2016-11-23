@@ -60,6 +60,9 @@ define(function () {
 
     var addOnOpenCallback = function (callback) {
         onOpenCallbacks.push(callback);
+        if (webSocket.readyState === webSocket.OPEN) {
+            callback();
+        }
     };
 
     var emit;
