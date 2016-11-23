@@ -9,19 +9,15 @@ define([
 ], function (wsConnection, localStorage) {
     "use strict";
 
-    var isBetterOrEqual, saveProposal, listenToUpdates, requestHiscores,
-        create,
-        updateUnsavedHiscores, updateFromLocalStorage, updateLocalStorage,
-        sendUnsavedToServer,
-        lastNameSet = ''; // last name edited (preset for new proposals)
+    var lastNameSet = ""; // last name edited (preset for new proposals)
 
-    isBetterOrEqual = function (hiscore1, hiscore2) {
+    var isBetterOrEqual = function (hiscore1, hiscore2) {
         return (hiscore1 !== undefined &&
                 (hiscore2 === undefined ||
-                 hiscore1.nRotations <= hiscore2.nRotations));
+                hiscore1.nRotations <= hiscore2.nRotations));
     };
 
-    updateFromLocalStorage = function (internal) {
+    var updateFromLocalStorage = function (internal) {
         var data = localStorage.get(internal.localStorageKey);
         if (data && data.unsaved && data.saved) {
             internal.unsavedHiscores = data.unsaved;
@@ -30,7 +26,7 @@ define([
     };
 
     // Atomically stores saved and unsaved hiscores.
-    updateLocalStorage = function (internal) {
+    var updateLocalStorage = function (internal) {
         localStorage.set(internal.localStorageKey, {
             unsaved: internal.unsavedHiscores,
             saved: internal.savedHiscores
@@ -38,7 +34,7 @@ define([
     };
 
     // via WebSocket (will automatically retry on broken connection)
-    sendUnsavedToServer = function (internal) {
+    var sendUnsavedToServer = function (internal) {
         internal.unsavedHiscores.forEach(function (unsavedHiscore) {
             wsConnection.emit({
                 eventName: "hiscore for " + internal.boardName,
@@ -54,7 +50,7 @@ define([
     //   * Updates hiscores in localStorage.
     //
     //   * Sends unsaved hiscores to server (via WebSocket), for saving.
-    saveProposal = function (internal) {
+    var saveProposal = function (internal) {
         var comparer = function (a, b) {
             return a.nRotations - b.nRotations;
         };
@@ -72,16 +68,17 @@ define([
 
             internal.proposalWasSaved = true;
 
-            internal.proposal = undefined; // or else it would still appear
+            delete internal.proposal; // or else it would still appear
         }
     };
 
     // Updates list of unsaved hiscores, removing entries where the name is
     // also in the list of saved hiscores and with an equal or better score.
-    updateUnsavedHiscores = function (internal) {
+    var updateUnsavedHiscores = function (internal) {
         internal.savedHiscores.forEach(function (savedHiscore) {
-            var unsavedHiscores = internal.unsavedHiscores, i = 0,
-                unsavedHiscore;
+            var unsavedHiscores = internal.unsavedHiscores;
+            var i = 0;
+            var unsavedHiscore;
 
             while (i < unsavedHiscores.length) {
                 unsavedHiscore = unsavedHiscores[i];
@@ -95,7 +92,7 @@ define([
         });
     };
 
-    listenToUpdates = function (internal) {
+    var listenToUpdates = function (internal) {
         wsConnection.addListener({
             eventName: "hiscores for " + internal.boardName,
             callback: function (newSavedHiscores) {
@@ -107,20 +104,20 @@ define([
         });
     };
 
-    requestHiscores = function (internal) {
+    var requestHiscores = function (internal) {
         wsConnection.emit({
             eventName: "request of hiscores for " + internal.boardName
         });
     };
 
-    create = function (boardName) {
+    var create = function (boardName) {
         var internal = {
             proposal: undefined, // new, proposed hiscore (editable)
             version: 0, // incremented on every update
             savedHiscores: [],
             unsavedHiscores: [], // new hiscores, not yet on the server
             boardName: boardName,
-            localStorageKey: boardName + '.hiscores',
+            localStorageKey: boardName + ".hiscores",
             hiscoreHasBeenSaved: false
         };
 
@@ -131,7 +128,6 @@ define([
         listenToUpdates(internal);
 
         wsConnection.addOnOpenCallback(function () {
-            console.log("connected"); // TODO
             requestHiscores(internal);
         });
 
@@ -139,11 +135,11 @@ define([
             // Calls callback with three parameters: hiscore, index, and
             // status. Status is one of:
             //
-            //   * 'saved'
+            //   * "saved"
             //
-            //   * 'unsaved'
+            //   * "unsaved"
             //
-            //   * 'editable' (appears no more than once)
+            //   * "editable" (appears no more than once)
             //
             // Priorities if equal number of rotations from new to old:
             // editable -> unsaved -> editable
@@ -152,13 +148,18 @@ define([
             // is viewed as different from all other names, as it's yet unknown
             // what the user will enter.
             forEach: {value: function (callback) {
-                var i = 0, savedI = 0, unsavedI = 0, hiscore, status,
-                    savedHiscore, unsavedHiscore,
-                    savedHiscores = internal.savedHiscores,
-                    unsavedHiscores = internal.unsavedHiscores,
-                    proposal = internal.proposal,
-                    proposalWasShown = false,
-                    usedNames = [];
+                var i = 0;
+                var savedI = 0;
+                var unsavedI = 0;
+                var hiscore;
+                var status;
+                var savedHiscore;
+                var unsavedHiscore;
+                var savedHiscores = internal.savedHiscores;
+                var unsavedHiscores = internal.unsavedHiscores;
+                var proposal = internal.proposal;
+                var proposalWasShown = false;
+                var usedNames = [];
 
                 while (i < 7) {
                     savedHiscore = savedHiscores[savedI];
@@ -167,21 +168,21 @@ define([
                             isBetterOrEqual(proposal, unsavedHiscore) &&
                             isBetterOrEqual(proposal, savedHiscore)) {
                         hiscore = proposal;
-                        status = 'editable';
+                        status = "editable";
                         proposalWasShown = true;
                     } else if (isBetterOrEqual(unsavedHiscore, savedHiscore)) {
                         hiscore = unsavedHiscore;
-                        status = 'unsaved';
+                        status = "unsaved";
                         unsavedI += 1;
                     } else if (savedHiscore !== undefined) {
                         hiscore = savedHiscore;
-                        status = 'saved';
+                        status = "saved";
                         savedI += 1;
                     } else {
                         break; // no more hiscores
                     }
 
-                    if (status === 'editable') {
+                    if (status === "editable") {
                         callback(hiscore, i, status);
                         i += 1;
                     } else if (usedNames.indexOf(hiscore.name) < 0) {
@@ -193,10 +194,15 @@ define([
             }},
 
             length: {get: function () {
-                return Math.min((internal.savedHiscores.length +
-                                 internal.unsavedHiscores.length +
-                                 (internal.proposal !== undefined ? 1 : 0)),
-                                7);
+                var x = internal.proposal !== undefined
+                    ? 1
+                    : 0;
+                return Math.min(
+                    internal.savedHiscores.length +
+                            internal.unsavedHiscores.length +
+                            x,
+                    7
+                );
             }},
 
             hasProposal: {get: function () {
@@ -233,11 +239,11 @@ define([
             }},
 
             rmProposal: {value: function () {
-                internal.proposal = undefined;
+                delete internal.proposal;
             }},
 
             resetProposal: {value: function () {
-                internal.proposal = undefined;
+                delete internal.proposal;
                 internal.proposalWasSaved = false;
             }},
 
