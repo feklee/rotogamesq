@@ -34,6 +34,7 @@ var redis = require('redis'),
     onRequestOfHiscoresForBoard,
     onRedisConnect,
     onDisconnect,
+    interpretMessage,
     maxNameLen = 8;
 
 /*jslint stupid: true */
@@ -112,28 +113,30 @@ insertHiscore = function (hiscore, board) {
 };
 
 // Called on client (browser) submitting new hiscore.
-onHiscoreForBoard = function (socket, board, hiscore) {
+onHiscoreForBoard = function (wsBrowserConnection, board, hiscore) {
     if (hiscoreIsValid(hiscore, board)) {
         insertHiscore(hiscore, board); // insert command is automatically
                                        // queued in case Redis is down
 
+/* TODO
         // Sends updated hiscores:
         emit.call(this, socket, board); // current client
         emit.call(this, socket.broadcast, board); // all other clients
+*/
     } else {
         console.log('Invalid hiscore received');
     }
 };
 
 // Called on client wanting updated hiscores.
-onRequestOfHiscoresForBoard = function (socket, board) {
-    emit.call(this, socket, board);
+onRequestOfHiscoresForBoard = function (wsBrowserConnection, board) {
+    emit.call(this, wsBrowserConnection, board);
 };
 
 // Called on (re-)connect to Redis. Hiscores need to be sent again, so that
 // the client doesn't miss possible updates.
-onRedisConnect = function (socket, board) {
-    emit.call(this, socket, board);
+onRedisConnect = function (wsBrowserConnection, board) {
+    emit.call(this, wsBrowserConnection, board);
 };
 
 // Called when the client (browser) disconnects. Cleans up.
@@ -141,33 +144,55 @@ onDisconnect = function () {
     redisClient.removeListener('connect', onRedisConnect);
 };
 
-// Using Socket.IO, establishes interchange of hiscores between the server and
+interpretMessage = function (message, wsBrowserConnection, board) {
+    if (message.type !== "utf8") {
+        return;
+    }
+
+    console.log(message.utf8Data); // TODO
+
+    var data = JSON.parse(message.utf8Data);
+    var hiscore;
+
+    switch (data[0]) {
+    case "hiscore for " + board.name:
+        hiscore = data[1];
+        onHiscoreForBoard.call(this, wsBrowserConnection, board, hiscore);
+        console.log(board, hiscore); // TODO
+        break;
+    case "request of hiscores for " + board.name:
+        onRequestOfHiscoresForBoard.call(this, wsBrowserConnection, board);
+        break;
+    }
+};
+
+// Using WebSocket, establishes interchange of hiscores between the server and
 // a client (browser).
-listen = function (socket, board) {
-    socket.on('hiscore for ' + board.name, function (hiscore) {
-        onHiscoreForBoard.call(this, socket, board, hiscore);
+listen = function (wsBrowserConnection, board) {
+    wsBrowserConnection.on("message", function (message) {
+        interpretMessage.call(this, message, wsBrowserConnection, board);
     });
-    socket.on('request of hiscores for ' + board.name, function () {
-        onRequestOfHiscoresForBoard.call(this, socket, board);
+
+    redisClient.on("connect", function () {
+        onRedisConnect.call(this, wsBrowserConnection, board);
     });
-    redisClient.on('connect', function () {
-        onRedisConnect.call(this, socket, board);
-    });
-    socket.setMaxListeners(0); // to avoid warning if more than 10 boards
+
+/* TODO:
     socket.once('disconnect', function () {
-        onDisconnect.call(this, socket, board);
+        onDisconnect.call(this, wsBrowserConnection, board);
     });
+*/
 
     // Sends current hiscores to client. If the client (browser) is just
     // initializing itself and has not set up listeners for getting hiscores,
     // then the hiscores will get lost. However, if the client is reconnecting
     // (e.g. after a temporary loss of network connection on a mobile device),
     // then it will get the latest hiscores, which is good.
-    emit.call(this, socket, board);
+// TODO:    emit.call(this, socket, board);
 };
 
 // Emits hiscores for the specified board, via Socket.IO.
-emit = function (socket, board) {
+emit = function (wsBrowserConnection, board) {
     var onZrangeDone = function (err, namesAndScores) {
         var hiscores = [], i, name, score, nRotations;
 
@@ -186,7 +211,10 @@ emit = function (socket, board) {
             });
         }
 
-        socket.emit('hiscores for ' + board.name, hiscores);
+        wsBrowserConnection.sendUTF(JSON.stringify([
+            "hiscores for " + board.name,
+            hiscores
+        ]));
     };
 
     redisClient.ZRANGE(
@@ -201,8 +229,8 @@ emit = function (socket, board) {
 // Creates hiscores object.
 create = function () {
     return Object.create(null, {
-        listen: {value: function (socket, board) {
-            listen.call(this, socket, board);
+        listen: {value: function (wsBrowserConnection, board) {
+            listen.call(this, wsBrowserConnection, board);
         }}
     });
 };

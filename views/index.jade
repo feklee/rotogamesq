@@ -29,11 +29,9 @@ html(lang="en", manifest="manifest.appcache")
 
     if env == 'development'
       link(rel="stylesheet", href="/app/stylesheets/index.css")
-      script(src="/socket.io/socket.io.js")
       script(data-main="/app/client/main", src="/app/client/vendor/require.js")
     else
       link(rel="stylesheet", href="/app.build/stylesheets/index.css")
-      script(src="/socket.io/socket.io.js")
       script(src="/app.build/client/main.js", async)
 
     meta(name="HandheldFriendly", content="True")

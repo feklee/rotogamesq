@@ -11,7 +11,6 @@ fonts/DroidSans.ttf
 fonts/DroidSans.woff
 fonts/fontello.ttf
 fonts/fontello.woff
-socket.io/socket.io.js
 
 NETWORK:
 *

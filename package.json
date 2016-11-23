@@ -12,12 +12,13 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "amdefine": ">=0.0.2",
     "express": "3.0.x",
     "jade": "0.27.x",
+    "png-js": "0.1.x",
     "redis": "0.8.x",
-    "amdefine": ">=0.0.2",
     "requirejs": "2.1.x",
-    "png-js": "0.1.x"
+    "websocket": "^1.0.23"
   },
   "engines": {
     "node": "0.8.x"

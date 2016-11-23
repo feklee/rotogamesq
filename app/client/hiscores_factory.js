@@ -18,7 +18,7 @@
 
 /*global define */
 
-define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
+define(['web_socket', 'local_storage'], function (webSocket, localStorage) {
     'use strict';
 
     var isBetterOrEqual, saveProposal, listenToUpdates, requestHiscores,
@@ -51,9 +51,11 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
 
     // via Socket.IO (will automatically retry on broken connection)
     sendUnsavedToServer = function (internal) {
+/* TODO:
         internal.unsavedHiscores.forEach(function (unsavedHiscore) {
             socketIo.emit('hiscore for ' + internal.boardName, unsavedHiscore);
         });
+*/
     };
 
     // Triggers saving of new hiscores entry:
@@ -62,7 +64,7 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
     //
     //   * Updates hiscores in localStorage.
     //
-    //   * Sends unsaved hiscores to server (Socket.IO), for saving.
+    //   * Sends unsaved hiscores to server (via WebSocket), for saving.
     saveProposal = function (internal) {
         var comparer = function (a, b) {
             return a.nRotations - b.nRotations;
@@ -105,18 +107,22 @@ define(['socket_io', 'local_storage'], function (socketIo, localStorage) {
     };
 
     listenToUpdates = function (internal) {
-        var eventName = 'hiscores for ' + internal.boardName;
+        var eventName = "hiscores for " + internal.boardName;
 
+/* TODO:
         socketIo.on(eventName, function (newSavedHiscores) {
             internal.savedHiscores = newSavedHiscores;
             updateUnsavedHiscores(internal);
             updateLocalStorage(internal);
             internal.version += 1;
         });
+*/
     };
 
     requestHiscores = function (internal) {
+/* TODO
         socketIo.emit('request of hiscores for ' + internal.boardName);
+*/
     };
 
     create = function (boardName) {

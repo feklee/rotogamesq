@@ -45,9 +45,9 @@ boards = Object.create([], {
         });
     }},
 
-    listen: {value: function (socket) {
+    listen: {value: function (wsBrowserConnection) {
         this.forEach(function (board) {
-            board.listen(socket);
+            board.listen(wsBrowserConnection);
         });
     }}
 });

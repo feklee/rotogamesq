@@ -85,8 +85,8 @@ create = function (name, startTiles, endTiles) {
 
         isSolvedBy: {value: isSolvedBy},
 
-        listen: {value: function (socket) {
-            hiscores.listen(socket, this);
+        listen: {value: function (wsBrowserConnection) {
+            hiscores.listen(wsBrowserConnection, this);
         }}
     });
 };
