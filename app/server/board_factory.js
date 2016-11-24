@@ -2,27 +2,32 @@
 
 /*jslint node: true, maxlen: 80 */
 
-'use strict';
+"use strict";
 
-var rotationFactory = require('../common/rotation_factory'),
-    rectTFactory = require('../common/rect_t_factory'),
-    create,
-    isSolvedBy,
-    isValidPosT,
-    rectTFromData,
-    rotationFromData;
+var rotationFactory = require("../common/rotation_factory");
+var rectTFactory = require("../common/rect_t_factory");
 
 // Returns false on invalid data.
-rotationFromData = function (rotationData) {
-    var rectTData = rotationData.rectT, rectT;
+var rotationFromData = function (rotationData) {
+    var rectTData = rotationData.rectT;
 
     if (!rotationData || !rectTData) {
         return false;
     }
 
-    rectT = rectTFactory.create(rectTData[0], rectTData[1]);
+    var rectT = rectTFactory.create(rectTData[0], rectTData[1]);
 
     return rotationFactory.create(rectT, rotationData.cw);
+};
+
+var applyRotations = function (tiles, rotationsData) {
+    rotationsData.forEach(function (rotationData) {
+        var rotation = rotationFromData(rotationData);
+        if (rotation === false) {
+            return false; // invalid rotation
+        }
+        tiles.rotate(rotation);
+    });
 };
 
 // Returns true, iff the specified rotations are a valid array of rotations,
@@ -30,30 +35,25 @@ rotationFromData = function (rotationData) {
 //
 // Note that rotations data at best (i.e. if not broken) is an array of data
 // describing rotations; it is not an array of rotation objects.
-isSolvedBy = function (rotationsData) {
-    var i, rotation, tiles = this.startTiles.copy();
+var isSolvedBy = function (board, rotationsData) {
+    var tiles = board.startTiles.copy();
 
     try {
         if (Array.isArray(rotationsData)) {
-            for (i = 0; i < rotationsData.length; i += 1) {
-                rotation = rotationFromData(rotationsData[i]);
-                if (rotation === false) {
-                    return false; // invalid rotation
-                }
-                tiles.rotate(rotation);
-            }
+            applyRotations(tiles, rotationsData);
 
-            return tiles.colorsAreEqualTo(this.endTiles);
+            return tiles.colorsAreEqualTo(board.endTiles);
         }
         return false;
-    } catch (err) { // just in case some bad data is not handled correctly
+    } catch (ignore) { // just in case some bad data is not handled correctly
         return false;
     }
 };
 
 // Loads a board synchronously.
-create = function (name, startTiles, endTiles) {
-    return Object.create(null, {
+var create = function (name, startTiles, endTiles) {
+    var board = Object.create(null);
+    return Object.defineProperties(board, {
         name: {get: function () {
             return name;
         }},
@@ -66,7 +66,9 @@ create = function (name, startTiles, endTiles) {
             return endTiles;
         }},
 
-        isSolvedBy: {value: isSolvedBy}
+        isSolvedBy: {value: function (rotationsData) {
+            return isSolvedBy(board, rotationsData);
+        }}
     });
 };
 
