@@ -246,7 +246,7 @@ define([
         util.onceDocumentIsComplete(onDocumentComplete);
     };
 
-    util.autoRefreshAppCache();
+    util.immediatelyRefreshAppCache();
 
     util.onceDocumentIsInteractive(function () {
         preventPageDrag();

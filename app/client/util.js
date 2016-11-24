@@ -26,7 +26,7 @@ define(function () {
                 documentIsComplete());
     };
 
-    var autoRefreshAppCache = function () {
+    var immediatelyRefreshAppCache = function () {
         window.applicationCache.addEventListener(
             "updateready",
             window.applicationCache.swapCache,
@@ -85,6 +85,6 @@ define(function () {
             return false;
         }},
 
-        autoRefreshAppCache: {value: autoRefreshAppCache}
+        immediatelyRefreshAppCache: {value: immediatelyRefreshAppCache}
     });
 });
