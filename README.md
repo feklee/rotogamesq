@@ -151,7 +151,7 @@ In various places the following values are assumed:
 Releasing a new version
 =======================
 
-  * Version number schema: [major.minor.patch][16]
+  * Version number schema: [major.minor.patch][8]
 
   * Update `version` in: `package.json`
 
@@ -203,13 +203,13 @@ Hocevar. See the COPYING file for more details.
 
 
 [1]: https://github.com/feklee/rotogame
-[2]: http://sq.rotogame.com
+[2]: https://sq.rotogame.com
 [3]: http://js13kgames.com
 [4]: mailto:felix.klee@inka.de
 [5]: https://github.com/remy/nodemon
 [6]: http://www.w3.org/TR/webstorage/#the-localstorage-attribute
 [7]: https://bugzilla.mozilla.org/show_bug.cgi?id=1314597
-[8]: http://www.whatwg.org/specs/web-apps/current-work/multipage/offline.html#appcache
+[8]: http://semver.org/
 [9]: https://github.com/github/markup/issues/165
 [10]: http://daringfireball.net/projects/markdown/
 [11]: https://developer.mozilla.org/en-US/docs/Apps
@@ -217,4 +217,3 @@ Hocevar. See the COPYING file for more details.
 [13]: https://github.com/feklee/rotogamesq
 [14]: http://creativecommons.org/licenses/by/3.0/es/
 [15]: https://blog.mozilla.org/apps/2013/11/19/q-a-rotogamesq/
-[16]: http://semver.org/
