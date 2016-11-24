@@ -2,11 +2,11 @@
 
 /*jslint browser: true, maxlen: 80 */
 
-/*global define */
+/*global define, window */
 
 define([
-    'display', 'boards', 'title', 'rotations_navigator', 'hiscores_table',
-    'boards_navigator', 'util', 'vendor/rAF'
+    "display", "boards", "title", "rotations_navigator", "hiscores_table",
+    "boards_navigator", "util", "vendor/rAF"
 ], function (
     display,
     boards,
@@ -16,25 +16,21 @@ define([
     boardsNavigator,
     util
 ) {
-    'use strict';
+    "use strict";
 
-    var updateComponentsLandscapeLayout, updateLandscapeLayout,
-        updateComponentsPortraitLayout, updatePortraitLayout,
-        updateLayout, animStep, doNotUpdateLayout, onResize,
-        hideLoadScreen, onBoardsLoaded, onDocumentComplete, preventPageDrag,
-        loaded = false,
-        goldenRatio = 1.61803398875,
-        width, // px
-        height; // px
+    var loaded = false;
+    var goldenRatio = 1.61803398875;
+    var width; // px
+    var height; // px
 
     // Updates GUI components for landscape layout.
-    updateComponentsLandscapeLayout = function (width, height) {
+    var updateComponentsLandscapeLayout = function (width, height) {
         // panel = panel with all the elements on the right of the board
-        var panelWidth = width - height,
-            panelLeft = height,
-            panelInsideMargin = Math.round(0.05 * panelWidth),
-            panelInsideWidth = panelWidth - 2 * panelInsideMargin,
-            panelInsideLeft = panelLeft + panelInsideMargin;
+        var panelWidth = width - height;
+        var panelLeft = height;
+        var panelInsideMargin = Math.round(0.05 * panelWidth);
+        var panelInsideWidth = panelWidth - 2 * panelInsideMargin;
+        var panelInsideLeft = panelLeft + panelInsideMargin;
 
         display.layout = {
             sideLen: height,
@@ -72,9 +68,9 @@ define([
     // Gives the game lanscape layout. The game is sized so that it takes up
     // the space of a golden ratio rectangle that takes up maximum space in the
     // browser window.
-    updateLandscapeLayout = function (viewportWidth, viewportHeight) {
-        var viewportRatio = viewportWidth / viewportHeight,
-            s = document.body.style;
+    var updateLandscapeLayout = function (viewportWidth, viewportHeight) {
+        var viewportRatio = viewportWidth / viewportHeight;
+        var s = document.body.style;
 
         if (viewportRatio < goldenRatio) {
             width = viewportWidth;
@@ -84,8 +80,8 @@ define([
             width = Math.round(height * goldenRatio);
         }
 
-        s.width = width + 'px';
-        s.height = height + 'px';
+        s.width = width + "px";
+        s.height = height + "px";
         s.margin = 0;
 
         if (loaded) {
@@ -94,11 +90,11 @@ define([
     };
 
     // Updates components for portrait layout.
-    updateComponentsPortraitLayout = function (width, height) {
-        var remainingHeight = height - width, // height without board display 
-            componentHeight,
-            componentTop,
-            horizontalMargin = 0.01 * width;
+    var updateComponentsPortraitLayout = function (width, height) {
+        var remainingHeight = height - width; // height without board display
+        var componentHeight;
+        var componentTop;
+        var horizontalMargin = 0.01 * width;
 
         componentTop = 0;
         componentHeight = Math.round(remainingHeight * 0.2);
@@ -142,9 +138,9 @@ define([
     // Gives the game portrait layout. The game is sized so that it takes up
     // maximum space in the browser window. It's aspect ratio is set in limits:
     // between 3:4 and reciprocal golden ratio.
-    updatePortraitLayout = function (viewportWidth, viewportHeight) {
-        var viewportRatio = viewportWidth / viewportHeight,
-            s = document.body.style;
+    var updatePortraitLayout = function (viewportWidth, viewportHeight) {
+        var viewportRatio = viewportWidth / viewportHeight;
+        var s = document.body.style;
 
         width = viewportWidth;
         height = viewportHeight;
@@ -158,18 +154,18 @@ define([
             width = Math.round(height * 3 / 4);
         }
 
-        s.width = width + 'px';
-        s.height = height + 'px';
-        s.margin = '0 auto'; // centers horizontally
+        s.width = width + "px";
+        s.height = height + "px";
+        s.margin = "0 auto"; // centers horizontally
 
         if (loaded) {
             updateComponentsPortraitLayout(width, height);
         }
     };
 
-    updateLayout = function () {
-        var viewportWidth = window.innerWidth,
-            viewportHeight = window.innerHeight;
+    var updateLayout = function () {
+        var viewportWidth = window.innerWidth;
+        var viewportHeight = window.innerHeight;
 
         if (viewportWidth > viewportHeight) {
             updateLandscapeLayout(viewportWidth, viewportHeight);
@@ -178,6 +174,7 @@ define([
         }
     };
 
+    var animStep;
     animStep = function () {
         display.animStep();
         title.animStep();
@@ -188,7 +185,7 @@ define([
         window.requestAnimationFrame(animStep);
     };
 
-    doNotUpdateLayout = function () {
+    var doNotUpdateLayout = function () {
         // At least on iOS 6.0 devices, updating layout causes loss of keyboard
         // focus, since focus cannot be reassigned after redrawing. See also:
         //
@@ -203,36 +200,36 @@ define([
         return hiscoresTable.hasFocus;
     };
 
-    onResize = function () {
+    var onResize = function () {
         if (!doNotUpdateLayout()) {
             updateLayout();
         }
     };
 
-    hideLoadScreen = function () {
-        document.getElementById('loadScreen').style.display = 'none';
+    var hideLoadScreen = function () {
+        document.getElementById("loadScreen").style.display = "none";
     };
 
     // Needed e.g. on iOS 6 to prevent default dragging of page.
-    preventPageDrag = function () {
+    var preventPageDrag = function () {
         var preventDefault = function (e) {
             e.preventDefault();
         };
 
-        document.addEventListener('touchmove', preventDefault);
+        document.addEventListener("touchmove", preventDefault);
 
         // Don't prevent default on `touchstart`. See also:
         // <http://stackoverflow.com/a/13720649>
     };
 
-    onDocumentComplete = function () {
+    var onDocumentComplete = function () {
         loaded = true;
 
         hideLoadScreen();
 
         // Resize not beforen now, to avoid jumpy load screen animation.
         onResize(); // captures initial size
-        window.addEventListener('resize', onResize);
+        window.addEventListener("resize", onResize);
 
         display.isVisible = true;
         boardsNavigator.activate();
@@ -242,7 +239,7 @@ define([
                     // continues with animation
     };
 
-    onBoardsLoaded = function () {
+    var onBoardsLoaded = function () {
         util.onceDocumentIsComplete(onDocumentComplete);
     };
 

@@ -6,29 +6,27 @@
 /*global define */
 
 define(function () {
-    'use strict';
-
-    var updateVisibility, show, hide;
+    "use strict";
 
     // Returns true, iff visibility has been updated.
-    updateVisibility = function (internal, el) {
+    var updateVisibility = function (internal, el) {
         if (internal.isVisible) {
-            el.style.display = 'block';
+            el.style.display = "block";
             internal.needsToBeRendered = true;
         } else {
-            el.style.display = 'none';
+            el.style.display = "none";
         }
         internal.visibilityNeedsToBeUpdated = false;
     };
 
-    show = function (internal) {
+    var show = function (internal) {
         if (!internal.isVisible) {
             internal.isVisible = true;
             internal.visibilityNeedsToBeUpdated = true;
         }
     };
 
-    hide = function (internal) {
+    var hide = function (internal) {
         if (internal.isVisible) {
             internal.isVisible = false;
             internal.visibilityNeedsToBeUpdated = true;

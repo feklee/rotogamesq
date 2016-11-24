@@ -4,45 +4,41 @@
 
 /*global define */
 
-define(['util', 'boards'], function (util, boards) {
-    'use strict';
+define(["util", "boards"], function (util, boards) {
+    "use strict";
 
-    var groupEl, tableEl, contTableEl, newTdEl,
-        newTrEl, newUnsavedTrEl, onNameInputFieldBlur,
-        onSubmit, updateSubmitButtonClasses, updateAbilityToSubmit,
-        onKeyUpInNameInputField, newNameInputTdEl, newSubmitButtonTdEl,
-        newInputTrEl, renderRows, render,
-        board,
-        nameInputFieldEl, submitButtonEl,
-        boardIsFinished,
-        submitIsEnabled = false,
-        needsToBeRendered = true,
-        layout = {width: 1, height: 1, left: 0, top: 0, portrait: false},
-        hiscoresVersion = 0,
-        nameInputFieldIsVisible;
+    var board;
+    var nameInputFieldEl;
+    var submitButtonEl;
+    var boardIsFinished;
+    var submitIsEnabled = false;
+    var needsToBeRendered = true;
+    var layout = {width: 1, height: 1, left: 0, top: 0, portrait: false};
+    var hiscoresVersion = 0;
+    var nameInputFieldIsVisible;
 
-    groupEl = function () {
-        return document.getElementById('hiscoresTableGroup');
+    var groupEl = function () {
+        return document.getElementById("hiscoresTableGroup");
     };
 
-    tableEl = function () {
-        return document.querySelector('#hiscoresTableGroup>table');
+    var tableEl = function () {
+        return document.querySelector("#hiscoresTableGroup>table");
     };
 
-    contTableEl = function () {
-        return document.querySelector('#hiscoresTableGroup>table.cont');
+    var contTableEl = function () {
+        return document.querySelector("#hiscoresTableGroup>table.cont");
     };
 
-    newTdEl = function (text) {
-        var el = document.createElement('td');
+    var newTdEl = function (text) {
+        var el = document.createElement("td");
 
         el.appendChild(document.createTextNode(text));
 
         return el;
     };
 
-    newTrEl = function (hiscore) {
-        var el = document.createElement('tr');
+    var newTrEl = function (hiscore) {
+        var el = document.createElement("tr");
 
         el.appendChild(newTdEl(hiscore.name));
         el.appendChild(newTdEl(hiscore.nRotations));
@@ -51,33 +47,33 @@ define(['util', 'boards'], function (util, boards) {
     };
 
     // for unsaved hiscores entries
-    newUnsavedTrEl = function (hiscore, lineHeight) {
-        var el = document.createElement('tr'),
+    var newUnsavedTrEl = function (hiscore, lineHeight) {
+        var el = document.createElement("tr");
 
-            // spinner shown instead of # rotations:
-            spinnerTdEl = newTdEl(''),
-            spinnerEl = document.createElement('span'),
-            s = spinnerEl.style;
+        // spinner shown instead of # rotations:
+        var spinnerTdEl = newTdEl("");
+        var spinnerEl = document.createElement("span");
+        var s = spinnerEl.style;
 
         spinnerTdEl.appendChild(spinnerEl);
-        s.width = (0.1 * lineHeight) + 'px';
-        s.height = 0.6 * lineHeight + 'px';
-        s.margin = '0 ' + (0.25 * lineHeight) + 'px';
-        spinnerEl.className = 'spinner';
+        s.width = (0.1 * lineHeight) + "px";
+        s.height = 0.6 * lineHeight + "px";
+        s.margin = "0 " + (0.25 * lineHeight) + "px";
+        spinnerEl.className = "spinner";
 
         el.appendChild(newTdEl(hiscore.name));
         el.appendChild(spinnerTdEl);
 
-        el.className = 'unsaved';
+        el.className = "unsaved";
         return el;
     };
 
     // updates name in new hiscore entry, but does *not* save it yet
-    onNameInputFieldBlur = function () {
+    var onNameInputFieldBlur = function () {
         board.hiscores.nameInProposal = nameInputFieldEl.value;
     };
 
-    onSubmit = function () {
+    var onSubmit = function () {
         if (submitIsEnabled) {
             board.hiscores.nameInProposal = nameInputFieldEl.value;
 
@@ -91,22 +87,24 @@ define(['util', 'boards'], function (util, boards) {
         }
     };
 
-    updateSubmitButtonClasses = function () {
+    var updateSubmitButtonClasses = function () {
         var className;
 
         if (submitButtonEl !== undefined) {
-            className = 'submit button' + (submitIsEnabled ? '' : ' disabled');
+            className = "submit button" + (submitIsEnabled
+                ? ""
+                : " disabled");
             submitButtonEl.className = className;
         }
     };
 
     // Updates: no name => submit does not work, and submit button is disabled
-    updateAbilityToSubmit = function () {
-        submitIsEnabled = nameInputFieldEl.value !== '';
+    var updateAbilityToSubmit = function () {
+        submitIsEnabled = nameInputFieldEl.value !== "";
         updateSubmitButtonClasses();
     };
 
-    onKeyUpInNameInputField = function (e) {
+    var onKeyUpInNameInputField = function (e) {
         updateAbilityToSubmit();
         if (e.keyCode === 13) { // enter key
             onSubmit();
@@ -114,22 +112,22 @@ define(['util', 'boards'], function (util, boards) {
     };
 
     // Caches the input field element.
-    newNameInputTdEl = function (name) {
-        var el = document.createElement('td');
+    var newNameInputTdEl = function (name) {
+        var el = document.createElement("td");
 
         if (nameInputFieldEl === undefined) {
-            nameInputFieldEl = document.createElement('input');
-            nameInputFieldEl.type = 'text';
-            nameInputFieldEl.maxLength = nameInputFieldEl.size =
-                board.hiscores.maxNameLen;
+            nameInputFieldEl = document.createElement("input");
+            nameInputFieldEl.type = "text";
+            nameInputFieldEl.maxLength = board.hiscores.maxNameLen;
+            nameInputFieldEl.size = board.hiscores.maxNameLen;
             nameInputFieldEl.spellcheck = false;
-            nameInputFieldEl.addEventListener('blur', onNameInputFieldBlur);
-            nameInputFieldEl.addEventListener('keyup',
-                                              onKeyUpInNameInputField);
-            nameInputFieldEl.addEventListener('propertychange',
-                                              updateAbilityToSubmit);
-            nameInputFieldEl.addEventListener('input', updateAbilityToSubmit);
-            nameInputFieldEl.addEventListener('paste', updateAbilityToSubmit);
+            nameInputFieldEl.addEventListener("blur", onNameInputFieldBlur);
+            nameInputFieldEl.addEventListener("keyup",
+                    onKeyUpInNameInputField);
+            nameInputFieldEl.addEventListener("propertychange",
+                    updateAbilityToSubmit);
+            nameInputFieldEl.addEventListener("input", updateAbilityToSubmit);
+            nameInputFieldEl.addEventListener("paste", updateAbilityToSubmit);
         }
         nameInputFieldEl.value = name;
         el.appendChild(nameInputFieldEl);
@@ -140,13 +138,13 @@ define(['util', 'boards'], function (util, boards) {
     };
 
     // Caches the submit button element.
-    newSubmitButtonTdEl = function () {
-        var el = document.createElement('td');
+    var newSubmitButtonTdEl = function () {
+        var el = document.createElement("td");
 
         if (submitButtonEl === undefined) {
-            submitButtonEl = document.createElement('span');
-            submitButtonEl.appendChild(document.createTextNode(''));
-            submitButtonEl.addEventListener('click', onSubmit);
+            submitButtonEl = document.createElement("span");
+            submitButtonEl.appendChild(document.createTextNode(""));
+            submitButtonEl.addEventListener("click", onSubmit);
             updateSubmitButtonClasses();
         }
 
@@ -155,15 +153,15 @@ define(['util', 'boards'], function (util, boards) {
         return el;
     };
 
-    newInputTrEl = function (hiscore) {
-        var el = document.createElement('tr');
+    var newInputTrEl = function (hiscore) {
+        var el = document.createElement("tr");
 
-        el.className = 'input';
+        el.className = "input";
         el.appendChild(newNameInputTdEl(hiscore.name));
         el.appendChild(newSubmitButtonTdEl());
 
         // focuses text entry when clicking anywhere in the line:
-        el.addEventListener('mouseup', function () {
+        el.addEventListener("mouseup", function () {
             nameInputFieldEl.focus();
         });
 
@@ -175,20 +173,20 @@ define(['util', 'boards'], function (util, boards) {
                 util.elIsInDom(nameInputFieldEl));
     };
 
-    renderRows = function (lineHeight) {
-        var el = tableEl(),
-            elc = contTableEl(),
-            currentEl = el,
-            iToContinue = Math.ceil(board.hiscores.length / 2),
-            nameInputFieldElNeedsFocus =
+    var renderRows = function (lineHeight) {
+        var el = tableEl();
+        var elc = contTableEl();
+        var currentEl = el;
+        var iToContinue = Math.ceil(board.hiscores.length / 2);
+        var nameInputFieldElNeedsFocus =
                 (!nameInputFieldIsVisible() ||
-                 document.activeElement === nameInputFieldEl);
+                document.activeElement === nameInputFieldEl);
 
         util.clear(el);
         util.clear(elc);
 
         board.hiscores.forEach(function (hiscore, i, status) {
-            if (status === 'editable') {
+            if (status === "editable") {
                 if (iToContinue >= 4) {
                     iToContinue -= 1; // editable row needs more vertical space
                                       // => continue earlier
@@ -200,64 +198,70 @@ define(['util', 'boards'], function (util, boards) {
             }
 
             switch (status) {
-            case 'editable':
+            case "editable":
                 currentEl.appendChild(newInputTrEl(hiscore));
                 if (nameInputFieldElNeedsFocus) {
                     // input element is new or already had focus
                     nameInputFieldEl.focus();
                 } // else: did not have focus before
                 break;
-            case 'unsaved':
+            case "unsaved":
                 currentEl.appendChild(newUnsavedTrEl(hiscore, lineHeight));
                 break;
-            default: // 'saved'
+            default: // "saved"
                 currentEl.appendChild(newTrEl(hiscore));
-                break;
             }
         });
     };
 
-    render = function () {
-        var s = groupEl().style,
-            ts = tableEl().style,
-            cts = contTableEl().style,
-            width2,
-            lineHeight;
+    var render = function () {
+        var s = groupEl().style;
+        var ts = tableEl().style;
+        var cts = contTableEl().style;
+        var width2;
+        var lineHeight;
 
         // Setting `table-layout` to `fixed` in CSS file somehow has no effect
         // in Chrome 21.0, at least for the hiscores table group. Therefore:
-        ts.tableLayout = cts.tableLayout = 'fixed';
+        ts.tableLayout = "fixed";
+        cts.tableLayout = "fixed";
 
-        s.width = layout.width + 'px';
-        s.height = layout.height + 'px';
-        s.top = layout.top + 'px';
+        s.width = layout.width + "px";
+        s.height = layout.height + "px";
+        s.top = layout.top + "px";
         if (layout.portrait) {
             // portrait => continue results display in second table
-            cts.display = 'table';
-            width2 = Math.floor((layout.width - 2 * layout.horizontalMargin) /
-                                2);
-            s.left = layout.horizontalMargin + 'px';
-            cts.left = (width2 + 2 * layout.horizontalMargin) + 'px';
-            ts.width = cts.width = width2 + 'px';
+            cts.display = "table";
+            width2 = Math.floor(
+                (layout.width - 2 * layout.horizontalMargin) / 2
+            );
+            s.left = layout.horizontalMargin + "px";
+            cts.left = (width2 + 2 * layout.horizontalMargin) + "px";
+            ts.width = width2 + "px";
+            cts.width = ts.width;
             lineHeight = layout.height / 4;
         } else {
-            cts.display = 'none';
-            s.left = layout.left + 'px';
+            cts.display = "none";
+            s.left = layout.left + "px";
             ts.width = s.width;
             lineHeight = layout.height / 7;
         }
-        cts.lineHeight = ts.lineHeight = lineHeight + 'px';
-        cts.fontSize = ts.fontSize = (0.85 * lineHeight) + 'px';
+        cts.lineHeight = lineHeight + "px";
+        ts.lineHeight = cts.lineHeight;
+        cts.fontSize = (0.85 * lineHeight) + "px";
+        ts.fontSize = cts.fontSize;
 
         renderRows(lineHeight);
     };
 
     return Object.create(null, {
         animStep: {value: function () {
-            needsToBeRendered = (needsToBeRendered ||
-                                 boards.selected !== board ||
-                                 board.isFinished !== boardIsFinished ||
-                                 board.hiscores.version !== hiscoresVersion);
+            needsToBeRendered = (
+                needsToBeRendered ||
+                    boards.selected !== board ||
+                    board.isFinished !== boardIsFinished ||
+                    board.hiscores.version !== hiscoresVersion
+            );
 
             board = boards.selected;
             boardIsFinished = board.isFinished;

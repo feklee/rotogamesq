@@ -2,60 +2,59 @@
 
 /*jslint browser: true, maxlen: 80 */
 
-/*global define */
+/*global define, window */
 
 define([
-    'util', '../common/rect_t_factory', 'display_c_sys',
-    'display_canvas_factory'
+    "util", "../common/rect_t_factory", "display_c_sys",
+    "display_canvas_factory"
 ], function (util, rectTFactory, displayCSys, displayCanvasFactory) {
-    'use strict';
+    "use strict";
 
-    var width, height, render, tlPos, brPos, updateSelectedRectT,
-        updateDraggedToTheRight, updateCanvasPagePos, onDragStart,
-        onDrag, onDragEnd, onMouseDown, onTouchStart, onMouseMove,
-        onTouchMove, onMouseUp, onTouchEnd,
-        sideLen, // side length of canvas
-        canvasPagePos, // position of canvas on page
-        pos1 = [0, 0], // 1st corner of rectangle
-        pos2 = [0, 0], // 2nd corner of rectangle
-        selectedRectT = rectTFactory.create([0, 0], [0, 0]),
-        draggedToTheRight,
-        needsToBeRendered = true,
-        isBeingDragged = false,
-        lineWidth = 1,
-        onDrag2, // configurable handler, called at the end of `onDrag`
-        onDragStart2,
-        onDragEnd2;
+    var sideLen; // side length of canvas
+    var canvasPagePos; // position of canvas on page
+    var pos1 = [0, 0]; // 1st corner of rectangle
+    var pos2 = [0, 0]; // 2nd corner of rectangle
+    var selectedRectT = rectTFactory.create([0, 0], [0, 0]);
+    var draggedToTheRight;
+    var needsToBeRendered = true;
+    var isBeingDragged = false;
+    var lineWidth = 1;
+    var onDrag2; // configurable handler, called at the end of `onDrag`
+    var onDragStart2;
+    var onDragEnd2;
 
     // may be negative
-    width = function () {
+    var width = function () {
         return pos2[0] - pos1[0];
     };
 
     // may be negative
-    height = function () {
+    var height = function () {
         return pos2[1] - pos1[1];
     };
 
-    render = function (el) {
-        var ctx = el.getContext('2d');
+    var render = function (el) {
+        var ctx = el.getContext("2d");
 
-        el.height = el.width = sideLen; // also clears canvas
+        // also clears canvas:
+        el.height = sideLen;
+        el.width = el.height;
+
         lineWidth = 0.005 * sideLen;
 
-        ctx.strokeStyle = '#fff';
+        ctx.strokeStyle = "#fff";
         ctx.lineWidth = lineWidth;
-        ctx.lineJoin = 'round';
+        ctx.lineJoin = "round";
         ctx.strokeRect(pos1[0], pos1[1], width(), height());
     };
 
     // top left corner
-    tlPos = function () {
+    var tlPos = function () {
         return [Math.min(pos1[0], pos2[0]), Math.min(pos1[1], pos2[1])];
     };
 
     // bottom right corner
-    brPos = function () {
+    var brPos = function () {
         return [Math.max(pos1[0], pos2[0]), Math.max(pos1[1], pos2[1])];
     };
 
@@ -67,33 +66,35 @@ define([
     //
     // A tile is selected, if it is inside or if it is touched by the rubber
     // band. Spacing is *not* part of tiles!
-    updateSelectedRectT = function () {
-        var tlPos2 = displayCSys.incIfInSpacing(tlPos()),
-            brPos2 = displayCSys.decIfInSpacing(brPos()),
-            tlPosT = displayCSys.posTInBounds(
-                displayCSys.posTFromPos(tlPos2).map(Math.floor)
-            ),
-            brPosT = displayCSys.posTInBounds(
-                displayCSys.posTFromPos(brPos2).map(Math.floor)
-            );
+    var updateSelectedRectT = function () {
+        var tlPos2 = displayCSys.incIfInSpacing(tlPos());
+        var brPos2 = displayCSys.decIfInSpacing(brPos());
+        var tlPosT = displayCSys.posTInBounds(
+            displayCSys.posTFromPos(tlPos2).map(Math.floor)
+        );
+        var brPosT = displayCSys.posTInBounds(
+            displayCSys.posTFromPos(brPos2).map(Math.floor)
+        );
 
         selectedRectT = rectTFactory.create(tlPosT, brPosT);
     };
 
-    updateDraggedToTheRight = function () {
+    var updateDraggedToTheRight = function () {
         draggedToTheRight = pos2[0] > pos1[0];
     };
 
     // Needed for calculating position when dragging.
-    updateCanvasPagePos = function () {
-        canvasPagePos =
-            util.viewportPos(document.getElementById('rubberBandCanvas'));
+    var updateCanvasPagePos = function () {
+        canvasPagePos = util.viewportPos(
+            document.getElementById("rubberBandCanvas")
+        );
     };
 
     // assumes that canvas is at position 0, 0 in the document
-    onDragStart = function (pos) {
+    var onDragStart = function (pos) {
         updateCanvasPagePos();
-        pos2 = pos1 = [pos[0] - canvasPagePos[0], pos[1] - canvasPagePos[1]];
+        pos2 = [pos[0] - canvasPagePos[0], pos[1] - canvasPagePos[1]];
+        pos1 = pos2;
         updateSelectedRectT();
         updateDraggedToTheRight();
         isBeingDragged = true;
@@ -103,7 +104,7 @@ define([
         }
     };
 
-    onDrag = function (pos) {
+    var onDrag = function (pos) {
         pos2 = [pos[0] - canvasPagePos[0], pos[1] - canvasPagePos[1]];
         updateSelectedRectT();
         updateDraggedToTheRight();
@@ -113,10 +114,14 @@ define([
         }
     };
 
-    onDragEnd = function () {
+    var onDragEnd = function () {
         isBeingDragged = false;
         needsToBeRendered = true;
-        pos1 = pos2 = [0, 0]; // reset
+
+        // reset:
+        pos1 = [0, 0];
+        pos2 = pos1;
+
         updateSelectedRectT();
         updateDraggedToTheRight();
         if (onDragEnd2 !== undefined) {
@@ -124,11 +129,11 @@ define([
         }
     };
 
-    onMouseDown = function (e) {
+    var onMouseDown = function (e) {
         onDragStart([e.pageX, e.pageY]);
     };
 
-    onTouchStart = function (e) {
+    var onTouchStart = function (e) {
         var touches;
 
         touches = e.changedTouches;
@@ -137,13 +142,13 @@ define([
         }
     };
 
-    onMouseMove = function (e) {
+    var onMouseMove = function (e) {
         if (isBeingDragged) {
             onDrag([e.pageX, e.pageY]);
         }
     };
 
-    onTouchMove = function (e) {
+    var onTouchMove = function (e) {
         var touches = e.changedTouches;
 
         if (isBeingDragged) {
@@ -153,40 +158,42 @@ define([
         }
     };
 
-    onMouseUp = function (e) {
+    var onMouseUp = function () {
         if (isBeingDragged) {
             onDragEnd();
         }
     };
 
-    onTouchEnd = function (e) {
+    var onTouchEnd = function () {
         if (isBeingDragged) {
             onDragEnd();
         }
     };
 
     util.onceDocumentIsInteractive(function () {
-        var el = document.getElementById('rubberBandCanvas');
+        var el = document.getElementById("rubberBandCanvas");
 
-        el.addEventListener('mousedown', onMouseDown);
-        el.addEventListener('touchstart', onTouchStart);
+        el.addEventListener("mousedown", onMouseDown);
+        el.addEventListener("touchstart", onTouchStart);
 
         // Some events are assigned to `window` so that they are also
         // registered when the mouse is moved outside of the element.
-        window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('touchmove', onTouchMove);
-        window.addEventListener('mouseup', onMouseUp);
-        window.addEventListener('touchend', onTouchEnd);
-        window.addEventListener('touchcancel', onTouchEnd);
+        window.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("touchmove", onTouchMove);
+        window.addEventListener("mouseup", onMouseUp);
+        window.addEventListener("touchend", onTouchEnd);
+        window.addEventListener("touchcancel", onTouchEnd);
     });
 
-    return Object.create(displayCanvasFactory.create(), {
-        animStep: {value: function () {
-            var el = document.getElementById('rubberBandCanvas');
+    var rubberBandCanvas = Object.create(displayCanvasFactory.create());
 
-            if (this.visibilityNeedsToBeUpdated) {
-                this.updateVisibility(el);
-                if (this.isVisible) {
+    return Object.defineProperties(rubberBandCanvas, {
+        animStep: {value: function () {
+            var el = document.getElementById("rubberBandCanvas");
+
+            if (rubberBandCanvas.visibilityNeedsToBeUpdated) {
+                rubberBandCanvas.updateVisibility(el);
+                if (rubberBandCanvas.isVisible) {
                     needsToBeRendered = true;
                 }
             }

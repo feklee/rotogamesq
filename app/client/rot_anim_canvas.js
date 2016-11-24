@@ -5,66 +5,83 @@
 /*global define */
 
 define([
-    'boards', 'display_c_sys', 'display_canvas_factory'
+    "boards", "display_c_sys", "display_canvas_factory"
 ], function (boards, displayCSys, displayCanvasFactory) {
-    'use strict';
+    "use strict";
 
-    var renderTile, render, passedTime, rotationIsFinished, updateAngle,
-        sideLen,
-        tiles, // tiles, in position *after* rotation
-        animIsRunning,
-        rectT, // tiles inside of this rectangle are rotated
-        startTime, // time when animation started, in milliseconds
-        startAngle, // rad
-        angle, // current angle, in rad
-        direction, // rotation direction (-1, or +1)
-        board;
+    var sideLen;
+    var tiles; // tiles, in position *after* rotation
+    var animIsRunning;
+    var rectT; // tiles inside of this rectangle are rotated
+    var startTime; // time when animation started, in milliseconds
+    var startAngle; // rad
+    var angle; // current angle, in rad
+    var direction; // rotation direction (-1, or +1)
+    var board;
 
-    renderTile = function (ctx, posT, rotCenter) {
-        var pos = displayCSys.posFromPosT(posT),
-            color = tiles[posT[0]][posT[1]].color,
-            tileSideLen = displayCSys.tileSideLen;
+    var renderTile = function (ctx, posT, rotCenter) {
+        var pos = displayCSys.posFromPosT(posT);
+        var color = tiles[posT[0]][posT[1]].color;
+        var tileSideLen = displayCSys.tileSideLen;
 
         ctx.fillStyle = color;
-        ctx.fillRect(pos[0] - rotCenter[0], pos[1] - rotCenter[1],
-                     tileSideLen, tileSideLen);
+        ctx.fillRect(
+            pos[0] - rotCenter[0],
+            pos[1] - rotCenter[1],
+            tileSideLen,
+            tileSideLen
+        );
     };
 
-    render = function (el) {
-        var xT, yT,
-            ctx = el.getContext('2d'),
-            xMinT = rectT[0][0],
-            yMinT = rectT[0][1],
-            xMaxT = rectT[1][0],
-            yMaxT = rectT[1][1],
-            center = displayCSys.posFromPosT(rectT.centerT),
-            rotCenter = [center[0] + displayCSys.tileSideLen / 2,
-                         center[1] + displayCSys.tileSideLen / 2];
+    var renderColumn = function (yMinT, yMaxT, ctx, xT, rotCenter) {
+        var yT = yMinT;
 
-        el.width = el.height = sideLen; // also clears canvas
+        while (yT <= yMaxT) {
+            renderTile(ctx, [xT, yT], rotCenter);
+            yT += 1;
+        }
+    };
+
+    var render = function (el) {
+        var ctx = el.getContext("2d");
+        var xMinT = rectT[0][0];
+        var yMinT = rectT[0][1];
+        var xMaxT = rectT[1][0];
+        var yMaxT = rectT[1][1];
+        var center = displayCSys.posFromPosT(rectT.centerT);
+        var rotCenter = [
+            center[0] + displayCSys.tileSideLen / 2,
+            center[1] + displayCSys.tileSideLen / 2
+        ];
+
+        // also clears canvas:
+        el.width = sideLen;
+        el.height = el.width;
 
         ctx.save();
         ctx.translate(rotCenter[0], rotCenter[1]);
         ctx.rotate(angle);
 
-        for (xT = xMinT; xT <= xMaxT; xT += 1) {
-            for (yT = yMinT; yT <= yMaxT; yT += 1) {
-                renderTile(ctx, [xT, yT], rotCenter);
-            }
+        var xT = xMinT;
+        while (xT <= xMaxT) {
+            renderColumn(yMinT, yMaxT, ctx, xT, rotCenter);
+            xT += 1;
         }
 
         ctx.restore();
     };
 
-    passedTime = function () {
+    var passedTime = function () {
         return Date.now() - startTime;
     };
 
-    rotationIsFinished = function () {
-        return direction < 0 ? angle <= 0 : angle >= 0;
+    var rotationIsFinished = function () {
+        return (direction < 0
+            ? angle <= 0
+            : angle >= 0);
     };
 
-    updateAngle = function () {
+    var updateAngle = function () {
         var speed = 0.004; // rad / ms
 
         angle = startAngle + direction * speed * passedTime();
@@ -74,12 +91,14 @@ define([
         }
     };
 
-    return Object.create(displayCanvasFactory.create(), {
-        animStep: {value: function () {
-            var el = document.getElementById('rotAnimCanvas');
+    var rotAnimCanvas = Object.create(displayCanvasFactory.create());
 
-            if (this.visibilityNeedsToBeUpdated) {
-                this.updateVisibility(el);
+    return Object.defineProperties(rotAnimCanvas, {
+        animStep: {value: function () {
+            var el = document.getElementById("rotAnimCanvas");
+
+            if (rotAnimCanvas.visibilityNeedsToBeUpdated) {
+                rotAnimCanvas.updateVisibility(el);
             }
 
             if (animIsRunning) {
@@ -88,7 +107,7 @@ define([
                     render(el);
                 } else {
                     animIsRunning = false;
-                    this.hide();
+                    rotAnimCanvas.hide();
                 }
             }
         }},
@@ -114,7 +133,7 @@ define([
             startTime = Date.now();
             direction = -lastRotation.direction;
             startAngle = lastRotation.angleRad;
-            this.show();
+            rotAnimCanvas.show();
         }}
     });
 });
