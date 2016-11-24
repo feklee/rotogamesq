@@ -246,6 +246,8 @@ define([
         util.onceDocumentIsComplete(onDocumentComplete);
     };
 
+    util.autoRefreshAppCache();
+
     util.onceDocumentIsInteractive(function () {
         preventPageDrag();
         boards.load(onBoardsLoaded);

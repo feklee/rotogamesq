@@ -2,21 +2,19 @@
 
 /*jslint browser: true, maxlen: 80 */
 
-/*global define */
+/*global define, window */
 
 define(function () {
     'use strict';
 
-    var documentIsComplete, documentIsInteractive;
-
     // Return true once document has loaded, incl. sub-resources.
-    documentIsComplete = function () {
+    var documentIsComplete = function () {
         return document.readyState === 'complete';
     };
 
     // Returns true once document is finished parsing but possibly still
     // loading sub-resources.
-    documentIsInteractive = function () {
+    var documentIsInteractive = function () {
         // Note that Android 2.3.5's standard browser uses `"loaded"` in place
         // of `"interactive"` as value for `readyState`. For discussion, see:
         //
@@ -26,6 +24,14 @@ define(function () {
         return (document.readyState === 'interactive' ||
                 document.readyState === 'loaded' ||
                 documentIsComplete());
+    };
+
+    var autoRefreshAppCache = function () {
+        window.applicationCache.addEventListener(
+            "updateready",
+            window.applicationCache.swapCache,
+            false
+        );
     };
 
     return Object.create(null, {
@@ -77,6 +83,8 @@ define(function () {
                 }
             }
             return false;
-        }}
+        }},
+
+        autoRefreshAppCache: {value: autoRefreshAppCache}
     });
 });
