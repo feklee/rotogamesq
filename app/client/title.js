@@ -5,31 +5,31 @@
 /*global define */
 
 define(function () {
-    'use strict';
+    "use strict";
 
-    var style, render,
-        needsToBeRendered = true,
-        layout = {width: 1, height: 1, portrait: false};
+    var needsToBeRendered = true;
+    var layout = {width: 1, height: 1, portrait: false};
 
-    style = function () {
-        return document.getElementById('title').style;
+    var style = function () {
+        return document.getElementById("title").style;
     };
 
-    render = function () {
+    var render = function () {
         var s = style();
 
-        s.lineHeight = s.height = layout.height + 'px';
-        s.fontSize = (0.8 * layout.height) + 'px';
+        s.lineHeight = layout.height + "px";
+        s.height = s.lineHeight;
+        s.fontSize = (0.8 * layout.height) + "px";
         if (layout.portrait) {
             s.left = 0;
-            s.marginLeft = layout.leftMargin + 'px';
-            s.textAlign = 'left';
-            s.width = 'auto';
+            s.marginLeft = layout.leftMargin + "px";
+            s.textAlign = "left";
+            s.width = "auto";
         } else {
-            s.left = layout.left + 'px';
+            s.left = layout.left + "px";
             s.marginLeft = 0;
-            s.textAlign = 'center';
-            s.width = layout.width + 'px';
+            s.textAlign = "center";
+            s.width = layout.width + "px";
         }
     };
 

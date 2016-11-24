@@ -5,54 +5,52 @@
 /*global define */
 
 define([
-    'boards', 'rubber_band_canvas', 'rot_anim_canvas', 'arrow_canvas',
-    'display_c_sys', 'display_canvas_factory', '../common/rotation_factory',
-    '../common/rect_t_factory'
+    "boards", "rubber_band_canvas", "rot_anim_canvas", "arrow_canvas",
+    "display_c_sys", "display_canvas_factory", "../common/rotation_factory",
+    "../common/rect_t_factory"
 ], function (boards, rubberBandCanvas, rotAnimCanvas, arrowCanvas,
-             displayCSys, displayCanvasFactory, rotationFactory,
-             rectTFactory) {
-    'use strict';
+        displayCSys, displayCanvasFactory, rotationFactory, rectTFactory) {
+    "use strict";
 
-    var updateRotation, tilesNeedUpdate, animIsRunningNeedsUpdate,
-        boardNeedsUpdate, onRubberBandDragStart, onRubberBandDrag,
-        updateRubberBandCanvasVisibility, onRubberBandDragEnd,
-        tileIsSelected, renderTile, render, startRotationAnim,
-        updateTiles, triggerInitRotAnim,
-        sideLen, tiles, board,
-        needsToBeRendered = true,
-        selectedRectT, // when dragged: currently selected rectangle
-        draggedToTheRight, // when dragged: current drag direction
-        animIsRunning,
-        rotation,
-        initRotAnimHasToBeTriggered = true;
+    var sideLen;
+    var tiles;
+    var board;
+    var needsToBeRendered = true;
+    var selectedRectT; // when dragged: currently selected rectangle
+    var draggedToTheRight; // when dragged: current drag direction
+    var animIsRunning;
+    var rotation;
+    var initRotAnimHasToBeTriggered = true;
 
-    updateRotation = function () {
+    var updateRotation = function () {
         if (selectedRectT === undefined) {
             rotation = undefined;
         } else {
-            rotation = rotationFactory.create(selectedRectT,
-                                              draggedToTheRight);
+            rotation = rotationFactory.create(
+                selectedRectT,
+                draggedToTheRight
+            );
         }
     };
 
-    tilesNeedUpdate = function () {
+    var tilesNeedUpdate = function () {
         return tiles === undefined || !board.tiles.areEqualTo(tiles);
     };
 
-    animIsRunningNeedsUpdate = function () {
+    var animIsRunningNeedsUpdate = function () {
         return (animIsRunning === undefined ||
                 animIsRunning !== rotAnimCanvas.animIsRunning);
     };
 
-    boardNeedsUpdate = function () {
+    var boardNeedsUpdate = function () {
         return board === undefined || board !== boards.selected;
     };
 
-    onRubberBandDragStart = function () {
+    var onRubberBandDragStart = function () {
         arrowCanvas.show();
     };
 
-    onRubberBandDrag = function (newSelectedRectT, newDraggedToTheRight) {
+    var onRubberBandDrag = function (newSelectedRectT, newDraggedToTheRight) {
         if (selectedRectT === undefined ||
                 !newSelectedRectT.isEqualTo(selectedRectT) ||
                 newDraggedToTheRight !== draggedToTheRight) {
@@ -64,7 +62,7 @@ define([
         }
     };
 
-    updateRubberBandCanvasVisibility = function () {
+    var updateRubberBandCanvasVisibility = function () {
         board = boards.selected;
         if (board.isFinished || !board.rotationIsPossible) {
             rubberBandCanvas.hide();
@@ -73,7 +71,7 @@ define([
         }
     };
 
-    onRubberBandDragEnd = function () {
+    var onRubberBandDragEnd = function () {
         if (rotation !== undefined && rotation.makesSense &&
                 !boards.selected.isFinished) {
             boards.selected.rotate(rotation);
@@ -89,7 +87,7 @@ define([
         needsToBeRendered = true;
     };
 
-    tileIsSelected = function (posT) {
+    var tileIsSelected = function (posT) {
         return (rubberBandCanvas.isBeingDragged &&
                 selectedRectT !== undefined &&
                 posT[0] >= selectedRectT[0][0] &&
@@ -98,44 +96,60 @@ define([
                 posT[1] <= selectedRectT[1][1]);
     };
 
-    renderTile = function (ctx, posT) {
-        var pos = displayCSys.posFromPosT(posT),
-            color = tiles[posT[0]][posT[1]].color,
-            showSelection = rubberBandCanvas.isBeingDragged,
-            tileSideLen = displayCSys.tileSideLen,
+    var renderTile = function (ctx, posT) {
+        var pos = displayCSys.posFromPosT(posT);
+        var color = tiles[posT[0]][posT[1]].color;
+        var showSelection = rubberBandCanvas.isBeingDragged;
+        var tileSideLen = displayCSys.tileSideLen;
 
-            // to avoid ugly thin black lines when there is no spacing
-            // (rendering error with many browsers as of Sept. 2012)
-            lenAdd = displayCSys.spacing === 0 ? 1 : 0;
+        // to avoid ugly thin black lines when there is no spacing (rendering
+        // error with many browsers as of Sept. 2012)
+        var lenAdd = displayCSys.spacing === 0
+            ? 1
+            : 0;
 
         if (rotAnimCanvas.animIsRunning && rotAnimCanvas.isInRotRect(posT)) {
             return; // don't show this tile, it's animated
         }
 
-        ctx.globalAlpha = showSelection && tileIsSelected(posT) ? 0.5 : 1;
+        ctx.globalAlpha = (showSelection && tileIsSelected(posT))
+            ? 0.5
+            : 1;
         ctx.fillStyle = color;
-        ctx.fillRect(pos[0], pos[1],
-                     tileSideLen + lenAdd, tileSideLen + lenAdd);
+        ctx.fillRect(
+            pos[0],
+            pos[1],
+            tileSideLen + lenAdd,
+            tileSideLen + lenAdd
+        );
     };
 
-    render = function () {
-        var xT, yT,
-            sideLenT = board.sideLenT,
-            el = document.getElementById('tilesCanvas'),
-            ctx = el.getContext('2d'),
-            renderAsFinished = (board.isFinished &&
-                                !rotAnimCanvas.animIsRunning);
+    var renderColumn = function (sideLenT, ctx, xT) {
+        var yT = 0;
+        while (yT < sideLenT) {
+            renderTile(ctx, [xT, yT]);
+            yT += 1;
+        }
+    };
 
-        el.height = el.width = sideLen;
+    var render = function () {
+        var sideLenT = board.sideLenT;
+        var el = document.getElementById("tilesCanvas");
+        var ctx = el.getContext("2d");
+        var renderAsFinished = board.isFinished &&
+                !rotAnimCanvas.animIsRunning;
+
+        el.height = sideLen;
+        el.width = el.height;
 
         if (renderAsFinished) {
             displayCSys.disableSpacing();
         }
 
-        for (xT = 0; xT < sideLenT; xT += 1) {
-            for (yT = 0; yT < sideLenT; yT += 1) {
-                renderTile(ctx, [xT, yT]);
-            }
+        var xT = 0;
+        while (xT < sideLenT) {
+            renderColumn(sideLenT, ctx, xT);
+            xT += 1;
         }
 
         if (renderAsFinished) {
@@ -143,14 +157,14 @@ define([
         }
     };
 
-    startRotationAnim = function () {
+    var startRotationAnim = function () {
         var lastRotation = board.lastRotation;
         if (lastRotation !== null) {
             rotAnimCanvas.startAnim(lastRotation);
         }
     };
 
-    updateTiles = function (boardHasChanged) {
+    var updateTiles = function (boardHasChanged) {
         tiles = board.tiles.copy();
 
         if (!boardHasChanged) {
@@ -164,7 +178,7 @@ define([
 
     // Triggers a rotation animation that is shown when the canvas is first
     // displayed. This rotation serves as a hint concerning how the game works.
-    triggerInitRotAnim = function () {
+    var triggerInitRotAnim = function () {
         var initRotation = rotationFactory.create(
             rectTFactory.create([0, 0], [tiles.widthT - 1, tiles.heightT - 1]),
             true

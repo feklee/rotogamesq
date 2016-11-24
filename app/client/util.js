@@ -5,11 +5,11 @@
 /*global define, window */
 
 define(function () {
-    'use strict';
+    "use strict";
 
     // Return true once document has loaded, incl. sub-resources.
     var documentIsComplete = function () {
-        return document.readyState === 'complete';
+        return document.readyState === "complete";
     };
 
     // Returns true once document is finished parsing but possibly still
@@ -21,8 +21,8 @@ define(function () {
         // <url:http://stackoverflow.com/questions/13348029/
         // values-for-document-readystate-in-android-2-3-browser>
 
-        return (document.readyState === 'interactive' ||
-                document.readyState === 'loaded' ||
+        return (document.readyState === "interactive" ||
+                document.readyState === "loaded" ||
                 documentIsComplete());
     };
 
@@ -46,19 +46,22 @@ define(function () {
                 //
                 // <url:http://stackoverflow.com/questions/13346746/
                 // document-readystate-on-domcontentloaded>
-                window.addEventListener('DOMContentLoaded',
-                                        onDocumentIsInteractive, false);
+                window.addEventListener(
+                    "DOMContentLoaded",
+                    onDocumentIsInteractive,
+                    false
+                );
             }
         }},
 
         // Runs `onDocumentIsComplete` once document has loaded (incl.
         // sub-resources).
         onceDocumentIsComplete: {value: function (onDocumentIsComplete) {
-            if (document.readyState === 'interactive' ||
-                    document.readyState === 'complete') {
+            if (document.readyState === "interactive" ||
+                    document.readyState === "complete") {
                 onDocumentIsComplete();
             } else {
-                window.addEventListener('load', onDocumentIsComplete, false);
+                window.addEventListener("load", onDocumentIsComplete, false);
             }
         }},
 
