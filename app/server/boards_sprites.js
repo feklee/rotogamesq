@@ -3,16 +3,16 @@
 
 /*jslint node: true, maxlen: 80 */
 
-'use strict';
+"use strict";
 
-var pngJs = require('png-js'),
-    tilesFactory = require('../common/tiles_factory'),
-    imgWidth,
-    imgData;
+var pngJs = require("png-js");
+var tilesFactory = require("../common/tiles_factory");
+var imgWidth;
+var imgData;
 
 // Loads boards sprites.
 exports.load = function (onLoaded) {
-    var png = pngJs.load('public/images/boards_sprites.png');
+    var png = pngJs.load("public/images/boards_sprites.png");
 
     png.decode(function (x) {
         imgData = x;
