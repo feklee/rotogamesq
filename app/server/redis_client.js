@@ -9,12 +9,12 @@
 
 /*jslint node: true, maxlen: 80 */
 
-'use strict';
+"use strict";
 
-var port = process.env.REDIS_PORT || 6379,
-    host = process.env.REDIS_HOST || '127.0.0.1',
-    password = process.env.REDIS_PASSWORD,
-    redisClient = require('redis').createClient(port, host);
+var port = process.env.REDIS_PORT || 6379;
+var host = process.env.REDIS_HOST || "127.0.0.1";
+var password = process.env.REDIS_PASSWORD;
+var redisClient = require("redis").createClient(port, host);
 
 redisClient.retry_backoff = 1; // disables backoff
 redisClient.retry_delay = 500; // ms
@@ -24,8 +24,8 @@ if (password) {
     redisClient.auth(password);
 }
 
-redisClient.on('error', function (err) {
-    console.error('Redis client:', err);
+redisClient.on("error", function (err) {
+    console.error("Redis client:", err);
 });
 
 // Disables check for max listeners, because potentially a lot may be created

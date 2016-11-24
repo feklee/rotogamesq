@@ -2,25 +2,25 @@
 
 /*jslint node: true, maxlen: 80 */
 
-'use strict';
+"use strict";
 
-var requirejs = require('requirejs'),
+var requirejs = require("requirejs"),
     config = {
-        appDir: 'app',
-        baseUrl: 'client',
-        dir: 'app.build',
+        appDir: "app",
+        baseUrl: "client",
+        dir: "app.build",
         modules: [
             {
-                name: 'main',
-                include: ['vendor/almond'],
-                insertRequire: ['main']
+                name: "main",
+                include: ["vendor/almond"],
+                insertRequire: ["main"]
             }
         ],
         removeCombined: true,
         wrap: true,
         useStrict: true,
-        fileExclusionRegExp: /^\.|^server$|\.md$|^require\.js$/,
-        optimizeCss: 'standard'
+        fileExclusionRegExp: /^\.|^server$|\.md$|^require\.js$/m,
+        optimizeCss: "standard"
     };
 
 module.exports = function (onBuildCreated) {
