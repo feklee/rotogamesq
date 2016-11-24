@@ -1,12 +1,17 @@
 // Common configuration, for client and server.
 
-/*jslint node: true, maxlen: 80 */
+/*jslint browser: true, maxlen: 80 */
 
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
+/*global define, require, module */
+
+var commonDefine;
+try {
+    commonDefine = define;
+} catch (ignore) {
+    commonDefine = require("amdefine")(module);
 }
 
-define({
+commonDefine({
     boards: [ // shown in the specified order, from left to right
         {
             name: "sapple:2016",

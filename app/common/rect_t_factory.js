@@ -1,53 +1,29 @@
 // Creates rectangles in coordinates of tiles.
 
-/*jslint node: true, maxlen: 80 */
+/*jslint browser: true, maxlen: 80 */
 
-/*global define */
+/*global define, require, module */
 
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
+var commonDefine;
+try {
+    commonDefine = define;
+} catch (ignore) {
+    commonDefine = require("amdefine")(module);
 }
 
-define(function () {
-    'use strict';
+commonDefine(function () {
+    "use strict";
 
-    var prototype, areSamePosT, isValidPosT;
-
-    isValidPosT = function (posT) {
+    var isValidPosT = function (posT) {
         return (Array.isArray(posT) &&
                 posT.length === 2 &&
-                typeof posT[0] === 'number' &&
-                typeof posT[1] === 'number');
+                typeof posT[0] === "number" &&
+                typeof posT[1] === "number");
     };
 
-    areSamePosT = function (pos1T, pos2T) {
+    var areSamePosT = function (pos1T, pos2T) {
         return pos1T[0] === pos2T[0] && pos1T[1] === pos2T[1];
     };
-
-    prototype = Object.create([], {
-        isEqualTo: {value: function (rectT) {
-            return (areSamePosT(this[0], rectT[0]) &&
-                    areSamePosT(this[1], rectT[1]));
-        }},
-        widthT: {get: function () {
-            return this[1][0] - this[0][0];
-        }},
-        heightT: {get: function () {
-            return this[1][1] - this[0][1];
-        }},
-        centerT: {get: function () {
-            return [(this[0][0] + this[1][0]) / 2,
-                    (this[0][1] + this[1][1]) / 2];
-        }},
-        contains: {value: function (posT) {
-            var xT = posT[0], yT = posT[1];
-            return (xT >= this[0][0] && yT >= this[0][1] &&
-                    xT <= this[1][0] && yT <= this[1][1]);
-        }},
-        isSquare: {get: function () {
-            return this.widthT === this.heightT;
-        }}
-    });
 
     return Object.create(null, {
         // Creates rectangle from top-left and bottom-right corners. If data is
@@ -59,11 +35,35 @@ define(function () {
                 return false;
             }
 
-            newRectT = Object.create(prototype);
+            newRectT = Object.create([]);
             newRectT.push(tlPosT);
             newRectT.push(brPosT);
 
-            return newRectT;
+            return Object.defineProperties(newRectT, {
+                isEqualTo: {value: function (rectT) {
+                    return (areSamePosT(newRectT[0], rectT[0]) &&
+                            areSamePosT(newRectT[1], rectT[1]));
+                }},
+                widthT: {get: function () {
+                    return newRectT[1][0] - newRectT[0][0];
+                }},
+                heightT: {get: function () {
+                    return newRectT[1][1] - newRectT[0][1];
+                }},
+                centerT: {get: function () {
+                    return [(newRectT[0][0] + newRectT[1][0]) / 2,
+                            (newRectT[0][1] + newRectT[1][1]) / 2];
+                }},
+                contains: {value: function (posT) {
+                    var xT = posT[0];
+                    var yT = posT[1];
+                    return (xT >= newRectT[0][0] && yT >= newRectT[0][1] &&
+                            xT <= newRectT[1][0] && yT <= newRectT[1][1]);
+                }},
+                isSquare: {get: function () {
+                    return newRectT.widthT === newRectT.heightT;
+                }}
+            });
         }}
     });
 });

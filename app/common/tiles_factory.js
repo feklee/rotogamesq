@@ -1,14 +1,17 @@
 // Creates tiles objects describing the status of a board.
 
-/*jslint node: true, maxlen: 80 */
+/*jslint browser: true, maxlen: 80 */
 
-/*global define */
+/*global define, require, module */
 
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
+var commonDefine;
+try {
+    commonDefine = define;
+} catch (ignore) {
+    commonDefine = require("amdefine")(module);
 }
 
-define(function () {
+commonDefine(function () {
     'use strict';
 
     var prototype, rotate, rotateInverse, rotateWithRotator, selectedTiles,
