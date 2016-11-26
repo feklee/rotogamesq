@@ -11,11 +11,11 @@ if (typeof define !== "function") {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: "bdaypie:2016",
-            sideLenT: 7,
-            startPosT: [19, 151],
-            endPosT: [12, 151],
-            start: "11-25"
+            name: "sapple:2016",
+            sideLenT: 5,
+            startPosT: [15, 95],
+            endPosT: [10, 95],
+            start: "11-13"
         },
         {
             name: "cat:2016",
@@ -24,13 +24,13 @@ define({
             endPosT: [12, 144],
             start: "11-13"
         },
-        {
-            name: "sapple:2016",
-            sideLenT: 5,
-            startPosT: [15, 95],
-            endPosT: [10, 95],
-            start: "11-13"
-        },
+        // {
+        //     name: "bdaypie:2016",
+        //     sideLenT: 7,
+        //     startPosT: [19, 151],
+        //     endPosT: [12, 151],
+        //     start: "11-25"
+        // },
         // {
         //     name: "pumpkins:2016",
         //     sideLenT: 5,
