@@ -11,11 +11,11 @@ if (typeof define !== "function") {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: "sapple:2016",
-            sideLenT: 5,
-            startPosT: [15, 95],
-            endPosT: [10, 95],
-            start: "11-13"
+            name: "firtree:2016",
+            sideLenT: 5, // px
+            startPosT: [33, 72],
+            endPosT: [12, 72],
+            start: "12-11"
         },
         {
             name: "cat:2016",
@@ -24,6 +24,13 @@ define({
             endPosT: [12, 144],
             start: "11-13"
         },
+        // {
+        //     name: "sapple:2016",
+        //     sideLenT: 5,
+        //     startPosT: [15, 95],
+        //     endPosT: [10, 95],
+        //     start: "11-13"
+        // },
         // {
         //     name: "bdaypie:2016",
         //     sideLenT: 7,
@@ -585,13 +592,13 @@ define({
         //     startPosT: [28, 50],
         //     endPosT: [7, 50]
         // },
-        {
-            name: "jester:2016",
-            sideLenT: 7,
-            startPosT: [21, 117],
-            endPosT: [0, 117],
-            start: "10-29"
-        },
+        // {
+        //     name: "jester:2016",
+        //     sideLenT: 7,
+        //     startPosT: [21, 117],
+        //     endPosT: [0, 117],
+        //     start: "10-29"
+        // },
         // {
         //     name: "pumpkin:2016",
         //     sideLenT: 7,
