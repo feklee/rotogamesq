@@ -77,7 +77,10 @@ html, body, #loadScreen {
 
 html {
     background: black;
-    overflow: hidden;
+
+    /* Don't use `overflow: hidden;` here, or else the virtual keyboard on touch
+    screen devices may not shift up the content when the user is offered to
+    enter into a hiscore table. */
 }
 
 body {
