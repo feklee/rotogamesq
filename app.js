@@ -39,7 +39,6 @@ app.use(express.static(__dirname + "/public"));
 
 app.get("/", routes.index);
 app.get("/install-webapp", routes.installWebapp);
-app.get("/manifest.appcache", routes.manifestAppcache);
 app.get("/manifest.webapp", routes.manifestWebapp);
 app.get("/web-app-manifest.json", routes.webAppManifestJson);
 

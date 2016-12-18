@@ -4,29 +4,19 @@
 
 'use strict';
 
-var manifestAppcache;
-
 module.exports = function (env) {
     /*jslint stupid: true */
     var readFileSync = require('fs').readFileSync,
         packageJson = require('../package.json'),
         openWebAppManifestJson =
             require('../views/open-web-app-manifest.json'),
-        amazonWebAppManifestJson,
-        manifestAppcacheInc = readFileSync('views/' + env + '.appcache.inc',
-                                           'utf8'),
-        manifestAppcacheContent;
+        amazonWebAppManifestJson;
     /*jslint stupid: false */
 
     (function () {
         var versionString = (env === 'development' ?
                              '(development, random: ' + Math.random() + ')' :
                              'v' + packageJson.version);
-
-        manifestAppcacheContent =
-                ('CACHE MANIFEST\n' +
-                 '# ROTOGAMEsq ' + versionString + '\n\n' +
-                 manifestAppcacheInc);
 
         openWebAppManifestJson.version = packageJson.version;
 
@@ -49,10 +39,6 @@ module.exports = function (env) {
         }},
         installWebapp: {value: function (req, res) {
             res.render('install-webapp');
-        }},
-        manifestAppcache: {value: function (req, res) {
-            res.set('Content-Type', 'text/cache-manifest');
-            res.send(manifestAppcacheContent);
         }},
         manifestWebapp: {value: function (req, res) {
             res.set('Content-Type', 'application/x-web-app-manifest+json');

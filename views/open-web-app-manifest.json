@@ -17,6 +17,5 @@
         "url": "https://github.com/feklee"
     },
     "type": "web",
-    "default_locale": "en",
-    "appcache_path": "/manifest.appcache"
+    "default_locale": "en"
 }
