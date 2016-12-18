@@ -11,11 +11,18 @@ if (typeof define !== "function") {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: "firtree:2016",
-            sideLenT: 5, // px
-            startPosT: [33, 72],
-            endPosT: [12, 72],
-            start: "12-11"
+            name: "santas:2016",
+            sideLenT: 5,
+            startPosT: [10, 139],
+            endPosT: [0, 139],
+            start: "12-18"
+        },
+        {
+            name: "xmastree:2016",
+            sideLenT: 7,
+            startPosT: [28, 31],
+            endPosT: [14, 38],
+            start: "12-18"
         },
         {
             name: "cat:2016",
@@ -183,13 +190,13 @@ define({
             start: "02-01",
             duration: 330
         },
-        {
-            name: "logo:2015b",
-            sideLenT: 5,
-            startPosT: [37, 5],
-            endPosT: [17, 0],
-            start: "12-31"
-        },
+        // {
+        //     name: "logo:2015b",
+        //     sideLenT: 5,
+        //     startPosT: [37, 5],
+        //     endPosT: [17, 0],
+        //     start: "12-31"
+        // },
         // {
         //     name: "pumpkinm:2015",
         //     sideLenT: 6,
@@ -612,6 +619,13 @@ define({
             startPosT: [27, 16],
             endPosT: [20, 16],
             start: "11-13"
+        },
+        {
+            name: "firtree:2016",
+            sideLenT: 5,
+            startPosT: [33, 72],
+            endPosT: [12, 72],
+            start: "12-11"
         }
     ]
 });
