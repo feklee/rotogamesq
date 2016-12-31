@@ -11,18 +11,18 @@ if (typeof define !== "function") {
 define({
     boards: [ // shown in the specified order, from left to right
         {
-            name: "santas:2016",
+            name: "logo:2017",
             sideLenT: 5,
-            startPosT: [10, 139],
-            endPosT: [0, 139],
-            start: "12-18"
+            startPosT: [42, 0],
+            endPosT: [17, 0],
+            start: "01-01"
         },
         {
-            name: "xmastree:2016",
-            sideLenT: 7,
-            startPosT: [28, 31],
-            endPosT: [14, 38],
-            start: "12-18"
+            name: "17",
+            sideLenT: 5,
+            startPosT: [27, 5],
+            endPosT: [22, 5],
+            start: "01-01"
         },
         {
             name: "cat:2016",
@@ -31,6 +31,20 @@ define({
             endPosT: [12, 144],
             start: "11-13"
         },
+        // {
+        //     name: "santas:2016",
+        //     sideLenT: 5,
+        //     startPosT: [10, 139],
+        //     endPosT: [0, 139],
+        //     start: "12-18"
+        // },
+        // {
+        //     name: "xmastree:2016",
+        //     sideLenT: 7,
+        //     startPosT: [28, 31],
+        //     endPosT: [14, 38],
+        //     start: "12-18"
+        // },
         // {
         //     name: "sapple:2016",
         //     sideLenT: 5,
@@ -612,20 +626,27 @@ define({
         //     startPosT: [28, 65],
         //     endPosT: [7, 65],
         //     start: "10-26"
-        // }
+        // },
+        // {
+        //     name: "firtree:2016",
+        //     sideLenT: 5,
+        //     startPosT: [33, 72],
+        //     endPosT: [12, 72],
+        //     start: "12-11"
+        // },
         {
             name: "giraffe:2016",
             sideLenT: 7,
             startPosT: [27, 16],
             endPosT: [20, 16],
-            start: "11-13"
+             start: "11-13"
         },
         {
-            name: "firtree:2016",
-            sideLenT: 5,
-            startPosT: [33, 72],
-            endPosT: [12, 72],
-            start: "12-11"
+            name: "20:2017",
+            sideLenT: 6,
+            startPosT: [18, 89],
+            endPosT: [12, 89],
+            start: "01-01"
         }
     ]
 });
