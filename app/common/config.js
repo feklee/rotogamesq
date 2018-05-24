@@ -17,13 +17,13 @@ define({
             endPosT: [17, 0],
             start: "01-01"
         },
-        {
-            name: "17",
-            sideLenT: 5,
-            startPosT: [27, 5],
-            endPosT: [22, 5],
-            start: "01-01"
-        },
+        // {
+        //     name: "17",
+        //     sideLenT: 5,
+        //     startPosT: [27, 5],
+        //     endPosT: [22, 5],
+        //     start: "01-01"
+        // },
         {
             name: "cat:2016",
             sideLenT: 7,
@@ -641,12 +641,12 @@ define({
             endPosT: [20, 16],
              start: "11-13"
         },
-        {
-            name: "20:2017",
-            sideLenT: 6,
-            startPosT: [18, 89],
-            endPosT: [12, 89],
-            start: "01-01"
-        }
+        // {
+        //     name: "20:2017",
+        //     sideLenT: 6,
+        //     startPosT: [18, 89],
+        //     endPosT: [12, 89],
+        //     start: "01-01"
+        // }
     ]
 });
