@@ -1,8 +1,9 @@
 Introduction
 ============
 
-ROTOGAMEsq is a variant of [Roto Game][1] with *squared tiles*: The [author][4]
-has moved, and in his new home the [bathroom tiles][15] are different. ;-)
+ROTOGAMEsq is a variant of [Roto Game][1] with *squared tiles*: The
+[author][4] has moved, and in his new home the [bathroom tiles][15]
+are different. 😉
 
 **Play:** [sq.rotogame.com][2]
 
@@ -15,8 +16,8 @@ History
 =======
 
 ROTOGAMEsq has originally been written from scratch for the 2012
-[js13kGames][3] challenge. The version that has been submitted to the challenge
-is tagged (GIT): `js13kgames`
+[js13kGames][3] challenge. The version that has been submitted to the
+challenge is tagged (GIT): `js13kgames`
 
 
 How to start development environment
@@ -47,8 +48,9 @@ How to start development environment
 Open Web App
 ============
 
-ROTOGAMEsq supports installation as [Open Web App][11]. Once installed, it can
-be run offline. To test installation, open the relative URL:
+ROTOGAMEsq supports installation as [Open Web App][11]. Once
+installed, it can be run offline. To test installation, open the
+relative URL:
 
     /install-webapp
 
@@ -60,26 +62,29 @@ The manifest is located at:
 How to add a board
 ==================
 
- 1. Add the tiles for the start and end to: `public/images/boards_sprites.png`
+ 1. Add the tiles for the start and end to:
+    `public/images/boards_sprites.png`
 
     Note: Making the image too large can trigger a Bugzilla@Mozilla
     [bug 1314597][7] on the Fx0 smartphone.
 
  2. Add the description to: `app/common/config.js`
 
-    Limit board names to eight alphanumeric characters, even though they are
-    flexible: Any string that goes as a Redis key should work.
+    Limit board names to eight alphanumeric characters, even though
+    they are flexible: Any string that goes as a Redis key should
+    work.
 
 
 User interface
 ==============
 
-  * Portrait and landscape layouts: To give optimal user experience espcially
-    on mobile devices, the game adapts the layout depending on whether the
-    browser's viewport is in landscape (width > height) or portrait mode.
+  * Portrait and landscape layouts: To give optimal user experience
+    espcially on mobile devices, the game adapts the layout depending
+    on whether the browser's viewport is in landscape (width > height)
+    or portrait mode.
 
-  * Undo/redo is accessible by standard keyboard shortcuts: Ctrl-Z / Command-Z,
-    Ctrl-Y / Shift-Command-Y
+  * Undo/redo is accessible by standard keyboard shortcuts: Ctrl-Z /
+    Command-Z, Ctrl-Y / Shift-Command-Y
 
 
 Hiscores
@@ -87,17 +92,18 @@ Hiscores
 
   * The hiscores for each board are stored in a Redis database.
 
-  * On the server, every hiscore entry is tested for plausibility (do the
-    rotations really solve a board). This prevents cheating by forging client
-    server communication.
+  * On the server, every hiscore entry is tested for plausibility (do
+    the rotations really solve a board). This prevents cheating by
+    forging client server communication.
 
-  * With every hiscore entry, rotations are stored, which makes it possible to
-    manually investigate some of the more astonishing solutions.
+  * With every hiscore entry, rotations are stored, which makes it
+    possible to manually investigate some of the more astonishing
+    solutions.
 
   * [localStorage][6] is used for offline capability:
 
-      + On client load (communication via WebSocket, automatically repeated
-        until connection is available):
+      + On client load (communication via WebSocket, automatically
+        repeated until connection is available):
 
           - hiscores are retrieved from localStorage,
 
@@ -105,10 +111,11 @@ Hiscores
 
           - unsaved hiscores are sent to server.
 
-      + On new hiscores on server: new saved hiscores broadcasted to all
-        clients
+      + On new hiscores on server: new saved hiscores broadcasted to
+        all clients
 
-      + On new hiscore entry on client: unsaved hiscores sent to server
+      + On new hiscore entry on client: unsaved hiscores sent to
+        server
 
   * Hiscores may be inspected via the Redis CLI:
 
@@ -116,7 +123,7 @@ Hiscores
 
             ZRANGE smiley 0 -1 WITHSCORES
 
-      + To show rotations associated with hiscores for board  `smiley`:
+      + To show rotations associated with hiscores for board `smiley`:
 
             HGETALL smiley.rotations
 
@@ -163,32 +170,33 @@ Releasing a new version
 Hacking notes
 =============
 
-  * `Object.freeze` is not used due to Android 2.3's native browser not
-    supporting it.
+  * `Object.freeze` is not used due to Android 2.3's native browser
+    not supporting it.
 
-  * Tiles are rendered to `canvas`. This may look cumbersome: Can't tiles be
-    rendered simply as squared `div` tags? They can. However, in major browser
-    `div` tags cannot be positioned with sub pixel accuracy (as of September
-    2012). In these browsers, positions are rounded to pixels and the result is
-    irregular spacing, e.g.: one spacing 2px, another one 3px
+  * Tiles are rendered to `canvas`. This may look cumbersome: Can't
+    tiles be rendered simply as squared `div` tags? They can. However,
+    in major browser `div` tags cannot be positioned with sub pixel
+    accuracy (as of September 2012). In these browsers, positions are
+    rounded to pixels and the result is irregular spacing, e.g.: one
+    spacing 2px, another one 3px
 
-    For similar reasons (possible subpixel positioning issues), the rotation is
-    *not* done using CSS3 transformations.
+    For similar reasons (possible subpixel positioning issues), the
+    rotation is *not* done using CSS3 transformations.
 
   * Format for comments: [Mardown][10]
 
-  * The current `README.md` has some ugly formatting of lists, to work around
-    [a bug][9] in GitHub's Markdown interpreter.
+  * The current `README.md` has some ugly formatting of lists, to work
+    around [a bug][9] in GitHub's Markdown interpreter.
 
-  * Browsers to test on, as of November 2012: Firefox, Chrome, Opera, Android
-    2.3 browser, iOS Safari, Firefox OS
+  * Browsers to test on, as of November 2012: Firefox, Chrome, Opera,
+    Android 2.3 browser, iOS Safari, Firefox OS
 
 
 Contributors
 ============
 
-  * Maria Morillas: boards *ebunny* (easter bunny), *pumpkin,* *mushroom,* and
-    *santa* all copyright 2013 and licensed under a
+  * Maria Morillas: boards *ebunny* (easter bunny), *pumpkin,*
+    *mushroom,* and *santa* all copyright 2013 and licensed under a
     [Creative Commons Attribution 3.0 Spain License][14].
 
 
@@ -199,9 +207,9 @@ Except where noted otherwise, files are licensed under the WTFPL.
 
 Copyright © 2012–2016 [Felix E. Klee][4]
 
-This work is free. You can redistribute it and/or modify it under the terms of
-the Do What The Fuck You Want To Public License, Version 2, as published by Sam
-Hocevar. See the COPYING file for more details.
+This work is free. You can redistribute it and/or modify it under the
+terms of the Do What The Fuck You Want To Public License, Version 2,
+as published by Sam Hocevar. See the COPYING file for more details.
 
 
 [1]: https://github.com/feklee/rotogame
