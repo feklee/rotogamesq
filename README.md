@@ -22,18 +22,20 @@ is tagged (GIT): `js13kgames`
 How to start development environment
 ====================================
 
- 1. Bring dependencies up to date:
+ 1. Start [Redis][16].
+
+ 2. Bring dependencies up to date:
 
         npm update
 
- 2. Set environment variables:
+ 3. Set environment variables:
       + `REDIS_HOST` (optional, default: `127.0.0.1`)
       + `REDIS_PORT` (optional, default: `6379`)
       + `REDIS_PASSWORD` (optional)
       + `AMAZON_VERIFICATION_KEY` (optional)
       + `NODE_ENV`: `development`
 
- 3. Run directly:
+ 4. Run directly:
 
         node app.js
 
@@ -217,3 +219,4 @@ Hocevar. See the COPYING file for more details.
 [13]: https://github.com/feklee/rotogamesq
 [14]: http://creativecommons.org/licenses/by/3.0/es/
 [15]: https://blog.mozilla.org/apps/2013/11/19/q-a-rotogamesq/
+[16]: https://en.wikipedia.org/wiki/Redis
