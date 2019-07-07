@@ -13,12 +13,12 @@ are different. 😉
 History
 =======
 
-ROTOGAMEsq has originally been written from scratch for the 2012
-[js13kGames][3] challenge. The version that has been submitted to the
-challenge is tagged (GIT): `js13kgames`
+ROTOGAMEsq was written from scratch for the 2012 [js13kGames][3]
+challenge. The version that was submitted to the challenge is tagged
+(GIT): `js13kgames`
 
-ROTOGAMEsq was a popular game for [Firefox OS][16] distributed via
-Firefox Marketplace.
+On the [Firefox OS][16] platform, ROTOGAMEsq was a popular offline
+capable game distributed via Firefox Marketplace.
 
 
 How to start development environment
