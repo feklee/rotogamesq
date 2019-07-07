@@ -26,14 +26,6 @@ define(function () {
                 documentIsComplete());
     };
 
-    var immediatelyRefreshAppCache = function () {
-        window.applicationCache.addEventListener(
-            "updateready",
-            window.applicationCache.swapCache,
-            false
-        );
-    };
-
     return Object.create(null, {
         // Runs `onDocumentIsInteractive` once document is finished parsing but
         // still loading sub-resources.
@@ -86,8 +78,6 @@ define(function () {
                 }
             }
             return false;
-        }},
-
-        immediatelyRefreshAppCache: {value: immediatelyRefreshAppCache}
+        }}
     });
 });
