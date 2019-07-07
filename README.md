@@ -7,8 +7,6 @@ are different. 😉
 
 **Play:** [sq.rotogame.com][2]
 
-**Install:** [Firefox Marketplace][12]
-
 **Hack:** [GitHub][13]
 
 
@@ -19,11 +17,14 @@ ROTOGAMEsq has originally been written from scratch for the 2012
 [js13kGames][3] challenge. The version that has been submitted to the
 challenge is tagged (GIT): `js13kgames`
 
+ROTOGAMEsq was a popular game for [Firefox OS][16] distributed via
+Firefox Marketplace.
+
 
 How to start development environment
 ====================================
 
- 1. Start [Redis][16].
+ 1. Start [Redis][12].
 
  2. Bring dependencies up to date:
 
@@ -223,8 +224,8 @@ as published by Sam Hocevar. See the COPYING file for more details.
 [9]: https://github.com/github/markup/issues/165
 [10]: http://daringfireball.net/projects/markdown/
 [11]: https://developer.mozilla.org/en-US/docs/Apps
-[12]: https://marketplace.firefox.com/app/rotogamesq/
+[12]: https://en.wikipedia.org/wiki/Redis
 [13]: https://github.com/feklee/rotogamesq
 [14]: http://creativecommons.org/licenses/by/3.0/es/
 [15]: https://blog.mozilla.org/apps/2013/11/19/q-a-rotogamesq/
-[16]: https://en.wikipedia.org/wiki/Redis
+[16]: https://en.wikipedia.org/wiki/Firefox_OS
